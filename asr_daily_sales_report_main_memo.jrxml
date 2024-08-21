@@ -1,0 +1,552 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.6.0.final using JasperReports Library version 6.6.0  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="asr_daily_sales_report" pageWidth="1262" pageHeight="130" orientation="Landscape" columnWidth="1262" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="9d01cb8b-56af-4240-b53d-381c58f0cf56">
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="PROD_CON"/>
+	<parameter name="salesRepId" class="java.lang.String"/>
+	<parameter name="monthName" class="java.lang.String"/>
+	<parameter name="routeId" class="java.lang.String"/>
+	<queryString language="SQL">
+		<![CDATA[select  p.product_cat_id,p.product_short_name,
+sum(case when to_char(vin.txn_dt,'dd') ='01' and p.product_id=vin.product_id  then 1 else 0 end) d_01,
+sum(case when to_char(vin.txn_dt,'dd') ='02' and p.product_id=vin.product_id  then 1 else 0 end) d_02,
+sum(case when to_char(vin.txn_dt,'dd') ='03' and p.product_id=vin.product_id  then 1 else 0 end) d_03,
+sum(case when to_char(vin.txn_dt,'dd') ='04' and p.product_id=vin.product_id  then 1 else 0 end) d_04,
+sum(case when to_char(vin.txn_dt,'dd') ='05' and p.product_id=vin.product_id  then 1 else 0 end) d_05,
+sum(case when to_char(vin.txn_dt,'dd') ='06' and p.product_id=vin.product_id  then 1 else 0 end) d_06,
+sum(case when to_char(vin.txn_dt,'dd') ='07' and p.product_id=vin.product_id  then 1 else 0 end) d_07,
+sum(case when to_char(vin.txn_dt,'dd') ='08' and p.product_id=vin.product_id  then 1 else 0 end) d_08,
+sum(case when to_char(vin.txn_dt,'dd') ='09' and p.product_id=vin.product_id  then 1 else 0 end) d_09,
+sum(case when to_char(vin.txn_dt,'dd') ='10' and p.product_id=vin.product_id  then 1 else 0 end) d_10,
+sum(case when to_char(vin.txn_dt,'dd') ='11' and p.product_id=vin.product_id  then 1 else 0 end) d_11,
+sum(case when to_char(vin.txn_dt,'dd') ='12' and p.product_id=vin.product_id  then 1 else 0 end) d_12,
+sum(case when to_char(vin.txn_dt,'dd') ='13' and p.product_id=vin.product_id  then 1 else 0 end) d_13,
+sum(case when to_char(vin.txn_dt,'dd') ='14' and p.product_id=vin.product_id  then 1 else 0 end) d_14,
+sum(case when to_char(vin.txn_dt,'dd') ='15' and p.product_id=vin.product_id  then 1 else 0 end) d_15,
+sum(case when to_char(vin.txn_dt,'dd') ='16' and p.product_id=vin.product_id  then 1 else 0 end) d_16,
+sum(case when to_char(vin.txn_dt,'dd') ='17' and p.product_id=vin.product_id  then 1 else 0 end) d_17,
+sum(case when to_char(vin.txn_dt,'dd') ='18' and p.product_id=vin.product_id  then 1 else 0 end) d_18,
+sum(case when to_char(vin.txn_dt,'dd') ='19' and p.product_id=vin.product_id  then 1 else 0 end) d_19,
+sum(case when to_char(vin.txn_dt,'dd') ='20' and p.product_id=vin.product_id  then 1 else 0 end) d_20,
+sum(case when to_char(vin.txn_dt,'dd') ='21' and p.product_id=vin.product_id  then 1 else 0 end) d_21,
+sum(case when to_char(vin.txn_dt,'dd') ='22' and p.product_id=vin.product_id  then 1 else 0 end) d_22,
+sum(case when to_char(vin.txn_dt,'dd') ='23' and p.product_id=vin.product_id  then 1 else 0 end) d_23,
+sum(case when to_char(vin.txn_dt,'dd') ='24' and p.product_id=vin.product_id  then 1 else 0 end) d_24,
+sum(case when to_char(vin.txn_dt,'dd') ='25' and p.product_id=vin.product_id  then 1 else 0 end) d_25,
+sum(case when to_char(vin.txn_dt,'dd') ='26' and p.product_id=vin.product_id  then 1 else 0 end) d_26,
+sum(case when to_char(vin.txn_dt,'dd') ='27' and p.product_id=vin.product_id  then 1 else 0 end) d_27,
+sum(case when to_char(vin.txn_dt,'dd') ='28' and p.product_id=vin.product_id  then 1 else 0 end) d_28,
+sum(case when to_char(vin.txn_dt,'dd') ='29' and p.product_id=vin.product_id  then 1 else 0 end) d_29,
+sum(case when to_char(vin.txn_dt,'dd') ='30' and p.product_id=vin.product_id  then 1 else 0 end) d_33,
+sum(case when to_char(vin.txn_dt,'dd') ='31' and p.product_id=vin.product_id  then 1 else 0 end) d_31,
+sum(case when to_char(vin.txn_dt,'mm-yyyy') =  $P{monthName}  and p.product_id=vin.product_id then 1 else 0 end) mon_total
+from product p left outer join v_sales_rep_inv_prod  vin on (p.product_id=vin.product_id and   vin.sales_rep_id=$P{salesRepId}  and to_char(vin.txn_dt,'mm-yyyy')=$P{monthName} and vin.route_id = $P{routeId} )
+group by p.ADD_IP, p.product_cat_id,p.product_short_name
+order by p.ADD_IP, p.product_cat_id,product_short_name]]>
+	</queryString>
+	<field name="PRODUCT_CAT_ID" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="PRODUCT_CAT_ID"/>
+	</field>
+	<field name="PRODUCT_SHORT_NAME" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="PRODUCT_SHORT_NAME"/>
+	</field>
+	<field name="D_01" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="D_01"/>
+	</field>
+	<field name="D_02" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="D_02"/>
+	</field>
+	<field name="D_03" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="D_03"/>
+	</field>
+	<field name="D_04" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="D_04"/>
+	</field>
+	<field name="D_05" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="D_05"/>
+	</field>
+	<field name="D_06" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="D_06"/>
+	</field>
+	<field name="D_07" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="D_07"/>
+	</field>
+	<field name="D_08" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="D_08"/>
+	</field>
+	<field name="D_09" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="D_09"/>
+	</field>
+	<field name="D_10" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="D_10"/>
+	</field>
+	<field name="D_11" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="D_11"/>
+	</field>
+	<field name="D_12" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="D_12"/>
+	</field>
+	<field name="D_13" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="D_13"/>
+	</field>
+	<field name="D_14" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="D_14"/>
+	</field>
+	<field name="D_15" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="D_15"/>
+	</field>
+	<field name="D_16" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="D_16"/>
+	</field>
+	<field name="D_17" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="D_17"/>
+	</field>
+	<field name="D_18" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="D_18"/>
+	</field>
+	<field name="D_19" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="D_19"/>
+	</field>
+	<field name="D_20" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="D_20"/>
+	</field>
+	<field name="D_21" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="D_21"/>
+	</field>
+	<field name="D_22" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="D_22"/>
+	</field>
+	<field name="D_23" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="D_23"/>
+	</field>
+	<field name="D_24" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="D_24"/>
+	</field>
+	<field name="D_25" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="D_25"/>
+	</field>
+	<field name="D_26" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="D_26"/>
+	</field>
+	<field name="D_27" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="D_27"/>
+	</field>
+	<field name="D_28" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="D_28"/>
+	</field>
+	<field name="D_29" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="D_29"/>
+	</field>
+	<field name="D_33" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="D_33"/>
+	</field>
+	<field name="D_31" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="D_31"/>
+	</field>
+	<field name="MON_TOTAL" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="MON_TOTAL"/>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<detail>
+		<band height="15" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="48" height="15" uuid="b6278499-b396-423b-a15e-5685cce04f1b">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="4f879065-3b31-488c-9de2-43bf413b90cd"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{PRODUCT_SHORT_NAME}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="48" y="0" width="37" height="15" uuid="90e56948-0a70-41b3-906c-444b4c1edfa1">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="ebf1166b-dc3f-4a54-9ad7-4f5a48ff97b1"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{D_01}.compareTo( java.math.BigDecimal.ZERO ) == 0 ? null: $F{D_01}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="85" y="0" width="37" height="15" uuid="27c2d379-fbc2-473f-997f-72d086904dee">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="d76bdea7-72ee-4f52-8900-04edf34b4e2d"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{D_02}.compareTo( java.math.BigDecimal.ZERO ) == 0 ? null: $F{D_02}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="122" y="0" width="37" height="15" uuid="a313cdf7-742b-4801-9cab-1bfcf20d3568">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="4c3f2e54-f126-4ce6-bcb4-6adf05c4b404"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{D_03}.compareTo( java.math.BigDecimal.ZERO ) == 0 ? null: $F{D_03}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="159" y="0" width="37" height="15" uuid="6ae61065-b9a2-4fdd-b402-df5820a15bd9">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="72d2cb0d-806f-4431-9d8f-cc47367551d1"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{D_04}.compareTo( java.math.BigDecimal.ZERO ) == 0 ? null: $F{D_04}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="196" y="0" width="37" height="15" uuid="d98717e6-b481-4d2f-b555-2b792311ba91">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="f4997088-a2d8-4d4b-8e2b-6804611f3b89"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{D_05}.compareTo( java.math.BigDecimal.ZERO ) == 0 ? null: $F{D_05}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="233" y="0" width="37" height="15" uuid="588491ba-e5b7-4fdb-aa89-480a50932f21">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="4fe462ef-acca-4556-aad5-f7d5696fa220"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{D_06}.compareTo( java.math.BigDecimal.ZERO ) == 0 ? null: $F{D_06}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="270" y="0" width="37" height="15" uuid="9d76f3df-6c86-4bc3-b840-004cc82ec7fc">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="246227c4-4cd7-4d89-b4e2-864380cf70bc"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{D_07}.compareTo( java.math.BigDecimal.ZERO ) == 0 ? null: $F{D_07}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="307" y="0" width="37" height="15" uuid="79342001-5286-4ed2-ba39-4cff850a308b">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="9f6d0971-d925-4110-8234-a8d10edb32a1"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{D_08}.compareTo( java.math.BigDecimal.ZERO ) == 0 ? null: $F{D_08}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="344" y="0" width="37" height="15" uuid="7c9de3bf-95bb-4510-b889-9bd0d188a063">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="023ea090-7955-472b-9119-8424bffbf646"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{D_09}.compareTo( java.math.BigDecimal.ZERO ) == 0 ? null: $F{D_09}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="381" y="0" width="37" height="15" uuid="b0e2fda9-91d9-4f38-9fbf-da7d9fddc91e">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="bc1f6598-2162-42f8-986e-3b7607375ddb"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{D_10}.compareTo( java.math.BigDecimal.ZERO ) == 0 ? null: $F{D_10}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="418" y="0" width="37" height="15" uuid="66842185-ae03-42c5-9746-af5fac5e78e9">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="8727d3c0-5318-41d0-b65e-c3a4ce60a330"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{D_11}.compareTo( java.math.BigDecimal.ZERO ) == 0 ? null: $F{D_11}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="455" y="0" width="37" height="15" uuid="c9602c65-6d7d-4627-9be5-3f51fc755bb9">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="9e2a97b9-0ee5-4cb5-927d-d6b506113e5b"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{D_12}.compareTo( java.math.BigDecimal.ZERO ) == 0 ? null: $F{D_12}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="492" y="0" width="37" height="15" uuid="a4243b1b-9fb7-4394-8c08-d8aece12419d">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="f51b9927-342e-42c2-8bff-064ee2a27c53"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{D_13}.compareTo( java.math.BigDecimal.ZERO ) == 0 ? null: $F{D_13}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="529" y="0" width="37" height="15" uuid="b58a2982-5395-485f-960a-1e3c2bc92657">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="0d30f257-be7f-4df3-8e9d-33c681ec8cf7"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{D_14}.compareTo( java.math.BigDecimal.ZERO ) == 0 ? null: $F{D_14}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="566" y="0" width="37" height="15" uuid="48576c0b-9c13-4fc8-934e-46026b2ac3c6">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="6a14a69a-a085-4937-9ffe-58d94e73c131"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{D_15}.compareTo( java.math.BigDecimal.ZERO ) == 0 ? null: $F{D_15}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="603" y="0" width="37" height="15" uuid="24fda809-63d9-4fed-8330-a5e9be0b52b9">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="b590e7aa-7a77-48b3-8637-a710c570bd1a"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{D_16}.compareTo( java.math.BigDecimal.ZERO ) == 0 ? null: $F{D_16}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="640" y="0" width="37" height="15" uuid="fa0f93d5-0711-46ee-83df-18feaee41713">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="5d6093d1-d9be-4e77-b7c4-8b9116e6812c"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{D_17}.compareTo( java.math.BigDecimal.ZERO ) == 0 ? null: $F{D_17}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="677" y="0" width="37" height="15" uuid="91354b34-78a5-41b2-9560-66c929528018">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="74bdf5c7-bacb-4660-a172-178921c228c5"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{D_18}.compareTo(java.math.BigDecimal.ZERO ) == 0 ? null: $F{D_18}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="714" y="0" width="37" height="15" uuid="4e2117eb-00a5-4b0c-b40a-91f3d7745157">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="41d9505a-e9fc-4ff7-954a-b97927c92732"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{D_19}.compareTo(java.math.BigDecimal.ZERO ) == 0 ? null : $F{D_19}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="751" y="0" width="37" height="15" uuid="1313baa4-d9dd-42f8-b858-138f404b8511">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="f8bad82f-05a4-44cb-b06f-f14168090b16"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{D_20}.compareTo( java.math.BigDecimal.ZERO ) == 0 ? null: $F{D_20}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="788" y="0" width="37" height="15" uuid="418207ac-c238-4286-bc4b-f11965db6e62">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="b5a01eb2-73b3-43ea-a35d-09373d6fd187"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{D_21}.compareTo( java.math.BigDecimal.ZERO ) == 0 ? null: $F{D_21}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="825" y="0" width="37" height="15" uuid="9ed70dee-0fd7-470b-a2c6-ae18cd41db3a">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="91047971-fd21-49a7-97a9-c90c49dc8676"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{D_22}.compareTo( java.math.BigDecimal.ZERO ) == 0 ? null: $F{D_22}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="862" y="0" width="37" height="15" uuid="32ec25e8-eda5-47b6-b53f-196ce11e84b7">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="f122a996-1ad6-4092-a058-7749dd55a562"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{D_23}.compareTo( java.math.BigDecimal.ZERO ) == 0 ? null: $F{D_23}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="899" y="0" width="37" height="15" uuid="fe11687d-5e68-468b-bbbd-8efb461f0fad">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="7e360cd9-467a-4989-974e-31d4d745700c"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{D_24}.compareTo( java.math.BigDecimal.ZERO ) == 0 ? null: $F{D_24}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="936" y="0" width="37" height="15" uuid="6171e9ba-1558-4cf8-a8d4-4389134a1442">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="697b32d0-7408-4785-9710-4ecdaaba947d"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{D_25}.compareTo( java.math.BigDecimal.ZERO ) == 0 ? null: $F{D_25}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="973" y="0" width="37" height="15" uuid="8f1b43c8-b94e-426b-adc2-1ccb67c14a51">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="c8397eee-166b-41fe-90e4-573938b60228"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{D_26}.compareTo( java.math.BigDecimal.ZERO ) == 0 ? null: $F{D_26}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="1010" y="0" width="37" height="15" uuid="802a8533-57fa-42fc-9b83-14b7b94aa5db">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="44b08444-9634-4c7a-afed-10d46653b0c1"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{D_27}.compareTo( java.math.BigDecimal.ZERO ) == 0 ? null: $F{D_27}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="1047" y="0" width="37" height="15" uuid="71018f6f-e3ee-427b-a7cf-247c3cd01928">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="6715dab6-f375-419a-a985-f6f7566549e4"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{D_28}.compareTo( java.math.BigDecimal.ZERO ) == 0 ? null: $F{D_28}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="1084" y="0" width="37" height="15" uuid="5a5d8ddd-4eb8-4347-b2fb-bc5fc7520be6">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="5c3c4225-80a0-4306-82b7-dae0993c1b24"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{D_29}.compareTo( java.math.BigDecimal.ZERO ) == 0 ? null: $F{D_29}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="1121" y="0" width="37" height="15" uuid="3c0787c5-db47-499b-aa81-cf8681cb26bd">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="df21b230-037b-4d36-87c7-b45f1c9c0b2c"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{D_33}.compareTo( java.math.BigDecimal.ZERO ) == 0 ? null: $F{D_33}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="1158" y="0" width="37" height="15" uuid="7f5927fc-0a07-455e-b99f-34a31a795e74">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="8c6e4ae7-eeba-4a02-a159-49b93d0f6fc5"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{D_31}.compareTo( java.math.BigDecimal.ZERO ) == 0 ? null: $F{D_31}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="1195" y="0" width="67" height="15" uuid="7b645ddb-07f6-4d8f-b92f-1664debf4b2c">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="ddd72e95-3dbd-4ec9-b379-9dfb19b366cb"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{MON_TOTAL}.compareTo( java.math.BigDecimal.ZERO ) == 0 ? null: $F{MON_TOTAL}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>
