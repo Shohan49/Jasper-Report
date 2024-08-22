@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.6.0.final using JasperReports Library version 6.6.0  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="asr_summaryOfVisitingStatus" pageWidth="752" pageHeight="612" orientation="Landscape" columnWidth="722" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="6d18b1aa-8a9c-400a-a5b5-1b09785e555b">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="smprod_db"/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<parameter name="teritoryId" class="java.lang.String"/>
+	<parameter name="zoneId" class="java.lang.String"/>
+	<parameter name="routeId" class="java.lang.String"/>
+	<parameter name="visitDay" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT sum(CASE WHEN visit_status = 'Not Visited' THEN 1 ELSE 0 end) "notVisited",
+sum(CASE WHEN visit_status = 'Sales' THEN 1 ELSE 0 end) "sales",
+sum(CASE WHEN visit_status = 'Stock Available' THEN 1 ELSE 0 end) "stockAvailable",
+sum(CASE WHEN visit_status = 'Closed' THEN 1 ELSE 0 end) "closed",
+sum(CASE WHEN visit_status = 'Other' THEN 1 ELSE 0 end) "other",
+max((SELECT count(DISTINCT consumer_id)
+from
+(SELECT * FROM (
+SELECT DISTINCT ct.TERITORY_ID, ct.consumer_id
+FROM appsm.sales_rep_teritory srt
+JOIN appsm.CONSUMER_TERITORY ct on srt.TERITORY_ID = ct.TERITORY_ID AND srt.visit_frequency=6
+union
+SELECT DISTINCT ct.TERITORY_ID, ct.consumer_id
+FROM appsm.sales_rep_teritory srt
+JOIN appsm.sales_rep_route_visit_day srrvd ON srt.teritory_id=srrvd.route_id
+JOIN appsm.CONSUMER_TERITORY ct on srt.TERITORY_ID = ct.TERITORY_ID
+WHERE srt.visit_frequency IN(2,3)
+AND initcap(trim(srrvd.visit_day))=trim(to_char(to_date( $P{visitDay}, 'dd-MM-yyyy'), 'Day')))) q1
+JOIN appsm.V_TERITORY_ALL vta ON q1.TERITORY_ID = vta.ROUTE_ID
+JOIN appsm.CONSUMER c ON c.id = q1.consumer_id AND c.STATUS = 1
+where vta.teritory_id= $P{teritoryId}
+and vta.zone_id like '%'||$P{zoneId}||'%'
+AND vta.ROUTE_ID like '%'||$P{routeId} ||'%')) AS outletCount
+FROM (
+SELECT vta.ZONE_ID, vta.ZONE_NAME, vta.ROUTE_ID, vta.ROUTE_NAME, c.id consumer_id,c.customer_name,c.mobile_no,c.trade_license_name,
+min(case when v.status=5 then v.entry_time end ) entry_time,
+min(case when v.status<>5 then v.entry_time end ) exit_time,
+min(case when v.status=0 OR v.status IS null then 'Not Visited'
+when v.status=1 then 'Sales'
+when v.status=2 then 'Stock Available'
+when v.status=3 then 'Closed'
+when v.status=4 then 'Other' end) visit_status
+from appsm.consumer_teritory ct
+JOIN appsm.consumer c ON ct.consumer_id=c.id
+LEFT JOIN appsm.V_TERITORY_ALL vta ON ct.TERITORY_ID = vta.ROUTE_ID
+left join appsm.V_STORE_VISIT_AND_BUFFER_STS v on (c.id=v.consumer_id
+and to_char(entry_time,'dd-mm-yyyy') = $P{visitDay} )
+where vta.teritory_id= $P{teritoryId}
+and vta.zone_id like '%'||$P{zoneId}||'%'
+AND vta.ROUTE_ID like '%'||$P{routeId} ||'%'
+and c.status='1'
+group BY vta.ZONE_ID, vta.ZONE_NAME, vta.ROUTE_ID, vta.ROUTE_NAME, c.id,c.customer_name,c.mobile_no,c.trade_license_name)]]>
+	</queryString>
+	<field name="sales" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="sales"/>
+	</field>
+	<field name="stockAvailable" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="stockAvailable"/>
+	</field>
+	<field name="closed" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="closed"/>
+	</field>
+	<field name="other" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="other"/>
+	</field>
+	<field name="notVisited" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="notVisited"/>
+	</field>
+	<field name="outletCount" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<detail>
+		<band height="80" splitType="Stretch">
+			<textField>
+				<reportElement stretchType="ContainerHeight" mode="Opaque" x="0" y="50" width="130" height="30" backcolor="#9FA6AE" uuid="c951680d-3102-4773-876d-7500a9d5f0d2">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="97a57adc-62c0-42d3-bb76-16f6b99fb068"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA["Sales : "+$F{sales}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement mode="Opaque" x="130" y="50" width="130" height="30" backcolor="#9FA6AE" uuid="f0c90171-b512-47c1-8080-b1d9024815db">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="f9242804-da4e-45f9-9152-7619fa63df07"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA["Stock Available : "+$F{stockAvailable}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement mode="Opaque" x="260" y="50" width="100" height="30" backcolor="#9FA6AE" uuid="b7fd9e51-8f80-4c1c-984b-5126c8b8e55a">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="efcec6d3-b82b-4849-9e6c-b2ff74bb6cfd"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA["Closed : "+$F{closed}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement mode="Opaque" x="360" y="50" width="100" height="30" backcolor="#9FA6AE" uuid="c8343894-a396-4655-80a8-f5238a83993a">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="3b67744d-91e1-4178-8a0f-d510b1b7aa5b"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA["Others : "+$F{other}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement mode="Opaque" x="460" y="50" width="140" height="30" backcolor="#9FA6AE" uuid="0e136395-b84b-4277-bf5c-da0448196743">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="e83534bc-36e9-438d-87f5-fa82e42b2a61"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA["Not Visited : "+$F{notVisited}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement mode="Opaque" x="600" y="50" width="152" height="30" backcolor="#9FA6AE" uuid="e45c5633-1912-4094-82de-e306d2ccea22"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA["Total Outlet : "+$F{outletCount}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>
