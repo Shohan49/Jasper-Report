@@ -1,0 +1,673 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.20.0.final using JasperReports Library version 6.20.0-2bc7ab61c56f459e8176eb05c7705e145cd400ad  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Brand_wise_memo_achievement_division_Bidi" pageWidth="1260" pageHeight="612" orientation="Landscape" columnWidth="752" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="b240dca5-f5b7-49c6-a2f4-ce589d0f7868">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="TEST_SM"/>
+	<parameter name="fromDate" class="java.lang.String">
+		<defaultValueExpression><![CDATA[$P{fromDate}]]></defaultValueExpression>
+	</parameter>
+	<parameter name="toDate" class="java.lang.String">
+		<defaultValueExpression><![CDATA[$P{toDate}]]></defaultValueExpression>
+	</parameter>
+	<parameter name="divisionId" class="java.lang.String"/>
+	<parameter name="productName" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="teritoryName" class="java.lang.String"/>
+	<field name="serviceOutlet" class="java.math.BigDecimal"/>
+	<field name="first100" class="java.math.BigDecimal"/>
+	<field name="second500" class="java.math.BigDecimal"/>
+	<field name="third1000" class="java.math.BigDecimal"/>
+	<field name="thousandPlus" class="java.math.BigDecimal"/>
+	<field name="brandMemo" class="java.math.BigDecimal"/>
+	<variable name="tenTo30" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{first100}]]></variableExpression>
+	</variable>
+	<variable name="fortyTo50" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{second500}]]></variableExpression>
+	</variable>
+	<variable name="sixtyTo90" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{third1000}]]></variableExpression>
+	</variable>
+	<variable name="hundredPlus" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{thousandPlus}]]></variableExpression>
+	</variable>
+	<variable name="serviceOutlet" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{serviceOutlet}]]></variableExpression>
+	</variable>
+	<variable name="brandMemo" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{brandMemo}]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="41" splitType="Stretch">
+			<staticText>
+				<reportElement x="1" y="1" width="615" height="40" uuid="0b6cd4e5-3a2e-41a0-9749-659f3622c3ea"/>
+				<textElement verticalAlignment="Middle">
+					<font size="20" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Brand Wise Memo Achievement (Division)]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="121" splitType="Stretch">
+			<textField>
+				<reportElement x="616" y="91" width="604" height="30" uuid="29e82b0a-ed2e-4c28-956e-43392ff32ad3"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA["Execution Time : " +new  SimpleDateFormat("dd-MMM-yyyy, hh:mm:ss a").format(new java.util.Date())]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="81" width="415" height="20" uuid="6d884fb5-a53a-4172-b9d0-f07a30d6e8ff">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Left" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA["Product Name: " +$P{productName}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="41" width="415" height="20" uuid="485a07fc-6f23-43e6-9ee1-f80233aeb8cd">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Left" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA["To Date: " +$P{toDate}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="61" width="415" height="20" uuid="e3e317f0-70e6-4ea5-a221-4be8e54cde19">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Left" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA["Category Name: Bidi"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="21" width="415" height="20" uuid="db7c6621-0edf-4d97-aad1-5999bd77c9eb">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Left" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA["From Date: " +$P{fromDate}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="101" width="415" height="20" uuid="150296d0-bbcc-4e3a-8f76-0bacc96978ad">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Left" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA["Division Name: " +$P{divisionId}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="40" splitType="Stretch">
+			<staticText>
+				<reportElement mode="Opaque" x="28" y="0" width="100" height="40" backcolor="#CCFFCC" uuid="1c5a73fe-539b-4af9-9d3e-137cc38f6454"/>
+				<box>
+					<pen lineWidth="1.0" lineStyle="Solid"/>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Territory Name]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="415" y="20" width="101" height="20" backcolor="#CCFFCC" uuid="cd6ac069-af90-4522-8438-5c928edba5f7"/>
+				<box>
+					<pen lineWidth="1.0" lineStyle="Solid"/>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="11"/>
+				</textElement>
+				<text><![CDATA[Memo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="516" y="20" width="100" height="20" backcolor="#CCFFCC" uuid="2f1d7fe8-291e-478c-8905-f14ce7b371bd"/>
+				<box>
+					<pen lineWidth="1.0" lineStyle="Solid"/>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="11"/>
+				</textElement>
+				<text><![CDATA[Contribution]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="716" y="20" width="100" height="20" backcolor="#CCFFCC" uuid="50af6466-a393-4df0-9088-d54a7fc198c5"/>
+				<box>
+					<pen lineWidth="1.0" lineStyle="Solid"/>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="11"/>
+				</textElement>
+				<text><![CDATA[Contribution]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="616" y="20" width="100" height="20" backcolor="#CCFFCC" uuid="05338640-6314-4ebc-acd0-5402972a3aa4"/>
+				<box>
+					<pen lineWidth="1.0" lineStyle="Solid"/>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="11"/>
+				</textElement>
+				<text><![CDATA[Memo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="816" y="20" width="100" height="20" backcolor="#CCFFCC" uuid="dccc2ba2-d59c-4f0a-a31e-7fb740396f0d"/>
+				<box>
+					<pen lineWidth="1.0" lineStyle="Solid"/>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="11"/>
+				</textElement>
+				<text><![CDATA[Memo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="916" y="20" width="100" height="20" backcolor="#CCFFCC" uuid="3c1d6c07-2471-4ec1-9ae5-3f4a6ce17036"/>
+				<box>
+					<pen lineWidth="1.0" lineStyle="Solid"/>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="11"/>
+				</textElement>
+				<text><![CDATA[Contribution]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="1016" y="20" width="100" height="20" backcolor="#CCFFCC" uuid="3f7a2dea-ae96-455f-9010-2907de381117"/>
+				<box>
+					<pen lineWidth="1.0" lineStyle="Solid"/>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="11"/>
+				</textElement>
+				<text><![CDATA[Memo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="1116" y="20" width="104" height="20" backcolor="#CCFFCC" uuid="9da93208-c346-4f34-aab0-fd377152d908"/>
+				<box>
+					<pen lineWidth="1.0" lineStyle="Solid"/>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="11"/>
+				</textElement>
+				<text><![CDATA[Contribution]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="1" y="0" width="27" height="40" backcolor="#CCFFCC" uuid="e4556c33-1f56-4677-bd1f-9929cc8d86f5"/>
+				<box>
+					<pen lineWidth="1.0" lineStyle="Solid"/>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[SL]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="128" y="0" width="101" height="40" backcolor="#CCFFCC" uuid="4a400332-7e25-47f2-8d1c-bd9875a779cf"/>
+				<box>
+					<pen lineWidth="1.0" lineStyle="Solid"/>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Bidi Selling Outlet]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="318" y="0" width="97" height="40" backcolor="#CCFFCC" uuid="8cb9591d-8c77-4763-b08b-0ad3db203962"/>
+				<box>
+					<pen lineWidth="1.0" lineStyle="Solid"/>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[BSR]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="415" y="0" width="201" height="20" backcolor="#CCFFCC" uuid="aa1cc2ff-70dd-4a0c-a1e5-af42f16f0081"/>
+				<box>
+					<pen lineWidth="1.0" lineStyle="Solid"/>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[12 to 100 stick]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="616" y="0" width="200" height="20" backcolor="#CCFFCC" uuid="d985d1ff-bf54-4dfb-b71f-371c68b9d217"/>
+				<box>
+					<pen lineWidth="1.0" lineStyle="Solid"/>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[101 to 500 stick]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="816" y="0" width="200" height="20" backcolor="#CCFFCC" uuid="63c1ec45-d190-4b53-b07f-bce260321917"/>
+				<box>
+					<pen lineWidth="1.0" lineStyle="Solid"/>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[501 to 1000 stick]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="1016" y="0" width="204" height="20" backcolor="#CCFFCC" uuid="360cf32a-d7f0-4bd3-b188-d9097d004993"/>
+				<box>
+					<pen lineWidth="1.0" lineStyle="Solid"/>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[1000 stick to Above]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="229" y="0" width="89" height="40" backcolor="#CCFFCC" uuid="b4f4ce72-23a2-4681-b01d-aa0a6b1e112c"/>
+				<box>
+					<pen lineWidth="1.0" lineStyle="Solid"/>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Brand Memo]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement mode="Transparent" x="1" y="0" width="27" height="20" backcolor="#97F7BF" uuid="834fee72-886b-46f9-b91c-dbf190a20516"/>
+				<box>
+					<pen lineWidth="1.0" lineStyle="Solid"/>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$V{REPORT_COUNT}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="28" y="0" width="100" height="20" uuid="76eccc12-6fcc-4588-9cb4-69abbf751a2a"/>
+				<box>
+					<pen lineWidth="1.0" lineStyle="Solid"/>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{teritoryName}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="415" y="0" width="101" height="20" uuid="333d1b58-629c-4250-b7d4-fb80c810a383"/>
+				<box>
+					<pen lineWidth="1.0" lineStyle="Solid"/>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{first100}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="516" y="0" width="100" height="20" uuid="63ad9cd2-7c4c-4d19-9438-0493077b17c8"/>
+				<box>
+					<pen lineWidth="1.0" lineStyle="Solid"/>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[String.format("%.2f", $F{brandMemo}.compareTo(new BigDecimal(0))  > 0 ? ($F{first100}.multiply(new BigDecimal(100)).divide($F{brandMemo}, 2, RoundingMode.HALF_UP)) : new BigDecimal(0)) + "%"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1116" y="0" width="104" height="20" uuid="d342aa02-12ed-438b-81f0-de70749ba427"/>
+				<box>
+					<pen lineWidth="1.0" lineStyle="Solid"/>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[String.format("%.2f", $F{brandMemo}.compareTo(new BigDecimal(0))  > 0 ? ($F{thousandPlus}.multiply(new BigDecimal(100)).divide($F{brandMemo}, 2, RoundingMode.HALF_UP)) : new BigDecimal(0)) + "%"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="616" y="0" width="100" height="20" uuid="bdb97721-0623-42db-9c90-893d1f224e4a"/>
+				<box>
+					<pen lineWidth="1.0" lineStyle="Solid"/>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{second500}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1016" y="0" width="100" height="20" uuid="5316be8b-b028-4ba4-8afd-419b02d65d6f"/>
+				<box>
+					<pen lineWidth="1.0" lineStyle="Solid"/>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{thousandPlus}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="916" y="0" width="100" height="20" uuid="4c77b0f5-7cd2-40da-87cc-65737da3a71c"/>
+				<box>
+					<pen lineWidth="1.0" lineStyle="Solid"/>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[String.format("%.2f", $F{brandMemo}.compareTo(new BigDecimal(0))  > 0 ? ($F{third1000}.multiply(new BigDecimal(100)).divide($F{brandMemo}, 2, RoundingMode.HALF_UP)) : new BigDecimal(0)) + "%"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="716" y="0" width="100" height="20" uuid="4b47cb5d-c5cb-4397-9514-f0bf787e461c"/>
+				<box>
+					<pen lineWidth="1.0" lineStyle="Solid"/>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[String.format("%.2f", $F{brandMemo}.compareTo(new BigDecimal(0))  > 0 ? ($F{second500}.multiply(new BigDecimal(100)).divide($F{brandMemo}, 2, RoundingMode.HALF_UP)) : new BigDecimal(0)) + "%"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="816" y="0" width="100" height="20" uuid="82b64128-3928-45f7-8633-f6c8931baf31"/>
+				<box>
+					<pen lineWidth="1.0" lineStyle="Solid"/>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{third1000}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="128" y="0" width="101" height="20" uuid="d67f7a7b-3688-40d8-aca5-20f9226245ec"/>
+				<box>
+					<pen lineWidth="1.0" lineStyle="Solid"/>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{serviceOutlet}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="318" y="0" width="97" height="20" uuid="71cb605b-362d-4194-936c-1c58cbbdbb9b"/>
+				<box>
+					<pen lineWidth="1.0" lineStyle="Solid"/>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[String.format("%.2f", $F{serviceOutlet}.compareTo(new BigDecimal(0))  > 0 ? ($F{brandMemo}.multiply(new BigDecimal(100)).divide($F{serviceOutlet}, 2, RoundingMode.HALF_UP)) : new BigDecimal(0)) + "%"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="229" y="0" width="89" height="20" uuid="26726d46-999e-4125-9af5-3507620c79ef"/>
+				<box>
+					<pen lineWidth="1.0" lineStyle="Solid"/>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{brandMemo}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<summary>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement mode="Opaque" x="415" y="0" width="101" height="20" backcolor="#C0D4A9" uuid="95fd1320-74fb-49af-ad25-cadbfc5c3ed6"/>
+				<box>
+					<pen lineWidth="1.0" lineStyle="Solid"/>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{tenTo30}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement mode="Opaque" x="516" y="0" width="100" height="20" backcolor="#C0D4A9" uuid="a7fa1f1f-02ad-4cf4-bac9-dbbc0aeb59f8"/>
+				<box>
+					<pen lineWidth="1.0" lineStyle="Solid"/>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[String.format("%.2f", $V{brandMemo}.compareTo(new BigDecimal(0))  > 0 ? ($V{tenTo30}.multiply(new BigDecimal(100)).divide($V{brandMemo}, 2, RoundingMode.HALF_UP)) : new BigDecimal(0)) + "%"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement mode="Opaque" x="916" y="0" width="100" height="20" backcolor="#C0D4A9" uuid="11f12ed7-bec0-4219-bf61-fc5a7d12faf3"/>
+				<box>
+					<pen lineWidth="1.0" lineStyle="Solid"/>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[String.format("%.2f", $V{brandMemo}.compareTo(new BigDecimal(0))  > 0 ? ($V{sixtyTo90}.multiply(new BigDecimal(100)).divide($V{brandMemo}, 2, RoundingMode.HALF_UP)) : new BigDecimal(0)) + "%"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement mode="Opaque" x="1116" y="0" width="104" height="20" backcolor="#C0D4A9" uuid="29e8c17b-8d73-4099-ba45-ec1289fcc354"/>
+				<box>
+					<pen lineWidth="1.0" lineStyle="Solid"/>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[String.format("%.2f", $V{brandMemo}.compareTo(new BigDecimal(0))  > 0 ? ($V{hundredPlus}.multiply(new BigDecimal(100)).divide($V{brandMemo}, 2, RoundingMode.HALF_UP)) : new BigDecimal(0)) + "%"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement mode="Opaque" x="816" y="0" width="100" height="20" backcolor="#C0D4A9" uuid="cec3a4a1-be96-4a82-87f9-fb1a303904e3"/>
+				<box>
+					<pen lineWidth="1.0" lineStyle="Solid"/>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{sixtyTo90}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement mode="Opaque" x="616" y="0" width="100" height="20" backcolor="#C0D4A9" uuid="d7c7a213-e08c-497d-8bb4-19c15bfa8e7b"/>
+				<box>
+					<pen lineWidth="1.0" lineStyle="Solid"/>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{fortyTo50}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement mode="Opaque" x="1016" y="0" width="100" height="20" backcolor="#C0D4A9" uuid="09a0af99-8f90-4520-a777-3fc48d5935e9"/>
+				<box>
+					<pen lineWidth="1.0" lineStyle="Solid"/>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{hundredPlus}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement mode="Opaque" x="716" y="0" width="100" height="20" backcolor="#C0D4A9" uuid="0b592041-850d-4637-b773-c212e715ceb4"/>
+				<box>
+					<pen lineWidth="1.0" lineStyle="Solid"/>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[String.format("%.2f", $V{brandMemo}.compareTo(new BigDecimal(0))  > 0 ? ($V{fortyTo50}.multiply(new BigDecimal(100)).divide($V{brandMemo}, 2, RoundingMode.HALF_UP)) : new BigDecimal(0)) + "%"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement mode="Opaque" x="1" y="0" width="127" height="20" backcolor="#C0D4A9" uuid="f6177650-e188-44ce-91d2-5e494d4024c3"/>
+				<box>
+					<pen lineWidth="1.0" lineStyle="Solid"/>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Total]]></text>
+			</staticText>
+			<textField>
+				<reportElement mode="Opaque" x="318" y="0" width="97" height="20" backcolor="#C0D4A9" uuid="508ff2f3-a44c-4fad-ba5a-b79e2cbd62a9"/>
+				<box>
+					<pen lineWidth="1.0" lineStyle="Solid"/>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[String.format("%.2f", $V{serviceOutlet}.compareTo(new BigDecimal(0))  > 0 ? ($V{brandMemo}.multiply(new BigDecimal(100)).divide($V{serviceOutlet}, 2, RoundingMode.HALF_UP)) : new BigDecimal(0)) + "%"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement mode="Opaque" x="128" y="0" width="101" height="20" backcolor="#C0D4A9" uuid="4e06738f-ec92-4fb8-882f-9e61cf819b4f"/>
+				<box>
+					<pen lineWidth="1.0" lineStyle="Solid"/>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{serviceOutlet}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement mode="Opaque" x="229" y="0" width="89" height="20" backcolor="#C0D4A9" uuid="4dc76a4f-9593-4f51-a744-9569fff520d3"/>
+				<box>
+					<pen lineWidth="1.0" lineStyle="Solid"/>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{brandMemo}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>
