@@ -1,0 +1,494 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.6.0.final using JasperReports Library version 6.6.0  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="CPR_REPORT_ALL" pageWidth="895" pageHeight="4942" columnWidth="855" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="43ccb32c-5cdd-44c8-9623-1093fec89e4a">
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="SM_TEST"/>
+	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w1" value="322"/>
+	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w2" value="673"/>
+	<property name="com.jaspersoft.studio.unit." value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageHeight" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.topMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.bottomMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.leftMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.rightMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnSpacing" value="pixel"/>
+	<parameter name="pDate" class="java.lang.String"/>
+	<queryString language="SQL">
+		<![CDATA[select 
+o.teritory_id,o.zone_id,o.route_id,o.teritory_name,o.zone_name,o.route_name,o.visit_frequency,o.outlet_no,( case when o.visit_frequency<> 6  and m.memo_no is null then 0 else o.outlet_no end )service_outlet,
+sum(case when vripc.product_cat_id = 101 then vripc.quantity else 0 end ) Cigrettee_sales,
+ sum(case when vripc.product_cat_id = 102 then vripc.quantity else 0 end ) Bidi_sales,
+ sum(case when vripc.product_cat_id = 103 then vripc.quantity else 0 end ) Match_sales,
+m.memo_no, (case when o.outlet_no>0 then  m.memo_no/o.outlet_no else 0 end) cpr ,
+to_date(  $P{pDate}   ,'dd-mm-yyyy') dd
+from v_route_wise_sales_rep_outlet o left outer join v_route_wise_memo m  on ( o.route_id=m.route_id and m.inv_date  =to_char(to_date( $P{pDate}  ,'dd-mm-yyyy'),'yyyymmdd') ) left join v_sales_rep_inv_prod_cat vripc on (vripc.route_id = m.route_id and to_char(vripc.txn_dt,'dd-mm-yyyy') =$P{pDate}   )
+group by o.teritory_id,o.zone_id,o.route_id,o.teritory_name,o.zone_name,o.route_name,o.visit_frequency,o.outlet_no,m.memo_no
+order by o.teritory_id,o.zone_id,o.route_id]]>
+	</queryString>
+	<field name="TERITORY_ID" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="TERITORY_ID"/>
+	</field>
+	<field name="ZONE_ID" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="ZONE_ID"/>
+	</field>
+	<field name="ROUTE_ID" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="ROUTE_ID"/>
+	</field>
+	<field name="TERITORY_NAME" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="TERITORY_NAME"/>
+	</field>
+	<field name="ZONE_NAME" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="ZONE_NAME"/>
+	</field>
+	<field name="ROUTE_NAME" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="ROUTE_NAME"/>
+	</field>
+	<field name="VISIT_FREQUENCY" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="VISIT_FREQUENCY"/>
+	</field>
+	<field name="OUTLET_NO" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="OUTLET_NO"/>
+	</field>
+	<field name="SERVICE_OUTLET" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="SERVICE_OUTLET"/>
+	</field>
+	<field name="CIGRETTEE_SALES" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="CIGRETTEE_SALES"/>
+	</field>
+	<field name="BIDI_SALES" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="BIDI_SALES"/>
+	</field>
+	<field name="MATCH_SALES" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="MATCH_SALES"/>
+	</field>
+	<field name="MEMO_NO" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="MEMO_NO"/>
+	</field>
+	<field name="CPR" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="CPR"/>
+	</field>
+	<field name="DD" class="java.sql.Timestamp">
+		<property name="com.jaspersoft.studio.field.label" value="DD"/>
+	</field>
+	<variable name="v_z_memo_no_t" class="java.math.BigDecimal" resetType="Group" resetGroup="ZONE_NAME" calculation="Sum">
+		<variableExpression><![CDATA[$F{MEMO_NO}]]></variableExpression>
+	</variable>
+	<variable name="v_z_outlet_t" class="java.math.BigDecimal" resetType="Group" resetGroup="ZONE_NAME" calculation="Sum">
+		<variableExpression><![CDATA[$F{SERVICE_OUTLET}]]></variableExpression>
+	</variable>
+	<variable name="v_z_cpr" class="java.math.BigDecimal" resetType="Group" resetGroup="ZONE_NAME">
+		<variableExpression><![CDATA[$V{v_z_outlet_t}.doubleValue() ==0.00?new BigDecimal("0.00"):$V{v_z_memo_no_t}.divide($V{v_z_outlet_t},2,BigDecimal.ROUND_UP)]]></variableExpression>
+	</variable>
+	<variable name="v_t_memo_no_t" class="java.math.BigDecimal" resetType="Group" resetGroup="TERITORY_NAME" calculation="Sum">
+		<variableExpression><![CDATA[$F{MEMO_NO}]]></variableExpression>
+	</variable>
+	<variable name="v_t_outlet_t" class="java.math.BigDecimal" resetType="Group" resetGroup="TERITORY_NAME" calculation="Sum">
+		<variableExpression><![CDATA[$F{SERVICE_OUTLET}]]></variableExpression>
+	</variable>
+	<variable name="v_t_cpr" class="java.math.BigDecimal" resetType="Group" resetGroup="TERITORY_NAME">
+		<variableExpression><![CDATA[$V{v_t_outlet_t}.doubleValue() ==0.00?new BigDecimal("0.00"):$V{v_t_memo_no_t}.divide($V{v_t_outlet_t},2,BigDecimal.ROUND_UP)]]></variableExpression>
+	</variable>
+	<variable name="v_z_cig_sales_t" class="java.math.BigDecimal" resetType="Group" resetGroup="ZONE_NAME" calculation="Sum">
+		<variableExpression><![CDATA[$F{CIGRETTEE_SALES}]]></variableExpression>
+	</variable>
+	<variable name="v_z_bidi_sales_t" class="java.math.BigDecimal" resetType="Group" resetGroup="ZONE_NAME" calculation="Sum">
+		<variableExpression><![CDATA[$F{BIDI_SALES}]]></variableExpression>
+	</variable>
+	<variable name="v_z_match_sales_t" class="java.math.BigDecimal" resetType="Group" resetGroup="ZONE_NAME" calculation="Sum">
+		<variableExpression><![CDATA[$F{MATCH_SALES}]]></variableExpression>
+	</variable>
+	<variable name="v_t_cig_sales_t" class="java.math.BigDecimal" resetType="Group" resetGroup="TERITORY_NAME" calculation="Sum">
+		<variableExpression><![CDATA[$F{CIGRETTEE_SALES}]]></variableExpression>
+	</variable>
+	<variable name="v_t_bidi_sales_t" class="java.math.BigDecimal" resetType="Group" resetGroup="TERITORY_NAME" calculation="Sum">
+		<variableExpression><![CDATA[$F{BIDI_SALES}]]></variableExpression>
+	</variable>
+	<variable name="v_t_match_sales_t" class="java.math.BigDecimal" resetType="Group" resetGroup="TERITORY_NAME" calculation="Sum">
+		<variableExpression><![CDATA[$F{MATCH_SALES}]]></variableExpression>
+	</variable>
+	<group name="TERITORY_NAME">
+		<groupExpression><![CDATA[$F{TERITORY_NAME}]]></groupExpression>
+		<groupFooter>
+			<band height="20">
+				<textField pattern="#,##0" isBlankWhenNull="true">
+					<reportElement mode="Opaque" x="633" y="0" width="111" height="20" backcolor="#C29DFA" uuid="1fac08fd-7210-4803-82a4-369f8413dc7f"/>
+					<box>
+						<pen lineWidth="0.12"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{v_t_memo_no_t}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement mode="Opaque" x="0" y="0" width="222" height="20" backcolor="#C29DFA" uuid="9ff2015c-685d-4b7e-80d2-c61d830994b9"/>
+					<box>
+						<pen lineWidth="0.12"/>
+					</box>
+					<textElement verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{TERITORY_NAME}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0%" isBlankWhenNull="true">
+					<reportElement mode="Opaque" x="744" y="0" width="111" height="20" backcolor="#C29DFA" uuid="68a83bf5-18e0-424b-8047-1565d0e274ee"/>
+					<box>
+						<pen lineWidth="0.12"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{v_t_cpr}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0" isBlankWhenNull="true">
+					<reportElement mode="Opaque" x="222" y="0" width="111" height="20" backcolor="#C29DFA" uuid="3f47141d-4bb6-435e-baef-3e419aea809a"/>
+					<box>
+						<pen lineWidth="0.12"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{v_t_outlet_t}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0" isBlankWhenNull="true">
+					<reportElement mode="Opaque" x="333" y="0" width="100" height="20" backcolor="#C29DFA" uuid="3a61a2bb-b76e-4ed2-93b8-1259f836bb56"/>
+					<box>
+						<pen lineWidth="0.12"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{v_t_cig_sales_t}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0" isBlankWhenNull="true">
+					<reportElement mode="Opaque" x="433" y="0" width="100" height="20" backcolor="#C29DFA" uuid="9137d05e-25b7-41d6-9de2-58db04658d07"/>
+					<box>
+						<pen lineWidth="0.12"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{v_t_bidi_sales_t}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0" isBlankWhenNull="true">
+					<reportElement mode="Opaque" x="533" y="0" width="100" height="20" backcolor="#C29DFA" uuid="a0174dea-5ab2-461b-869b-9c3572cc4ed7"/>
+					<box>
+						<pen lineWidth="0.12"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{v_t_match_sales_t}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupFooter>
+	</group>
+	<group name="ZONE_NAME">
+		<groupExpression><![CDATA[$F{ZONE_NAME}]]></groupExpression>
+		<groupFooter>
+			<band height="20">
+				<textField pattern="#,##0" isBlankWhenNull="true">
+					<reportElement mode="Opaque" x="633" y="0" width="111" height="20" backcolor="#D7F6FA" uuid="ff12fb9a-622e-4425-b0bd-6caa078ea0b9"/>
+					<box>
+						<pen lineWidth="0.12"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[$V{v_z_memo_no_t}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0" isBlankWhenNull="true">
+					<reportElement mode="Opaque" x="222" y="0" width="111" height="20" backcolor="#D7F6FA" uuid="8c7a7487-7826-4e1a-a91d-18b523a16cc8"/>
+					<box>
+						<pen lineWidth="0.12"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[$V{v_z_outlet_t}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0%" isBlankWhenNull="true">
+					<reportElement mode="Opaque" x="744" y="0" width="111" height="20" backcolor="#D7F6FA" uuid="fb979390-29bb-4630-a1b3-353fa0a2e5de"/>
+					<box>
+						<pen lineWidth="0.12"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[$V{v_z_cpr}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement mode="Opaque" x="0" y="0" width="222" height="20" backcolor="#D7F6FA" uuid="3aa1fb07-14c0-436b-a849-6872c2fbc4c5"/>
+					<box>
+						<pen lineWidth="0.12"/>
+					</box>
+					<textElement verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[$F{ZONE_NAME}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0" isBlankWhenNull="true">
+					<reportElement mode="Opaque" x="333" y="0" width="100" height="20" backcolor="#D7F6FA" uuid="f9e87752-0cab-47a1-97f4-c6f82c21c2ac"/>
+					<box>
+						<pen lineWidth="0.12"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[$V{v_z_cig_sales_t}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0" isBlankWhenNull="true">
+					<reportElement mode="Opaque" x="433" y="0" width="100" height="20" backcolor="#D7F6FA" uuid="d720a13c-271c-4533-bb6e-d404b4080162"/>
+					<box>
+						<pen lineWidth="0.12"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[$V{v_z_bidi_sales_t}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0" isBlankWhenNull="true">
+					<reportElement mode="Opaque" x="533" y="0" width="100" height="20" backcolor="#D7F6FA" uuid="bef97b6d-718b-471b-8675-ef82f459822c"/>
+					<box>
+						<pen lineWidth="0.12"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[$V{v_z_match_sales_t}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="46" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="1" width="855" height="25" uuid="f55676d8-3aac-4f27-bf53-224c8d590d93"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Abul Khair Tobacco Company Limited]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="26" width="855" height="20" uuid="123cd11d-0c70-4374-8024-d1b7ae072193"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Route wise CPR ]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="29" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="533" height="20" uuid="9f7043f5-c100-4ff7-8f75-85518c80771c"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Territory All"]]></textFieldExpression>
+			</textField>
+			<textField pattern="MMM d, yyyy">
+				<reportElement x="744" y="0" width="111" height="20" uuid="5aaa4d7c-e143-4065-bd93-8bf520611569"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{DD}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="533" y="0" width="211" height="20" uuid="9cf09453-a2e1-45b7-af45-e8efa323c976"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Sales Date:]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="40" splitType="Stretch">
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="0" width="130" height="40" backcolor="#C7E5F0" uuid="36bfcfc2-d943-4902-98d5-263e3c5376cf">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="9167cbcf-9a86-40bc-a4d8-e75795d111de"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Route]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="130" y="0" width="92" height="40" backcolor="#C7E5F0" uuid="23988e1a-bd47-4eda-a5aa-1d00b40d1921">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="cb140898-5e86-4ab1-a3db-8cd19ba68eef"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Frequency]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="222" y="0" width="111" height="40" backcolor="#C7E5F0" uuid="640c5254-abff-4308-babe-3b0faf8bfb9b">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="9ccf2dc1-8524-4127-92e8-b204d605b1f9"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Outlet]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="633" y="0" width="111" height="40" backcolor="#C7E5F0" uuid="cf1132f2-72e0-4597-8bee-3c5aec049d86">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="44f7fd03-e998-4f08-b75b-a2b4598f9e9b"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Memo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="744" y="0" width="111" height="40" backcolor="#C7E5F0" uuid="d975a80a-3295-4cbb-8667-507fb3499d3f">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="c182f60a-e2f6-48e0-b33f-96e4cb4dc32e"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[CPR]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="333" y="20" width="100" height="20" backcolor="#C7E5F0" uuid="204a04c4-2115-475a-a274-b6b701578ae6">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="c7cbaf36-4efa-456a-8130-4f70c822fb32"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Cigarette]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="433" y="20" width="100" height="20" backcolor="#C7E5F0" uuid="fb7a81b7-d765-4bed-a2e5-f7a66708c138">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="d02e0227-ca40-4072-9598-94531b2a0d72"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Bidi]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="533" y="20" width="100" height="20" backcolor="#C7E5F0" uuid="11dd8ddd-2965-4934-8f86-073e4a7f9ca7">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="c82e7432-9fca-4b63-883d-f4ba4f23e18d"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Match]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="333" y="0" width="300" height="20" backcolor="#C7E5F0" uuid="300b6f5c-c8b9-46c7-afa9-b08840b1c23e"/>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Sales]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="15" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="130" height="15" uuid="79275e7a-e8d0-4c43-b790-89ce3b144b7e">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="9167cbcf-9a86-40bc-a4d8-e75795d111de"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{ROUTE_NAME}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="130" y="0" width="92" height="15" uuid="151febc8-8f82-4e12-aacb-ce52539d6aaa">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="cb140898-5e86-4ab1-a3db-8cd19ba68eef"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{VISIT_FREQUENCY}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0" isBlankWhenNull="true">
+				<reportElement x="222" y="0" width="111" height="15" uuid="e8e4e0bd-ef19-49d6-9e2c-13d4bfda9996">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="9ccf2dc1-8524-4127-92e8-b204d605b1f9"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{OUTLET_NO}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0" isBlankWhenNull="true">
+				<reportElement x="633" y="0" width="111" height="15" uuid="12d8425b-7579-4481-9f4d-02cd31313470">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="44f7fd03-e998-4f08-b75b-a2b4598f9e9b"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{MEMO_NO}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0%" isBlankWhenNull="true">
+				<reportElement x="744" y="0" width="111" height="15" uuid="b77d1b61-4bd2-416b-8d34-ef475f8dde35">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="c182f60a-e2f6-48e0-b33f-96e4cb4dc32e"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{CPR}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="333" y="0" width="100" height="15" uuid="a7507aaa-cce0-4f93-a9f4-43fd9c495cd2">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="c7cbaf36-4efa-456a-8130-4f70c822fb32"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{CIGRETTEE_SALES}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="433" y="0" width="100" height="15" uuid="72308f99-8757-458c-a9ba-c0da9a6276bd">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="d02e0227-ca40-4072-9598-94531b2a0d72"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{BIDI_SALES}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="533" y="0" width="100" height="15" uuid="5f27dd69-173c-4425-a54e-4aa578714968">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="c82e7432-9fca-4b63-883d-f4ba4f23e18d"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{MATCH_SALES}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>
