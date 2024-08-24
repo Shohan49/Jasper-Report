@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.20.0.final using JasperReports Library version 6.20.0-2bc7ab61c56f459e8176eb05c7705e145cd400ad  -->
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Brand_wise_memo_achievement_national_Match" pageWidth="1260" pageHeight="612" orientation="Landscape" columnWidth="752" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="b240dca5-f5b7-49c6-a2f4-ce589d0f7868">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Brand_wise_memo_achievement_territory" pageWidth="1260" pageHeight="612" orientation="Landscape" columnWidth="752" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="b240dca5-f5b7-49c6-a2f4-ce589d0f7868">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="TEST_SM"/>
 	<parameter name="fromDate" class="java.lang.String">
 		<defaultValueExpression><![CDATA[$P{fromDate}]]></defaultValueExpression>
@@ -8,28 +8,28 @@
 	<parameter name="toDate" class="java.lang.String">
 		<defaultValueExpression><![CDATA[$P{toDate}]]></defaultValueExpression>
 	</parameter>
-	<parameter name="productName" class="java.lang.String"/>
-	<queryString>
-		<![CDATA[]]>
-	</queryString>
-	<field name="wingName" class="java.lang.String"/>
+	<parameter name="productName" class="java.lang.String">
+		<defaultValueExpression><![CDATA[$P{productName}]]></defaultValueExpression>
+	</parameter>
+	<parameter name="teritoryId" class="java.lang.String"/>
+	<field name="routeName" class="java.lang.String"/>
 	<field name="serviceOutlet" class="java.math.BigDecimal"/>
-	<field name="dozen1" class="java.math.BigDecimal"/>
-	<field name="dozen5" class="java.math.BigDecimal"/>
-	<field name="dozen11" class="java.math.BigDecimal"/>
-	<field name="moreThan11" class="java.math.BigDecimal"/>
+	<field name="tenTo30" class="java.math.BigDecimal"/>
+	<field name="fortyTo50" class="java.math.BigDecimal"/>
+	<field name="sixtyTo90" class="java.math.BigDecimal"/>
+	<field name="hundredPlus" class="java.math.BigDecimal"/>
 	<field name="brandMemo" class="java.math.BigDecimal"/>
 	<variable name="tenTo30" class="java.math.BigDecimal" calculation="Sum">
-		<variableExpression><![CDATA[$F{dozen1}]]></variableExpression>
+		<variableExpression><![CDATA[$F{tenTo30}]]></variableExpression>
 	</variable>
 	<variable name="fortyTo50" class="java.math.BigDecimal" calculation="Sum">
-		<variableExpression><![CDATA[$F{dozen5}]]></variableExpression>
+		<variableExpression><![CDATA[$F{fortyTo50}]]></variableExpression>
 	</variable>
 	<variable name="sixtyTo90" class="java.math.BigDecimal" calculation="Sum">
-		<variableExpression><![CDATA[$F{dozen11}]]></variableExpression>
+		<variableExpression><![CDATA[$F{sixtyTo90}]]></variableExpression>
 	</variable>
 	<variable name="hundredPlus" class="java.math.BigDecimal" calculation="Sum">
-		<variableExpression><![CDATA[$F{moreThan11}]]></variableExpression>
+		<variableExpression><![CDATA[$F{hundredPlus}]]></variableExpression>
 	</variable>
 	<variable name="serviceOutlet" class="java.math.BigDecimal" calculation="Sum">
 		<variableExpression><![CDATA[$F{serviceOutlet}]]></variableExpression>
@@ -47,44 +47,51 @@
 				<textElement verticalAlignment="Middle">
 					<font size="20" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Brand Wise Memo Achievement (National)]]></text>
+				<text><![CDATA[Brand Wise Memo Achievement (Territory)]]></text>
 			</staticText>
 		</band>
 	</title>
 	<pageHeader>
 		<band height="121" splitType="Stretch">
 			<textField>
-				<reportElement x="616" y="90" width="604" height="30" uuid="29e82b0a-ed2e-4c28-956e-43392ff32ad3"/>
+				<reportElement x="616" y="91" width="604" height="30" uuid="29e82b0a-ed2e-4c28-956e-43392ff32ad3"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA["Execution Time : " +new  SimpleDateFormat("dd-MMM-yyyy, hh:mm:ss a").format(new java.util.Date())]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="0" y="101" width="415" height="20" uuid="1d44c6bb-1288-4de1-b4e7-c3c352468299">
+				<reportElement x="0" y="21" width="415" height="20" uuid="dfc8bf32-0dcb-4c40-b340-f53e7665ae84">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
 				<textElement textAlignment="Left" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA["Product Name: " +$P{productName}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["From Date: " +$P{fromDate}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="0" y="61" width="415" height="20" uuid="2bc019c0-78b0-4245-ab96-d6db94c62023">
+				<reportElement x="0" y="41" width="415" height="20" uuid="9fadc27c-48e4-41b3-a98e-74e404f51c26">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
 				<textElement textAlignment="Left" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA["To Date: " +$P{toDate}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="0" y="81" width="415" height="20" uuid="8f0dfba2-24f6-404d-b8ba-2a6cde08ef74">
+				<reportElement x="0" y="81" width="415" height="20" uuid="75120ca2-8331-4ce4-b367-7b67267abdbe">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
 				<textElement textAlignment="Left" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA["Category Name: Match"]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Product Name: " +$P{productName}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="0" y="41" width="415" height="20" uuid="26e1dc4e-3ffb-4a19-b53f-79728054c1a1">
+				<reportElement x="0" y="101" width="415" height="20" uuid="bcef2ca9-d01a-4018-be20-19026c8b8cbf">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
 				<textElement textAlignment="Left" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA["From Date: " +$P{fromDate}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Territory Name: " +$P{teritoryId}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="61" width="415" height="20" uuid="bca65c77-c84b-4a1d-8527-6041dc974830">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Left" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA["Category Name: Cigarette"]]></textFieldExpression>
 			</textField>
 		</band>
 	</pageHeader>
@@ -102,7 +109,7 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="11" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Wing Name]]></text>
+				<text><![CDATA[Route Name]]></text>
 			</staticText>
 			<staticText>
 				<reportElement mode="Opaque" x="415" y="20" width="101" height="20" backcolor="#CCFFCC" uuid="cd6ac069-af90-4522-8438-5c928edba5f7"/>
@@ -133,7 +140,7 @@
 				<text><![CDATA[Contribution]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="716" y="20" width="102" height="20" backcolor="#CCFFCC" uuid="50af6466-a393-4df0-9088-d54a7fc198c5"/>
+				<reportElement mode="Opaque" x="716" y="20" width="100" height="20" backcolor="#CCFFCC" uuid="50af6466-a393-4df0-9088-d54a7fc198c5"/>
 				<box>
 					<pen lineWidth="1.0" lineStyle="Solid"/>
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -242,7 +249,7 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="11" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Match Selling Outlet]]></text>
+				<text><![CDATA[Cigarette Selling Outlet]]></text>
 			</staticText>
 			<staticText>
 				<reportElement mode="Opaque" x="318" y="0" width="97" height="40" backcolor="#CCFFCC" uuid="8cb9591d-8c77-4763-b08b-0ad3db203962"/>
@@ -270,7 +277,7 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="11" isBold="true"/>
 				</textElement>
-				<text><![CDATA[1 Dozen]]></text>
+				<text><![CDATA[10 to 30 stick]]></text>
 			</staticText>
 			<staticText>
 				<reportElement mode="Opaque" x="616" y="0" width="200" height="20" backcolor="#CCFFCC" uuid="d985d1ff-bf54-4dfb-b71f-371c68b9d217"/>
@@ -284,7 +291,7 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="11" isBold="true"/>
 				</textElement>
-				<text><![CDATA[2 to 5 Dozen]]></text>
+				<text><![CDATA[40 to 50 stick]]></text>
 			</staticText>
 			<staticText>
 				<reportElement mode="Opaque" x="816" y="0" width="200" height="20" backcolor="#CCFFCC" uuid="63c1ec45-d190-4b53-b07f-bce260321917"/>
@@ -298,7 +305,7 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="11" isBold="true"/>
 				</textElement>
-				<text><![CDATA[6 to 11 Dozen]]></text>
+				<text><![CDATA[60 to 90 stick]]></text>
 			</staticText>
 			<staticText>
 				<reportElement mode="Opaque" x="1016" y="0" width="204" height="20" backcolor="#CCFFCC" uuid="360cf32a-d7f0-4bd3-b188-d9097d004993"/>
@@ -312,7 +319,7 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="11" isBold="true"/>
 				</textElement>
-				<text><![CDATA[12 Dozen above]]></text>
+				<text><![CDATA[100 stick to Above]]></text>
 			</staticText>
 			<staticText>
 				<reportElement mode="Opaque" x="229" y="0" width="89" height="40" backcolor="#CCFFCC" uuid="b4f4ce72-23a2-4681-b01d-aa0a6b1e112c"/>
@@ -354,7 +361,7 @@
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$F{wingName}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{routeName}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="415" y="0" width="101" height="20" uuid="333d1b58-629c-4250-b7d4-fb80c810a383"/>
@@ -366,7 +373,7 @@
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$F{dozen1}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{tenTo30}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="516" y="0" width="100" height="20" uuid="63ad9cd2-7c4c-4d19-9438-0493077b17c8"/>
@@ -378,7 +385,7 @@
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[String.format("%.2f", $F{brandMemo}.compareTo(new BigDecimal(0))  > 0 ? ($F{dozen1}.multiply(new BigDecimal(100)).divide($F{brandMemo}, 2, RoundingMode.HALF_UP)) : new BigDecimal(0)) + "%"]]></textFieldExpression>
+				<textFieldExpression><![CDATA[String.format("%.2f", $F{brandMemo}.compareTo(new BigDecimal(0))  > 0 ? ($F{tenTo30}.multiply(new BigDecimal(100)).divide($F{brandMemo}, 2, RoundingMode.HALF_UP)) : new BigDecimal(0)) + "%"]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="1116" y="0" width="104" height="20" uuid="d342aa02-12ed-438b-81f0-de70749ba427"/>
@@ -390,7 +397,7 @@
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[String.format("%.2f", $F{brandMemo}.compareTo(new BigDecimal(0))  > 0 ? ($F{moreThan11}.multiply(new BigDecimal(100)).divide($F{brandMemo}, 2, RoundingMode.HALF_UP)) : new BigDecimal(0)) + "%"]]></textFieldExpression>
+				<textFieldExpression><![CDATA[String.format("%.2f", $F{brandMemo}.compareTo(new BigDecimal(0))  > 0 ? ($F{hundredPlus}.multiply(new BigDecimal(100)).divide($F{brandMemo}, 2, RoundingMode.HALF_UP)) : new BigDecimal(0)) + "%"]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="616" y="0" width="100" height="20" uuid="bdb97721-0623-42db-9c90-893d1f224e4a"/>
@@ -402,7 +409,7 @@
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$F{dozen5}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{fortyTo50}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="1016" y="0" width="100" height="20" uuid="5316be8b-b028-4ba4-8afd-419b02d65d6f"/>
@@ -414,7 +421,7 @@
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$F{moreThan11}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{hundredPlus}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="916" y="0" width="100" height="20" uuid="4c77b0f5-7cd2-40da-87cc-65737da3a71c"/>
@@ -426,7 +433,7 @@
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[String.format("%.2f", $F{brandMemo}.compareTo(new BigDecimal(0))  > 0 ? ($F{dozen11}.multiply(new BigDecimal(100)).divide($F{brandMemo}, 2, RoundingMode.HALF_UP)) : new BigDecimal(0)) + "%"]]></textFieldExpression>
+				<textFieldExpression><![CDATA[String.format("%.2f", $F{brandMemo}.compareTo(new BigDecimal(0))  > 0 ? ($F{sixtyTo90}.multiply(new BigDecimal(100)).divide($F{brandMemo}, 2, RoundingMode.HALF_UP)) : new BigDecimal(0)) + "%"]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="716" y="0" width="100" height="20" uuid="4b47cb5d-c5cb-4397-9514-f0bf787e461c"/>
@@ -438,7 +445,7 @@
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[String.format("%.2f", $F{brandMemo}.compareTo(new BigDecimal(0))  > 0 ? ($F{dozen5}.multiply(new BigDecimal(100)).divide($F{brandMemo}, 2, RoundingMode.HALF_UP)) : new BigDecimal(0)) + "%"]]></textFieldExpression>
+				<textFieldExpression><![CDATA[String.format("%.2f", $F{brandMemo}.compareTo(new BigDecimal(0))  > 0 ? ($F{fortyTo50}.multiply(new BigDecimal(100)).divide($F{brandMemo}, 2, RoundingMode.HALF_UP)) : new BigDecimal(0)) + "%"]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="816" y="0" width="100" height="20" uuid="82b64128-3928-45f7-8633-f6c8931baf31"/>
@@ -450,7 +457,7 @@
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$F{dozen11}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{sixtyTo90}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="128" y="0" width="101" height="20" uuid="d67f7a7b-3688-40d8-aca5-20f9226245ec"/>
