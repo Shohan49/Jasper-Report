@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.20.0.final using JasperReports Library version 6.20.0-2bc7ab61c56f459e8176eb05c7705e145cd400ad  -->
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="DailySales" pageWidth="2033" pageHeight="842" columnWidth="1220" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="4c40d711-54eb-414b-892e-47f86de4aa9e">
+<!-- Created with Jaspersoft Studio version 6.6.0.final using JasperReports Library version 6.6.0  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="DailySales" pageWidth="1700" pageHeight="842" columnWidth="1220" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="4c40d711-54eb-414b-892e-47f86de4aa9e">
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 	<property name="com.jaspersoft.studio.unit." value="pixel"/>
 	<property name="com.jaspersoft.studio.unit.pageHeight" value="pixel"/>
@@ -11,332 +11,505 @@
 	<property name="com.jaspersoft.studio.unit.rightMargin" value="pixel"/>
 	<property name="com.jaspersoft.studio.unit.columnWidth" value="pixel"/>
 	<property name="com.jaspersoft.studio.unit.columnSpacing" value="pixel"/>
-	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="PRODUCTION_AKT_SM"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="SM_TEST"/>
 	<parameter name="pDate" class="java.lang.String"/>
 	<parameter name="pDateFormat" class="java.lang.String"/>
 	<parameter name="pTeritoryId" class="java.lang.String"/>
 	<parameter name="pTerName" class="java.lang.String"/>
 	<queryString language="SQL">
-		<![CDATA[SELECT 
-        vta.WING_NAME wingName,
-        vta.DIVISION_NAME divisionName,
-        vta.TERITORY_NAME teritoryName,
-        vta.ZONE_NAME zoneName,
-        vta.ROUTE_NAME routeName, 
-        vta.ROUTE_ID routeId,
-        v.cig_sale cigSale,
-        v.cig_memo cigMemo,
-        v.bidi_sale bidiSale,
-        v.bidi_memo bidiMemo,
-        v.match_sale matchSale,
-        v.match_memo matchMemo,
-        v.lighter_sale lighterSale,
-        v.lighter_memo lighterMemo,
-        v.memo memo,
-        vst.cig_target cigTarget,
-        vst.bidi_target bidiTarget,
-        vst.match_target matchTarget,
-        vst.lighter_target lighterTarget,
-        (case when vst.cig_target>0 then v.cig_sale/vst.cig_target else 0 end ) cigAchivement,
-        (case when vst.bidi_target>0 then v.bidi_sale/vst.bidi_target else 0 end ) bidiAchivement,
-        (case when vst.match_target>0 then v.match_sale/vst.match_target else 0 end ) matchAchivement,
-        (case when vst.lighter_target>0 then v.lighter_sale/vst.lighter_target else 0 end ) lighterAchivement
-from appsm.v_sr_daily_sales_quantity_v2 v
-JOIN appsm.v_sales_rep_route_wise_tar_v2 vst ON v.dd=vst.dd and v.sales_rep_id=vst.sales_rep_id
+		<![CDATA[SELECT vta.WING_NAME, vta.DIVISION_NAME, vta.TERITORY_NAME teritory_name,vta.ZONE_NAME zone_name,vta.ROUTE_NAME route_name, vta.ROUTE_ID, 
+v.cig_sale,v.cig_memo,v.bidi_sale,v.bidi_memo,v.match_sale,v.match_memo,v.memo,vst.cig_target,vst.bidi_target,vst.match_target,
+(case when vst.cig_target>0 then  v.cig_sale/vst.cig_target else 0 end )cig_achivement,
+(case when vst.bidi_target>0 then  v.bidi_sale/vst.bidi_target  else 0 end ) bidi_achivement,
+(case when vst.match_target>0 then  v.match_sale/vst.match_target  else 0 end ) match_achivement
+from appsm.v_sr_daily_sales_quantity v 
+JOIN appsm.v_sales_rep_route_wise_target vst ON v.dd=vst.dd and v.sales_rep_id=vst.sales_rep_id
 JOIN APPSM.V_TERITORY_ALL vta ON vst.route_id = vta.ROUTE_ID
-where v.dd= $P{pDate}
-AND vta.TERITORY_ID IN ( select id from appsm.teritory where id = ANY($P!{pTeritoryId})or parent_id in
-(select id from appsm.teritory where id = ANY($P!{pTeritoryId}) or parent_id in
-(select id from appsm.teritory where id = ANY($P!{pTeritoryId}) or parent_id = ANY($P!{pTeritoryId}) )))
-order by vta.TERITORY_ID, vta.ZONE_ID, vta.ROUTE_ID]]>
+where v.dd=  $P{pDate} 
+AND vta.TERITORY_ID IN ( select id from appsm.teritory where id = $P{pTeritoryId} or parent_id in    
+            				(select id from appsm.teritory where  id = $P{pTeritoryId} or parent_id in
+            				 (select id from appsm.teritory where  id = $P{pTeritoryId} or parent_id= $P{pTeritoryId})))
+order by vta.ROUTE_ID]]>
 	</queryString>
-	<field name="teritoryName" class="java.lang.String">
+	<field name="TERITORY_NAME" class="java.lang.String">
 		<property name="com.jaspersoft.studio.field.label" value="TERITORY_NAME"/>
 	</field>
-	<field name="zoneName" class="java.lang.String">
+	<field name="ZONE_NAME" class="java.lang.String">
 		<property name="com.jaspersoft.studio.field.label" value="ZONE_NAME"/>
 	</field>
-	<field name="routeName" class="java.lang.String">
+	<field name="ROUTE_NAME" class="java.lang.String">
 		<property name="com.jaspersoft.studio.field.label" value="ROUTE_NAME"/>
 	</field>
-	<field name="cigSale" class="java.math.BigDecimal">
+	<field name="CIG_SALE" class="java.math.BigDecimal">
 		<property name="com.jaspersoft.studio.field.label" value="CIG_SALE"/>
 	</field>
-	<field name="cigMemo" class="java.math.BigDecimal">
+	<field name="CIG_MEMO" class="java.math.BigDecimal">
 		<property name="com.jaspersoft.studio.field.label" value="CIG_MEMO"/>
 	</field>
-	<field name="bidiSale" class="java.math.BigDecimal">
+	<field name="BIDI_SALE" class="java.math.BigDecimal">
 		<property name="com.jaspersoft.studio.field.label" value="BIDI_SALE"/>
 	</field>
-	<field name="bidiMemo" class="java.math.BigDecimal">
+	<field name="BIDI_MEMO" class="java.math.BigDecimal">
 		<property name="com.jaspersoft.studio.field.label" value="BIDI_MEMO"/>
 	</field>
-	<field name="matchSale" class="java.math.BigDecimal">
+	<field name="MATCH_SALE" class="java.math.BigDecimal">
 		<property name="com.jaspersoft.studio.field.label" value="MATCH_SALE"/>
 	</field>
-	<field name="matchMemo" class="java.math.BigDecimal">
+	<field name="MATCH_MEMO" class="java.math.BigDecimal">
 		<property name="com.jaspersoft.studio.field.label" value="MATCH_MEMO"/>
 	</field>
-	<field name="memo" class="java.math.BigDecimal">
+	<field name="MEMO" class="java.math.BigDecimal">
 		<property name="com.jaspersoft.studio.field.label" value="MEMO"/>
 	</field>
-	<field name="cigTarget" class="java.math.BigDecimal">
+	<field name="CIG_TARGET" class="java.math.BigDecimal">
 		<property name="com.jaspersoft.studio.field.label" value="CIG_TARGET"/>
 	</field>
-	<field name="bidiTarget" class="java.math.BigDecimal">
+	<field name="BIDI_TARGET" class="java.math.BigDecimal">
 		<property name="com.jaspersoft.studio.field.label" value="BIDI_TARGET"/>
 	</field>
-	<field name="matchTarget" class="java.math.BigDecimal">
+	<field name="MATCH_TARGET" class="java.math.BigDecimal">
 		<property name="com.jaspersoft.studio.field.label" value="MATCH_TARGET"/>
 	</field>
-	<field name="cigAchivement" class="java.math.BigDecimal">
+	<field name="CIG_ACHIVEMENT" class="java.math.BigDecimal">
 		<property name="com.jaspersoft.studio.field.label" value="CIG_ACHIVEMENT"/>
 	</field>
-	<field name="bidiAchivement" class="java.math.BigDecimal">
+	<field name="BIDI_ACHIVEMENT" class="java.math.BigDecimal">
 		<property name="com.jaspersoft.studio.field.label" value="BIDI_ACHIVEMENT"/>
 	</field>
-	<field name="matchAchivement" class="java.math.BigDecimal">
+	<field name="MATCH_ACHIVEMENT" class="java.math.BigDecimal">
 		<property name="com.jaspersoft.studio.field.label" value="MATCH_ACHIVEMENT"/>
 	</field>
-	<field name="divisionName" class="java.lang.String"/>
-	<field name="wingName" class="java.lang.String"/>
-	<field name="lighterSale" class="java.math.BigDecimal">
-		<property name="com.jaspersoft.studio.field.label" value="MATCH_SALE"/>
-	</field>
-	<field name="lighterMemo" class="java.math.BigDecimal">
-		<property name="com.jaspersoft.studio.field.label" value="MATCH_MEMO"/>
-	</field>
-	<field name="lighterTarget" class="java.math.BigDecimal">
-		<property name="com.jaspersoft.studio.field.label" value="MATCH_TARGET"/>
-	</field>
-	<field name="lighterAchivement" class="java.math.BigDecimal">
-		<property name="com.jaspersoft.studio.field.label" value="MATCH_ACHIVEMENT"/>
-	</field>
+	<field name="division_name" class="java.lang.String"/>
+	<field name="wing_name" class="java.lang.String"/>
 	<variable name="v_z_total_cig" class="java.math.BigDecimal" resetType="Group" resetGroup="ZONE_NAME" calculation="Sum">
-		<variableExpression><![CDATA[$F{cigSale}]]></variableExpression>
+		<variableExpression><![CDATA[$F{CIG_SALE}]]></variableExpression>
 	</variable>
 	<variable name="v_z_total_bidi" class="java.math.BigDecimal" resetType="Group" resetGroup="ZONE_NAME" calculation="Sum">
-		<variableExpression><![CDATA[$F{bidiSale}]]></variableExpression>
+		<variableExpression><![CDATA[$F{BIDI_SALE}]]></variableExpression>
 	</variable>
 	<variable name="v_z_total_match" class="java.math.BigDecimal" resetType="Group" resetGroup="ZONE_NAME" calculation="Sum">
-		<variableExpression><![CDATA[$F{matchSale}]]></variableExpression>
+		<variableExpression><![CDATA[$F{MATCH_SALE}]]></variableExpression>
 	</variable>
 	<variable name="v_z_total_memo" class="java.math.BigDecimal" resetType="Group" resetGroup="ZONE_NAME" calculation="Sum">
-		<variableExpression><![CDATA[$F{memo}]]></variableExpression>
+		<variableExpression><![CDATA[$F{MEMO}]]></variableExpression>
 	</variable>
 	<variable name="v_t_total_cig" class="java.math.BigDecimal" resetType="Group" resetGroup="TERITORY_NAME" calculation="Sum">
-		<variableExpression><![CDATA[$F{cigSale}]]></variableExpression>
+		<variableExpression><![CDATA[$F{CIG_SALE}]]></variableExpression>
 	</variable>
 	<variable name="v_t_total_bidi" class="java.math.BigDecimal" resetType="Group" resetGroup="TERITORY_NAME" calculation="Sum">
-		<variableExpression><![CDATA[$F{bidiSale}]]></variableExpression>
+		<variableExpression><![CDATA[$F{BIDI_SALE}]]></variableExpression>
 	</variable>
 	<variable name="v_t_total_match" class="java.math.BigDecimal" resetType="Group" resetGroup="TERITORY_NAME" calculation="Sum">
-		<variableExpression><![CDATA[$F{matchSale}]]></variableExpression>
+		<variableExpression><![CDATA[$F{MATCH_SALE}]]></variableExpression>
 	</variable>
 	<variable name="v_t_total_memo" class="java.math.BigDecimal" resetType="Group" resetGroup="TERITORY_NAME" calculation="Sum">
-		<variableExpression><![CDATA[$F{memo}]]></variableExpression>
+		<variableExpression><![CDATA[$F{MEMO}]]></variableExpression>
 	</variable>
 	<variable name="v_z_total_cig_target" class="java.math.BigDecimal" resetType="Group" resetGroup="ZONE_NAME" calculation="Sum">
-		<variableExpression><![CDATA[$F{cigTarget}]]></variableExpression>
+		<variableExpression><![CDATA[$F{CIG_TARGET}]]></variableExpression>
 	</variable>
 	<variable name="v_z_total_bidi_target" class="java.math.BigDecimal" resetType="Group" resetGroup="ZONE_NAME" calculation="Sum">
-		<variableExpression><![CDATA[$F{bidiTarget}]]></variableExpression>
+		<variableExpression><![CDATA[$F{BIDI_TARGET}]]></variableExpression>
 	</variable>
 	<variable name="v_z_total_match_target" class="java.math.BigDecimal" resetType="Group" resetGroup="ZONE_NAME" calculation="Sum">
-		<variableExpression><![CDATA[$F{matchTarget}]]></variableExpression>
+		<variableExpression><![CDATA[$F{MATCH_TARGET}]]></variableExpression>
 	</variable>
 	<variable name="v_t_total_cig_target" class="java.math.BigDecimal" resetType="Group" resetGroup="TERITORY_NAME" calculation="Sum">
-		<variableExpression><![CDATA[$F{cigTarget}]]></variableExpression>
+		<variableExpression><![CDATA[$F{CIG_TARGET}]]></variableExpression>
 	</variable>
 	<variable name="v_t_total_bidi_target" class="java.math.BigDecimal" resetType="Group" resetGroup="TERITORY_NAME" calculation="Sum">
-		<variableExpression><![CDATA[$F{bidiTarget}]]></variableExpression>
+		<variableExpression><![CDATA[$F{BIDI_TARGET}]]></variableExpression>
 	</variable>
 	<variable name="v_t_total_match_target" class="java.math.BigDecimal" resetType="Group" resetGroup="TERITORY_NAME" calculation="Sum">
-		<variableExpression><![CDATA[$F{matchTarget}]]></variableExpression>
+		<variableExpression><![CDATA[$F{MATCH_TARGET}]]></variableExpression>
 	</variable>
-	<variable name="v_z_match_achivement" class="java.math.BigDecimal" resetType="Group" resetGroup="ZONE_NAME" calculation="Sum">
+	<variable name="v_z_cig_achivement" class="java.math.BigDecimal" resetType="Group" resetGroup="ZONE_NAME">
+		<variableExpression><![CDATA[$V{v_z_total_cig_target}.doubleValue() ==0.00?new BigDecimal("0.00"):$V{v_z_total_cig}.divide($V{v_z_total_cig_target},2, RoundingMode.CEILING)]]></variableExpression>
+	</variable>
+	<variable name="v_t_cig_achivement" class="java.math.BigDecimal" resetType="Group" resetGroup="TERITORY_NAME">
+		<variableExpression><![CDATA[$V{v_t_total_cig_target}.doubleValue() ==0.00?new BigDecimal("0.00"):$V{v_t_total_cig}.divide($V{v_t_total_cig_target},2, RoundingMode.CEILING)]]></variableExpression>
+	</variable>
+	<variable name="v_z_bidi_achivement" class="java.math.BigDecimal" resetType="Group" resetGroup="ZONE_NAME">
+		<variableExpression><![CDATA[$V{v_z_total_bidi_target}.doubleValue() ==0.00?new BigDecimal("0.00"):$V{v_z_total_bidi}.divide($V{v_z_total_bidi_target},2, RoundingMode.CEILING)]]></variableExpression>
+	</variable>
+	<variable name="v_t_bidi_achivement" class="java.math.BigDecimal" resetType="Group" resetGroup="TERITORY_NAME">
+		<variableExpression><![CDATA[$V{v_t_total_bidi_target}.doubleValue() ==0.00?new BigDecimal("0.00"):$V{v_t_total_bidi}.divide($V{v_t_total_bidi_target},2, RoundingMode.CEILING)]]></variableExpression>
+	</variable>
+	<variable name="v_z_match_achivement" class="java.math.BigDecimal" resetType="Group" resetGroup="ZONE_NAME">
 		<variableExpression><![CDATA[$V{v_z_total_match_target}.doubleValue() ==0.00?new BigDecimal("0.00"):$V{v_z_total_match}.divide($V{v_z_total_match_target},2, RoundingMode.CEILING)]]></variableExpression>
 	</variable>
-	<variable name="v_t_match_achivement" class="java.math.BigDecimal" resetType="Group" resetGroup="TERITORY_NAME" calculation="Sum">
+	<variable name="v_t_match_achivement" class="java.math.BigDecimal" resetType="Group" resetGroup="TERITORY_NAME">
 		<variableExpression><![CDATA[$V{v_t_total_match_target}.doubleValue() ==0.00?new BigDecimal("0.00"):$V{v_t_total_match}.divide($V{v_t_total_match_target},2, RoundingMode.CEILING)]]></variableExpression>
 	</variable>
 	<variable name="v_z_total_cig_memo" class="java.math.BigDecimal" resetType="Group" resetGroup="ZONE_NAME" calculation="Sum">
-		<variableExpression><![CDATA[$F{cigMemo}]]></variableExpression>
+		<variableExpression><![CDATA[$F{CIG_MEMO}]]></variableExpression>
 	</variable>
 	<variable name="v_z_total_bidi_memo" class="java.math.BigDecimal" resetType="Group" resetGroup="ZONE_NAME" calculation="Sum">
-		<variableExpression><![CDATA[$F{bidiMemo}]]></variableExpression>
+		<variableExpression><![CDATA[$F{BIDI_MEMO}]]></variableExpression>
 	</variable>
 	<variable name="v_z_total_match_memo" class="java.math.BigDecimal" resetType="Group" resetGroup="ZONE_NAME" calculation="Sum">
-		<variableExpression><![CDATA[$F{matchMemo}]]></variableExpression>
+		<variableExpression><![CDATA[$F{MATCH_MEMO}]]></variableExpression>
 	</variable>
 	<variable name="v_t_total_cig_memo" class="java.math.BigDecimal" resetType="Group" resetGroup="TERITORY_NAME" calculation="Sum">
-		<variableExpression><![CDATA[$F{cigMemo}]]></variableExpression>
+		<variableExpression><![CDATA[$F{CIG_MEMO}]]></variableExpression>
 	</variable>
 	<variable name="v_t_total_bidi_memo" class="java.math.BigDecimal" resetType="Group" resetGroup="TERITORY_NAME" calculation="Sum">
-		<variableExpression><![CDATA[$F{bidiMemo}]]></variableExpression>
+		<variableExpression><![CDATA[$F{BIDI_MEMO}]]></variableExpression>
 	</variable>
 	<variable name="v_t_total_match_memo" class="java.math.BigDecimal" resetType="Group" resetGroup="TERITORY_NAME" calculation="Sum">
-		<variableExpression><![CDATA[$F{matchMemo}]]></variableExpression>
+		<variableExpression><![CDATA[$F{MATCH_MEMO}]]></variableExpression>
 	</variable>
-	<variable name="zoneLighterTarget" class="java.math.BigDecimal" resetType="Group" resetGroup="ZONE_NAME" calculation="Sum">
-		<variableExpression><![CDATA[$F{lighterTarget}]]></variableExpression>
+	<variable name="v_d_total_cig" class="java.math.BigDecimal" resetType="Group" resetGroup="DIVISION_GROUP" calculation="Sum">
+		<variableExpression><![CDATA[$F{CIG_SALE}]]></variableExpression>
 	</variable>
-	<variable name="TerritoryLighterTarget" class="java.math.BigDecimal" resetType="Group" resetGroup="TERITORY_NAME" calculation="Sum">
-		<variableExpression><![CDATA[$F{lighterTarget}]]></variableExpression>
+	<variable name="v_d_total_bidi" class="java.math.BigDecimal" resetType="Group" resetGroup="DIVISION_GROUP" calculation="Sum">
+		<variableExpression><![CDATA[$F{BIDI_SALE}]]></variableExpression>
 	</variable>
-	<variable name="zoneLighterSale" class="java.math.BigDecimal" resetType="Group" resetGroup="ZONE_NAME" calculation="Sum">
-		<variableExpression><![CDATA[$F{lighterSale}]]></variableExpression>
+	<variable name="v_d_total_match" class="java.math.BigDecimal" resetType="Group" resetGroup="DIVISION_GROUP" calculation="Sum">
+		<variableExpression><![CDATA[$F{MATCH_SALE}]]></variableExpression>
 	</variable>
-	<variable name="TerritoryLighterSale" class="java.math.BigDecimal" resetType="Group" resetGroup="TERITORY_NAME" calculation="Sum">
-		<variableExpression><![CDATA[$F{lighterSale}]]></variableExpression>
+	<variable name="v_d_total_memo" class="java.math.BigDecimal" resetType="Group" resetGroup="DIVISION_GROUP" calculation="Sum">
+		<variableExpression><![CDATA[$F{MEMO}]]></variableExpression>
 	</variable>
-	<variable name="zoneLighterMemo" class="java.math.BigDecimal" resetType="Group" resetGroup="ZONE_NAME" calculation="Sum">
-		<variableExpression><![CDATA[$F{lighterMemo}]]></variableExpression>
+	<variable name="v_d_total_cig_target" class="java.math.BigDecimal" resetType="Group" resetGroup="DIVISION_GROUP" calculation="Sum">
+		<variableExpression><![CDATA[$F{CIG_TARGET}]]></variableExpression>
 	</variable>
-	<variable name="TerritoryLighterMemo" class="java.math.BigDecimal" resetType="Group" resetGroup="TERITORY_NAME" calculation="Sum">
-		<variableExpression><![CDATA[$F{lighterMemo}]]></variableExpression>
+	<variable name="v_d_total_bidi_target" class="java.math.BigDecimal" resetType="Group" resetGroup="DIVISION_GROUP" calculation="Sum">
+		<variableExpression><![CDATA[$F{BIDI_TARGET}]]></variableExpression>
 	</variable>
-	<group name="TERITORY_NAME">
-		<groupExpression><![CDATA[$F{teritoryName}]]></groupExpression>
+	<variable name="v_d_total_match_target" class="java.math.BigDecimal" resetType="Group" resetGroup="DIVISION_GROUP" calculation="Sum">
+		<variableExpression><![CDATA[$F{MATCH_TARGET}]]></variableExpression>
+	</variable>
+	<variable name="v_d_cig_achivement" class="java.math.BigDecimal" resetType="Group" resetGroup="DIVISION_GROUP">
+		<variableExpression><![CDATA[$V{v_t_total_cig_target}.doubleValue() ==0.00?new BigDecimal("0.00"):$V{v_t_total_cig}.divide($V{v_t_total_cig_target},2, RoundingMode.CEILING)]]></variableExpression>
+	</variable>
+	<variable name="v_d_bidi_achivement" class="java.math.BigDecimal" resetType="Group" resetGroup="DIVISION_GROUP">
+		<variableExpression><![CDATA[$V{v_t_total_bidi_target}.doubleValue() ==0.00?new BigDecimal("0.00"):$V{v_t_total_bidi}.divide($V{v_t_total_bidi_target},2, RoundingMode.CEILING)]]></variableExpression>
+	</variable>
+	<variable name="v_d_match_achivement" class="java.math.BigDecimal" resetType="Group" resetGroup="DIVISION_GROUP">
+		<variableExpression><![CDATA[$V{v_t_total_match_target}.doubleValue() ==0.00?new BigDecimal("0.00"):$V{v_t_total_match}.divide($V{v_t_total_match_target},2, RoundingMode.CEILING)]]></variableExpression>
+	</variable>
+	<variable name="v_d_total_cig_memo" class="java.math.BigDecimal" resetType="Group" resetGroup="DIVISION_GROUP" calculation="Sum">
+		<variableExpression><![CDATA[$F{CIG_MEMO}]]></variableExpression>
+	</variable>
+	<variable name="v_d_total_bidi_memo" class="java.math.BigDecimal" resetType="Group" resetGroup="DIVISION_GROUP" calculation="Sum">
+		<variableExpression><![CDATA[$F{BIDI_MEMO}]]></variableExpression>
+	</variable>
+	<variable name="v_d_total_match_memo" class="java.math.BigDecimal" resetType="Group" resetGroup="DIVISION_GROUP" calculation="Sum">
+		<variableExpression><![CDATA[$F{MATCH_MEMO}]]></variableExpression>
+	</variable>
+	<variable name="v_w_total_cig" class="java.math.BigDecimal" resetType="Group" resetGroup="WING_NAME" calculation="Sum">
+		<variableExpression><![CDATA[$F{CIG_SALE}]]></variableExpression>
+	</variable>
+	<variable name="v_w_total_bidi" class="java.math.BigDecimal" resetType="Group" resetGroup="WING_NAME" calculation="Sum">
+		<variableExpression><![CDATA[$F{BIDI_SALE}]]></variableExpression>
+	</variable>
+	<variable name="v_w_total_match" class="java.math.BigDecimal" resetType="Group" resetGroup="WING_NAME" calculation="Sum">
+		<variableExpression><![CDATA[$F{MATCH_SALE}]]></variableExpression>
+	</variable>
+	<variable name="v_w_total_memo" class="java.math.BigDecimal" resetType="Group" resetGroup="WING_NAME" calculation="Sum">
+		<variableExpression><![CDATA[$F{MEMO}]]></variableExpression>
+	</variable>
+	<variable name="v_w_total_cig_target" class="java.math.BigDecimal" resetType="Group" resetGroup="WING_NAME" calculation="Sum">
+		<variableExpression><![CDATA[$F{CIG_TARGET}]]></variableExpression>
+	</variable>
+	<variable name="v_w_total_bidi_target" class="java.math.BigDecimal" resetType="Group" resetGroup="WING_NAME" calculation="Sum">
+		<variableExpression><![CDATA[$F{BIDI_TARGET}]]></variableExpression>
+	</variable>
+	<variable name="v_w_total_match_target" class="java.math.BigDecimal" resetType="Group" resetGroup="WING_NAME" calculation="Sum">
+		<variableExpression><![CDATA[$F{MATCH_TARGET}]]></variableExpression>
+	</variable>
+	<variable name="v_w_cig_achivement" class="java.math.BigDecimal" resetType="Group" resetGroup="WING_NAME">
+		<variableExpression><![CDATA[$V{v_t_total_cig_target}.doubleValue() ==0.00?new BigDecimal("0.00"):$V{v_t_total_cig}.divide($V{v_t_total_cig_target},2, RoundingMode.CEILING)]]></variableExpression>
+	</variable>
+	<variable name="v_w_bidi_achivement" class="java.math.BigDecimal" resetType="Group" resetGroup="WING_NAME">
+		<variableExpression><![CDATA[$V{v_t_total_bidi_target}.doubleValue() ==0.00?new BigDecimal("0.00"):$V{v_t_total_bidi}.divide($V{v_t_total_bidi_target},2, RoundingMode.CEILING)]]></variableExpression>
+	</variable>
+	<variable name="v_w_match_achivement" class="java.math.BigDecimal" resetType="Group" resetGroup="WING_NAME">
+		<variableExpression><![CDATA[$V{v_t_total_match_target}.doubleValue() ==0.00?new BigDecimal("0.00"):$V{v_t_total_match}.divide($V{v_t_total_match_target},2, RoundingMode.CEILING)]]></variableExpression>
+	</variable>
+	<variable name="v_w_total_cig_memo" class="java.math.BigDecimal" resetType="Group" resetGroup="WING_NAME" calculation="Sum">
+		<variableExpression><![CDATA[$F{CIG_MEMO}]]></variableExpression>
+	</variable>
+	<variable name="v_w_total_bidi_memo" class="java.math.BigDecimal" resetType="Group" resetGroup="WING_NAME" calculation="Sum">
+		<variableExpression><![CDATA[$F{BIDI_MEMO}]]></variableExpression>
+	</variable>
+	<variable name="v_w_total_match_memo" class="java.math.BigDecimal" resetType="Group" resetGroup="WING_NAME" calculation="Sum">
+		<variableExpression><![CDATA[$F{MATCH_MEMO}]]></variableExpression>
+	</variable>
+	<group name="WING_NAME">
+		<groupExpression><![CDATA[$F{wing_name}]]></groupExpression>
 		<groupFooter>
 			<band height="20">
 				<textField>
-					<reportElement mode="Opaque" x="0" y="0" width="550" height="20" backcolor="#A7CCD4" uuid="83be4cc4-7eae-46b5-b40e-3a182e2b4a74"/>
+					<reportElement mode="Opaque" x="0" y="0" width="550" height="20" backcolor="#008000" uuid="da21476f-9903-4149-9d2d-574f192d0b56"/>
 					<box>
 						<pen lineWidth="0.12"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="9" isBold="true"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$F{teritoryName}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$F{wing_name}]]></textFieldExpression>
 				</textField>
-				<textField pattern="00">
-					<reportElement mode="Opaque" x="550" y="0" width="90" height="20" backcolor="#A7CCD4" uuid="b9ffd8f3-ff0d-4efe-b597-8fed03bd0e49"/>
+				<textField pattern="#,##0.###;#,##0">
+					<reportElement mode="Opaque" x="973" y="0" width="90" height="20" backcolor="#008000" uuid="081c716e-e1bd-4640-af9a-69401eecd36a"/>
 					<box>
 						<pen lineWidth="0.12"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="9" isBold="true"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$V{v_t_total_cig_target}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$V{v_w_total_bidi}]]></textFieldExpression>
 				</textField>
-				<textField pattern="00">
-					<reportElement mode="Opaque" x="883" y="0" width="90" height="20" backcolor="#A7CCD4" uuid="13c6854d-f891-4db6-a8f6-fea7d13c389d"/>
+				<textField pattern="#,##0.00%">
+					<reportElement mode="Opaque" x="730" y="0" width="90" height="20" backcolor="#008000" uuid="e8a9b2c1-11b6-423e-a254-238e36ad0dcb"/>
 					<box>
 						<pen lineWidth="0.12"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="9" isBold="true"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$V{v_t_total_bidi_target}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$V{v_w_cig_achivement}]]></textFieldExpression>
 				</textField>
-				<textField pattern="00">
-					<reportElement mode="Opaque" x="1216" y="0" width="90" height="20" backcolor="#A7CCD4" uuid="fcafaac9-95a7-4831-9e29-54c1cd487d0c"/>
+				<textField pattern="#,##0">
+					<reportElement mode="Opaque" x="820" y="0" width="63" height="20" backcolor="#008000" uuid="c64c8493-789c-404c-a4de-fcc0bb56a884"/>
 					<box>
 						<pen lineWidth="0.12"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="9" isBold="true"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$V{v_t_total_match_target}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$V{v_w_total_cig_memo}]]></textFieldExpression>
 				</textField>
-				<textField pattern="00">
-					<reportElement mode="Opaque" x="1882" y="0" width="111" height="20" backcolor="#A7CCD4" uuid="2ee2ee4f-e3b0-492b-b7bb-953726ed9fe7"/>
+				<textField pattern="#,##0.###;#,##0">
+					<reportElement mode="Opaque" x="550" y="0" width="90" height="20" backcolor="#008000" uuid="38646cc5-7501-40bf-8e27-9342c2406244"/>
 					<box>
 						<pen lineWidth="0.12"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="9" isBold="true"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$V{v_t_total_memo}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$V{v_w_total_cig_target}]]></textFieldExpression>
 				</textField>
-				<textField pattern="00">
-					<reportElement mode="Opaque" x="640" y="0" width="90" height="20" backcolor="#A7CCD4" uuid="0082d033-62d3-4a53-9aa0-c9f8e44818f9"/>
+				<textField pattern="#,##0.###;#,##0">
+					<reportElement mode="Opaque" x="1549" y="0" width="111" height="20" backcolor="#008000" uuid="0448e3d8-78c8-4205-8d36-f68f495a4095"/>
 					<box>
 						<pen lineWidth="0.12"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="9" isBold="true"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$V{v_t_total_cig}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$V{v_w_total_memo}]]></textFieldExpression>
 				</textField>
-				<textField pattern="#,##0.##%">
-					<reportElement mode="Opaque" x="730" y="0" width="90" height="20" backcolor="#A7CCD4" uuid="899378a6-2fec-4fe7-b7fe-eb4247296f89"/>
+				<textField pattern="#,##0.00%">
+					<reportElement mode="Opaque" x="1063" y="0" width="90" height="20" backcolor="#008000" uuid="5c3809fb-7d9d-47fb-b6fc-433d537d68ab"/>
 					<box>
 						<pen lineWidth="0.12"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="9" isBold="true"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$V{v_t_total_cig_target}.compareTo(new BigDecimal(0)) > 0 
-    ? ($V{v_t_total_cig}.multiply(new BigDecimal(100))
-       .divide($V{v_t_total_cig_target}, 4, RoundingMode.HALF_UP)
-       .setScale(2, RoundingMode.HALF_UP)
-       .toString() + "%")
-    : new BigDecimal(0).setScale(2).toString() + "%"]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$V{v_w_bidi_achivement}]]></textFieldExpression>
 				</textField>
-				<textField pattern="00">
-					<reportElement mode="Opaque" x="973" y="0" width="90" height="20" backcolor="#A7CCD4" uuid="c0f4f130-5cf0-4446-be19-18af021bba82"/>
+				<textField pattern="#,##0">
+					<reportElement mode="Opaque" x="1153" y="0" width="63" height="20" backcolor="#008000" uuid="25f982a2-28c8-40a4-86b9-158d7904b31c"/>
 					<box>
 						<pen lineWidth="0.12"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="9" isBold="true"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$V{v_t_total_bidi}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$V{v_d_total_bidi_memo}]]></textFieldExpression>
 				</textField>
-				<textField pattern="0.00">
-					<reportElement mode="Opaque" x="1063" y="0" width="90" height="20" backcolor="#A7CCD4" uuid="62b1e7f8-4992-4eaa-b25e-c6d913058014"/>
+				<textField pattern="#,##0">
+					<reportElement mode="Opaque" x="1486" y="0" width="63" height="20" backcolor="#008000" uuid="d6698f28-160c-4488-8cb5-91ce0d1c500f"/>
 					<box>
 						<pen lineWidth="0.12"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="9" isBold="true"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$V{v_t_total_bidi_target}.compareTo(new BigDecimal(0)) > 0 
-    ? ($V{v_t_total_bidi}.multiply(new BigDecimal(100))
-       .divide($V{v_t_total_bidi_target}, 2, RoundingMode.HALF_UP)
-       .setScale(2, RoundingMode.HALF_UP)
-       .toString() + "%")
-    : new BigDecimal(0).setScale(2, RoundingMode.HALF_UP).toString() + "%"]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$V{v_w_total_match_memo}]]></textFieldExpression>
 				</textField>
-				<textField pattern="00">
-					<reportElement mode="Opaque" x="1306" y="0" width="90" height="20" backcolor="#A7CCD4" uuid="abbf0bc2-c9f7-48ad-9a53-55d9b4b96933"/>
+				<textField pattern="#,##0.###;#,##0">
+					<reportElement mode="Opaque" x="1216" y="0" width="90" height="20" backcolor="#008000" uuid="d444302b-7a2e-41cd-96ef-0ffa33ebc9fa"/>
 					<box>
 						<pen lineWidth="0.12"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="9" isBold="true"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$V{v_t_total_match}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$V{v_w_total_match_target}]]></textFieldExpression>
 				</textField>
-				<textField pattern="0.00">
-					<reportElement mode="Opaque" x="1396" y="0" width="90" height="20" backcolor="#A7CCD4" uuid="70ec48a6-827c-45e3-8247-e1cbc6f34af7"/>
+				<textField pattern="#,##0.00%">
+					<reportElement mode="Opaque" x="1396" y="0" width="90" height="20" backcolor="#008000" uuid="eba59c1b-cc4d-42df-9acc-88117fff5a5c"/>
 					<box>
 						<pen lineWidth="0.12"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="9" isBold="true"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$V{v_t_total_match_target}.compareTo(new BigDecimal(0)) > 0 
-    ? ($V{v_t_total_match}.multiply(new BigDecimal(100))
-       .divide($V{v_t_total_match_target}, 2, RoundingMode.HALF_UP)
-       .setScale(2, RoundingMode.HALF_UP)
-       .toString() + "%")
-    : new BigDecimal(0).setScale(2, RoundingMode.HALF_UP).toString() + "%"]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$V{v_w_match_achivement}]]></textFieldExpression>
 				</textField>
-				<textField pattern="00">
-					<reportElement mode="Opaque" x="820" y="0" width="63" height="20" backcolor="#A7CCD4" uuid="4869436a-a364-4b93-a97b-c466d1eda2df"/>
+				<textField pattern="#,##0.###;#,##0">
+					<reportElement mode="Opaque" x="640" y="0" width="90" height="20" backcolor="#008000" uuid="e1772283-30ef-4a8b-ac6f-36d05ed797c9"/>
 					<box>
 						<pen lineWidth="0.12"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="9" isBold="true"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$V{v_t_total_cig_memo}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$V{v_w_total_cig}]]></textFieldExpression>
 				</textField>
-				<textField pattern="00">
-					<reportElement mode="Opaque" x="1153" y="0" width="63" height="20" backcolor="#A7CCD4" uuid="543b396a-519c-4ccd-9025-c186115427ac"/>
+				<textField pattern="#,##0.###;#,##0">
+					<reportElement mode="Opaque" x="1306" y="0" width="90" height="20" backcolor="#008000" uuid="84f28e22-4198-48eb-be24-70d0b2a0c369"/>
+					<box>
+						<pen lineWidth="0.12"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="9" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{v_w_total_match}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.###;#,##0">
+					<reportElement mode="Opaque" x="883" y="0" width="90" height="20" backcolor="#008000" uuid="d23293ac-efca-478c-9412-b69c5f3ff3bc"/>
+					<box>
+						<pen lineWidth="0.12"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="9" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{v_w_total_bidi_target}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupFooter>
+	</group>
+	<group name="DIVISION_GROUP">
+		<groupExpression><![CDATA[$F{division_name}]]></groupExpression>
+		<groupFooter>
+			<band height="20">
+				<textField>
+					<reportElement mode="Opaque" x="0" y="0" width="550" height="20" backcolor="#0000FF" uuid="131c4929-fd2e-4414-a080-2e4a558e2b86"/>
+					<box>
+						<pen lineWidth="0.12"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="9" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{division_name}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.###;#,##0">
+					<reportElement mode="Opaque" x="550" y="0" width="90" height="20" backcolor="#0000FF" uuid="7f5e4a46-6d38-4dd4-b358-6c43d2af8a48"/>
+					<box>
+						<pen lineWidth="0.12"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="9" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{v_d_total_cig_target}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.###;#,##0">
+					<reportElement mode="Opaque" x="883" y="0" width="90" height="20" backcolor="#0000FF" uuid="ece35865-fd80-43cb-ba92-f06147603108"/>
+					<box>
+						<pen lineWidth="0.12"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="9" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{v_d_total_bidi_target}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.###;#,##0">
+					<reportElement mode="Opaque" x="1216" y="0" width="90" height="20" backcolor="#0000FF" uuid="099f831c-012f-42dd-9f68-34450f2ded5c"/>
+					<box>
+						<pen lineWidth="0.12"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="9" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{v_d_total_match_target}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.###;#,##0">
+					<reportElement mode="Opaque" x="1549" y="0" width="111" height="20" backcolor="#0000FF" uuid="8e456211-0acb-4410-8455-cf786fed1657"/>
+					<box>
+						<pen lineWidth="0.12"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="9" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{v_d_total_memo}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.###;#,##0">
+					<reportElement mode="Opaque" x="640" y="0" width="90" height="20" backcolor="#0000FF" uuid="554dff1e-bb91-4345-be2b-5f7e2c2f62b7"/>
+					<box>
+						<pen lineWidth="0.12"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="9" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{v_d_total_cig}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.00%">
+					<reportElement mode="Opaque" x="730" y="0" width="90" height="20" backcolor="#0000FF" uuid="8b3d2751-8d74-4f2e-88aa-c740aa5cb1bb"/>
+					<box>
+						<pen lineWidth="0.12"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="9" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{v_d_cig_achivement}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.###;#,##0">
+					<reportElement mode="Opaque" x="973" y="0" width="90" height="20" backcolor="#0000FF" uuid="9df4dcac-9c2e-490f-8b6e-d26217fb5d5a"/>
+					<box>
+						<pen lineWidth="0.12"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="9" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{v_d_total_bidi}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.00%">
+					<reportElement mode="Opaque" x="1063" y="0" width="90" height="20" backcolor="#0000FF" uuid="fadcfb2d-e6c3-4126-942f-b0337f7358df"/>
+					<box>
+						<pen lineWidth="0.12"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="9" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{v_d_bidi_achivement}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.###;#,##0">
+					<reportElement mode="Opaque" x="1306" y="0" width="90" height="20" backcolor="#0000FF" uuid="9aaa97db-dab4-4853-86a3-5319743e3484"/>
+					<box>
+						<pen lineWidth="0.12"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="9" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{v_d_total_match}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.00%">
+					<reportElement mode="Opaque" x="1396" y="0" width="90" height="20" backcolor="#0000FF" uuid="9b454049-f7c6-48a5-a44f-bb291fd2c1c0"/>
+					<box>
+						<pen lineWidth="0.12"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="9" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{v_d_match_achivement}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0">
+					<reportElement mode="Opaque" x="820" y="0" width="63" height="20" backcolor="#0000FF" uuid="401ea909-47c7-4cec-a3fe-273f9ab52681"/>
+					<box>
+						<pen lineWidth="0.12"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="9" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{v_d_total_cig_memo}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0">
+					<reportElement mode="Opaque" x="1153" y="0" width="63" height="20" backcolor="#0000FF" uuid="958857be-19c3-4370-85e6-ebdab4dd62ab"/>
 					<box>
 						<pen lineWidth="0.12"/>
 					</box>
@@ -345,8 +518,155 @@ order by vta.TERITORY_ID, vta.ZONE_ID, vta.ROUTE_ID]]>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{v_t_total_bidi_memo}]]></textFieldExpression>
 				</textField>
-				<textField pattern="00">
-					<reportElement mode="Opaque" x="1486" y="0" width="63" height="20" backcolor="#A7CCD4" uuid="27c5197f-3ec0-4e90-a8c1-ea253f98c562"/>
+				<textField pattern="#,##0">
+					<reportElement mode="Opaque" x="1486" y="0" width="63" height="20" backcolor="#0000FF" uuid="3093fe53-ea8c-4958-a88e-aa9827ad2237"/>
+					<box>
+						<pen lineWidth="0.12"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="9" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{v_d_total_match_memo}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupFooter>
+	</group>
+	<group name="TERITORY_NAME">
+		<groupExpression><![CDATA[$F{TERITORY_NAME}]]></groupExpression>
+		<groupFooter>
+			<band height="20">
+				<textField>
+					<reportElement mode="Opaque" x="0" y="0" width="550" height="20" backcolor="#8EEAFA" uuid="83be4cc4-7eae-46b5-b40e-3a182e2b4a74"/>
+					<box>
+						<pen lineWidth="0.12"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="9" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{TERITORY_NAME}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.###;#,##0">
+					<reportElement mode="Opaque" x="550" y="0" width="90" height="20" backcolor="#8EEAFA" uuid="b9ffd8f3-ff0d-4efe-b597-8fed03bd0e49"/>
+					<box>
+						<pen lineWidth="0.12"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="9" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{v_t_total_cig_target}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.###;#,##0">
+					<reportElement mode="Opaque" x="883" y="0" width="90" height="20" backcolor="#8EEAFA" uuid="13c6854d-f891-4db6-a8f6-fea7d13c389d"/>
+					<box>
+						<pen lineWidth="0.12"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="9" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{v_t_total_bidi_target}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.###;#,##0">
+					<reportElement mode="Opaque" x="1216" y="0" width="90" height="20" backcolor="#8EEAFA" uuid="fcafaac9-95a7-4831-9e29-54c1cd487d0c"/>
+					<box>
+						<pen lineWidth="0.12"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="9" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{v_t_total_match_target}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.###;#,##0">
+					<reportElement mode="Opaque" x="1549" y="0" width="111" height="20" backcolor="#8EEAFA" uuid="2ee2ee4f-e3b0-492b-b7bb-953726ed9fe7"/>
+					<box>
+						<pen lineWidth="0.12"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="9" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{v_t_total_memo}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.###;#,##0">
+					<reportElement mode="Opaque" x="640" y="0" width="90" height="20" backcolor="#8EEAFA" uuid="0082d033-62d3-4a53-9aa0-c9f8e44818f9"/>
+					<box>
+						<pen lineWidth="0.12"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="9" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{v_t_total_cig}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.00%">
+					<reportElement mode="Opaque" x="730" y="0" width="90" height="20" backcolor="#8EEAFA" uuid="899378a6-2fec-4fe7-b7fe-eb4247296f89"/>
+					<box>
+						<pen lineWidth="0.12"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="9" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{v_t_cig_achivement}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.###;#,##0">
+					<reportElement mode="Opaque" x="973" y="0" width="90" height="20" backcolor="#8EEAFA" uuid="c0f4f130-5cf0-4446-be19-18af021bba82"/>
+					<box>
+						<pen lineWidth="0.12"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="9" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{v_t_total_bidi}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.00%">
+					<reportElement mode="Opaque" x="1063" y="0" width="90" height="20" backcolor="#8EEAFA" uuid="62b1e7f8-4992-4eaa-b25e-c6d913058014"/>
+					<box>
+						<pen lineWidth="0.12"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="9" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{v_t_bidi_achivement}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.###;#,##0">
+					<reportElement mode="Opaque" x="1306" y="0" width="90" height="20" backcolor="#8EEAFA" uuid="abbf0bc2-c9f7-48ad-9a53-55d9b4b96933"/>
+					<box>
+						<pen lineWidth="0.12"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="9" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{v_t_total_match}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.00%">
+					<reportElement mode="Opaque" x="1396" y="0" width="90" height="20" backcolor="#8EEAFA" uuid="70ec48a6-827c-45e3-8247-e1cbc6f34af7"/>
+					<box>
+						<pen lineWidth="0.12"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="9" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{v_t_match_achivement}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0">
+					<reportElement mode="Opaque" x="820" y="0" width="63" height="20" backcolor="#8EEAFA" uuid="4869436a-a364-4b93-a97b-c466d1eda2df"/>
+					<box>
+						<pen lineWidth="0.12"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="9" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{v_t_total_cig_memo}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0">
+					<reportElement mode="Opaque" x="1153" y="0" width="63" height="20" backcolor="#8EEAFA" uuid="543b396a-519c-4ccd-9025-c186115427ac"/>
+					<box>
+						<pen lineWidth="0.12"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="9" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{v_t_total_bidi_memo}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0">
+					<reportElement mode="Opaque" x="1486" y="0" width="63" height="20" backcolor="#8EEAFA" uuid="27c5197f-3ec0-4e90-a8c1-ea253f98c562"/>
 					<box>
 						<pen lineWidth="0.12"/>
 					</box>
@@ -355,56 +675,11 @@ order by vta.TERITORY_ID, vta.ZONE_ID, vta.ROUTE_ID]]>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{v_t_total_match_memo}]]></textFieldExpression>
 				</textField>
-				<textField pattern="00">
-					<reportElement mode="Opaque" x="1819" y="0" width="63" height="20" backcolor="#A7CCD4" uuid="2fbdf7a1-caf7-482b-aafc-6c046bc14ea8"/>
-					<box>
-						<pen lineWidth="0.12"/>
-					</box>
-					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font size="9" isBold="true"/>
-					</textElement>
-					<textFieldExpression><![CDATA[$V{TerritoryLighterMemo}]]></textFieldExpression>
-				</textField>
-				<textField pattern="0.00">
-					<reportElement mode="Opaque" x="1729" y="0" width="90" height="20" backcolor="#A7CCD4" uuid="77440850-619a-4639-b171-60f2895dfb9e"/>
-					<box>
-						<pen lineWidth="0.12"/>
-					</box>
-					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font size="9" isBold="true"/>
-					</textElement>
-					<textFieldExpression><![CDATA[$V{TerritoryLighterTarget}.compareTo(new BigDecimal(0)) > 0 
-    ? ($V{TerritoryLighterSale}.multiply(new BigDecimal(100))
-       .divide($V{TerritoryLighterTarget}, 2, RoundingMode.HALF_UP)
-       .setScale(2, RoundingMode.HALF_UP)
-       .toString() + "%")
-    : new BigDecimal(0).setScale(2, RoundingMode.HALF_UP).toString() + "%"]]></textFieldExpression>
-				</textField>
-				<textField pattern="00">
-					<reportElement mode="Opaque" x="1549" y="0" width="90" height="20" backcolor="#A7CCD4" uuid="f4345be9-3fff-446a-a901-ecdaffbd0b50"/>
-					<box>
-						<pen lineWidth="0.12"/>
-					</box>
-					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font size="9" isBold="true"/>
-					</textElement>
-					<textFieldExpression><![CDATA[$V{TerritoryLighterTarget}]]></textFieldExpression>
-				</textField>
-				<textField pattern="00">
-					<reportElement mode="Opaque" x="1639" y="0" width="90" height="20" backcolor="#A7CCD4" uuid="72e53bc3-1ba1-4c2b-ba93-28aa649f4730"/>
-					<box>
-						<pen lineWidth="0.12"/>
-					</box>
-					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font size="9" isBold="true"/>
-					</textElement>
-					<textFieldExpression><![CDATA[$V{TerritoryLighterSale}]]></textFieldExpression>
-				</textField>
 			</band>
 		</groupFooter>
 	</group>
 	<group name="ZONE_NAME">
-		<groupExpression><![CDATA[$F{zoneName}]]></groupExpression>
+		<groupExpression><![CDATA[$F{ZONE_NAME}]]></groupExpression>
 		<groupFooter>
 			<band height="20">
 				<textField>
@@ -415,9 +690,9 @@ order by vta.TERITORY_ID, vta.ZONE_ID, vta.ROUTE_ID]]>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="9" isBold="true"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$F{zoneName}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$F{ZONE_NAME}]]></textFieldExpression>
 				</textField>
-				<textField pattern="00">
+				<textField pattern="#,##0.###;#,##0">
 					<reportElement mode="Opaque" x="550" y="0" width="90" height="20" backcolor="#EDEDED" uuid="905bc3ed-1467-40a2-bdae-07b8ab156dfd"/>
 					<box>
 						<pen lineWidth="0.12"/>
@@ -427,7 +702,7 @@ order by vta.TERITORY_ID, vta.ZONE_ID, vta.ROUTE_ID]]>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{v_z_total_cig_target}]]></textFieldExpression>
 				</textField>
-				<textField pattern="00">
+				<textField pattern="#,##0.###;#,##0">
 					<reportElement mode="Opaque" x="883" y="0" width="90" height="20" backcolor="#EDEDED" uuid="7d93638d-233f-46a6-baa1-9e9c40752c6b"/>
 					<box>
 						<pen lineWidth="0.12"/>
@@ -437,7 +712,7 @@ order by vta.TERITORY_ID, vta.ZONE_ID, vta.ROUTE_ID]]>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{v_z_total_bidi_target}]]></textFieldExpression>
 				</textField>
-				<textField pattern="00">
+				<textField pattern="#,##0.###;#,##0">
 					<reportElement mode="Opaque" x="1216" y="0" width="90" height="20" backcolor="#EDEDED" uuid="f2deff12-2e88-432e-8001-cffb2cb00af1"/>
 					<box>
 						<pen lineWidth="0.12"/>
@@ -447,8 +722,8 @@ order by vta.TERITORY_ID, vta.ZONE_ID, vta.ROUTE_ID]]>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{v_z_total_match_target}]]></textFieldExpression>
 				</textField>
-				<textField pattern="00">
-					<reportElement mode="Opaque" x="1882" y="0" width="111" height="20" backcolor="#EDEDED" uuid="cd56b698-eb61-4c07-a688-19647f84724d"/>
+				<textField pattern="#,##0.###;#,##0">
+					<reportElement mode="Opaque" x="1549" y="0" width="111" height="20" backcolor="#EDEDED" uuid="cd56b698-eb61-4c07-a688-19647f84724d"/>
 					<box>
 						<pen lineWidth="0.12"/>
 					</box>
@@ -457,7 +732,7 @@ order by vta.TERITORY_ID, vta.ZONE_ID, vta.ROUTE_ID]]>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{v_z_total_memo}]]></textFieldExpression>
 				</textField>
-				<textField pattern="00">
+				<textField pattern="#,##0.###;#,##0">
 					<reportElement mode="Opaque" x="640" y="0" width="90" height="20" backcolor="#EDEDED" uuid="9af5a62b-2f7a-402f-90ed-c4346001cb2b"/>
 					<box>
 						<pen lineWidth="0.12"/>
@@ -467,7 +742,7 @@ order by vta.TERITORY_ID, vta.ZONE_ID, vta.ROUTE_ID]]>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{v_z_total_cig}]]></textFieldExpression>
 				</textField>
-				<textField pattern="#,##0.##%">
+				<textField pattern="#,##0.00%">
 					<reportElement mode="Opaque" x="730" y="0" width="90" height="20" backcolor="#EDEDED" uuid="1350be70-be7b-44e4-bf35-39e09c272f38"/>
 					<box>
 						<pen lineWidth="0.12"/>
@@ -475,14 +750,9 @@ order by vta.TERITORY_ID, vta.ZONE_ID, vta.ROUTE_ID]]>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font isBold="true"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$V{v_z_total_cig_target}.compareTo(new BigDecimal(0)) > 0 
-    ? ($V{v_z_total_cig}.multiply(new BigDecimal(100))
-                        .divide($V{v_z_total_cig_target}, 2, RoundingMode.HALF_UP)
-                        .setScale(2, RoundingMode.HALF_UP)
-                        .toString() + "%")
-    : new BigDecimal(0).setScale(2, RoundingMode.HALF_UP).toString() + "%"]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$V{v_z_cig_achivement}]]></textFieldExpression>
 				</textField>
-				<textField pattern="00">
+				<textField pattern="#,##0.###;#,##0">
 					<reportElement mode="Opaque" x="973" y="0" width="90" height="20" backcolor="#EDEDED" uuid="e9fac0d5-f90a-4b34-bdb1-32fe1b399ae1"/>
 					<box>
 						<pen lineWidth="0.12"/>
@@ -492,7 +762,7 @@ order by vta.TERITORY_ID, vta.ZONE_ID, vta.ROUTE_ID]]>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{v_z_total_bidi}]]></textFieldExpression>
 				</textField>
-				<textField pattern="0.00">
+				<textField pattern="#,##0.00%">
 					<reportElement mode="Opaque" x="1063" y="0" width="90" height="20" backcolor="#EDEDED" uuid="c35eaf53-856b-40f2-b020-969255ffad21"/>
 					<box>
 						<pen lineWidth="0.12"/>
@@ -500,14 +770,9 @@ order by vta.TERITORY_ID, vta.ZONE_ID, vta.ROUTE_ID]]>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font isBold="true"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$V{v_z_total_bidi_target}.compareTo(new BigDecimal(0)) > 0 
-    ? ($V{v_z_total_bidi}.multiply(new BigDecimal(100))
-       .divide($V{v_z_total_bidi_target}, 2, RoundingMode.HALF_UP)
-       .setScale(2, RoundingMode.HALF_UP)
-       .toString() + "%")
-    : new BigDecimal(0).setScale(2, RoundingMode.HALF_UP).toString() + "%"]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$V{v_z_bidi_achivement}]]></textFieldExpression>
 				</textField>
-				<textField pattern="00">
+				<textField pattern="#,##0.###;#,##0">
 					<reportElement mode="Opaque" x="1306" y="0" width="90" height="20" backcolor="#EDEDED" uuid="aa868719-1cf5-4232-8df8-fb958331c431"/>
 					<box>
 						<pen lineWidth="0.12"/>
@@ -517,7 +782,7 @@ order by vta.TERITORY_ID, vta.ZONE_ID, vta.ROUTE_ID]]>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{v_z_total_match}]]></textFieldExpression>
 				</textField>
-				<textField pattern="0.00">
+				<textField pattern="#,##0.00%">
 					<reportElement mode="Opaque" x="1396" y="0" width="90" height="20" backcolor="#EDEDED" uuid="0b33c6a2-46bc-4db7-8565-425e7bb564ec"/>
 					<box>
 						<pen lineWidth="0.12"/>
@@ -525,14 +790,9 @@ order by vta.TERITORY_ID, vta.ZONE_ID, vta.ROUTE_ID]]>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font isBold="true"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$V{v_z_total_match_target}.compareTo(new BigDecimal(0)) > 0 
-    ? ($V{v_z_total_match}.multiply(new BigDecimal(100))
-       .divide($V{v_z_total_match_target}, 2, RoundingMode.HALF_UP)
-       .setScale(2, RoundingMode.HALF_UP)
-       .toString() + "%")
-    : new BigDecimal(0).setScale(2, RoundingMode.HALF_UP).toString() + "%"]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$V{v_z_match_achivement}]]></textFieldExpression>
 				</textField>
-				<textField pattern="00">
+				<textField pattern="#,##0">
 					<reportElement mode="Opaque" x="820" y="0" width="63" height="20" backcolor="#EDEDED" uuid="595533ea-6e35-459b-856d-1b5d7042ad5c"/>
 					<box>
 						<pen lineWidth="0.12"/>
@@ -542,7 +802,7 @@ order by vta.TERITORY_ID, vta.ZONE_ID, vta.ROUTE_ID]]>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{v_z_total_cig_memo}]]></textFieldExpression>
 				</textField>
-				<textField pattern="00">
+				<textField pattern="#,##0">
 					<reportElement mode="Opaque" x="1153" y="0" width="63" height="20" backcolor="#EDEDED" uuid="08d6cdec-55e4-4057-9b09-ed96a2068dda"/>
 					<box>
 						<pen lineWidth="0.12"/>
@@ -552,7 +812,7 @@ order by vta.TERITORY_ID, vta.ZONE_ID, vta.ROUTE_ID]]>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{v_z_total_bidi_memo}]]></textFieldExpression>
 				</textField>
-				<textField pattern="00">
+				<textField pattern="#,##0">
 					<reportElement mode="Opaque" x="1486" y="0" width="63" height="20" backcolor="#EDEDED" uuid="d134efa6-e924-4c86-9a57-756096b13ec4"/>
 					<box>
 						<pen lineWidth="0.12"/>
@@ -561,51 +821,6 @@ order by vta.TERITORY_ID, vta.ZONE_ID, vta.ROUTE_ID]]>
 						<font isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{v_z_total_match_memo}]]></textFieldExpression>
-				</textField>
-				<textField pattern="00">
-					<reportElement mode="Opaque" x="1639" y="0" width="90" height="20" backcolor="#EDEDED" uuid="33d7c273-d64e-410f-960a-626e41f8e582"/>
-					<box>
-						<pen lineWidth="0.12"/>
-					</box>
-					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font isBold="true"/>
-					</textElement>
-					<textFieldExpression><![CDATA[$V{zoneLighterSale}]]></textFieldExpression>
-				</textField>
-				<textField pattern="00">
-					<reportElement mode="Opaque" x="1549" y="0" width="90" height="20" backcolor="#EDEDED" uuid="22deb63b-fea4-414c-a9eb-a275119450e1"/>
-					<box>
-						<pen lineWidth="0.12"/>
-					</box>
-					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font isBold="true"/>
-					</textElement>
-					<textFieldExpression><![CDATA[$V{zoneLighterTarget}]]></textFieldExpression>
-				</textField>
-				<textField pattern="00">
-					<reportElement mode="Opaque" x="1819" y="0" width="63" height="20" backcolor="#EDEDED" uuid="299af703-0992-4406-a112-d1a6fcc7fae9"/>
-					<box>
-						<pen lineWidth="0.12"/>
-					</box>
-					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font isBold="true"/>
-					</textElement>
-					<textFieldExpression><![CDATA[$V{zoneLighterMemo}]]></textFieldExpression>
-				</textField>
-				<textField pattern="0.00">
-					<reportElement mode="Opaque" x="1729" y="0" width="90" height="20" backcolor="#EDEDED" uuid="084c4318-e96c-4756-96e4-8ec42e8c5bbb"/>
-					<box>
-						<pen lineWidth="0.12"/>
-					</box>
-					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font isBold="true"/>
-					</textElement>
-					<textFieldExpression><![CDATA[$V{zoneLighterTarget}.compareTo(new BigDecimal(0)) > 0 
-    ? ($V{zoneLighterSale}.multiply(new BigDecimal(100))
-       .divide($V{zoneLighterTarget}, 2, RoundingMode.HALF_UP)
-       .setScale(2, RoundingMode.HALF_UP)
-       .toString() + "%")
-    : new BigDecimal(0).setScale(2, RoundingMode.HALF_UP).toString() + "%"]]></textFieldExpression>
 				</textField>
 			</band>
 		</groupFooter>
@@ -616,7 +831,7 @@ order by vta.TERITORY_ID, vta.ZONE_ID, vta.ROUTE_ID]]>
 	<title>
 		<band height="40" splitType="Stretch">
 			<staticText>
-				<reportElement x="0" y="10" width="1992" height="30" uuid="bae4a8d5-a6cf-43cf-9f1e-dc842f7f640f"/>
+				<reportElement x="0" y="10" width="1220" height="30" uuid="bae4a8d5-a6cf-43cf-9f1e-dc842f7f640f"/>
 				<textElement textAlignment="Center">
 					<font size="20" isBold="true"/>
 				</textElement>
@@ -627,25 +842,25 @@ order by vta.TERITORY_ID, vta.ZONE_ID, vta.ROUTE_ID]]>
 	<pageHeader>
 		<band height="30" splitType="Stretch">
 			<textField>
-				<reportElement x="0" y="0" width="291" height="30" uuid="3ccf1b4a-411b-43cd-a370-f78cdcbc8955"/>
+				<reportElement x="0" y="0" width="333" height="30" uuid="3ccf1b4a-411b-43cd-a370-f78cdcbc8955"/>
 				<textElement verticalAlignment="Middle">
 					<font isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Territory Name: "+$P{pTerName}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="1153" y="0" width="576" height="30" uuid="1a6575bc-bfe4-41b6-bb06-73832d027a86"/>
+				<reportElement x="772" y="0" width="665" height="30" uuid="1a6575bc-bfe4-41b6-bb06-73832d027a86"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Sales Date: "+new SimpleDateFormat("dd-MMM-yyyy").format(new SimpleDateFormat("dd-MM-yyyy").parse($P{pDateFormat}) )]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Sales Date: "+$P{pDateFormat}]]></textFieldExpression>
 			</textField>
 			<textField pattern="MMM d, yyyy h:mm:ss a">
-				<reportElement x="1729" y="0" width="263" height="30" uuid="18b30a49-eb57-4a2f-804c-238ba59bab87"/>
+				<reportElement x="1437" y="0" width="222" height="30" uuid="18b30a49-eb57-4a2f-804c-238ba59bab87"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font size="9" isBold="true"/>
+					<font size="9"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Execution Time : " +new  SimpleDateFormat("dd-MMM-yyyy, hh:mm:ss a").format(new java.util.Date())]]></textFieldExpression>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
 			</textField>
 		</band>
 	</pageHeader>
@@ -673,7 +888,7 @@ order by vta.TERITORY_ID, vta.ZONE_ID, vta.ROUTE_ID]]>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="9" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Cigarette]]></text>
+				<text><![CDATA[Cigrettee]]></text>
 			</staticText>
 			<staticText>
 				<reportElement mode="Opaque" x="883" y="0" width="333" height="15" backcolor="#E6E1E1" uuid="e977ce6d-e22c-419a-b046-7dd34e933fd6">
@@ -700,7 +915,7 @@ order by vta.TERITORY_ID, vta.ZONE_ID, vta.ROUTE_ID]]>
 				<text><![CDATA[Match]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="1882" y="0" width="111" height="30" backcolor="#E6E1E1" uuid="f4097858-b309-4dee-9cf8-f0716592ae31">
+				<reportElement mode="Opaque" x="1549" y="0" width="111" height="30" backcolor="#E6E1E1" uuid="f4097858-b309-4dee-9cf8-f0716592ae31">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="53484340-cabb-47b1-afc5-ed2200727c10"/>
 				</reportElement>
 				<box>
@@ -891,66 +1106,6 @@ order by vta.TERITORY_ID, vta.ZONE_ID, vta.ROUTE_ID]]>
 				</textElement>
 				<text><![CDATA[Wing Name]]></text>
 			</staticText>
-			<staticText>
-				<reportElement mode="Opaque" x="1729" y="15" width="90" height="15" backcolor="#E6E1E1" uuid="485203b3-622d-42c6-88e9-cd6974269710">
-					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="1e990697-cab8-452c-8e2e-824d6a157e3f"/>
-				</reportElement>
-				<box>
-					<pen lineWidth="0.12"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="9" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Achivement]]></text>
-			</staticText>
-			<staticText>
-				<reportElement mode="Opaque" x="1819" y="15" width="63" height="15" backcolor="#E6E1E1" uuid="34ea157a-31c7-4d13-9204-fe3da5f4dd97">
-					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="1e990697-cab8-452c-8e2e-824d6a157e3f"/>
-				</reportElement>
-				<box>
-					<pen lineWidth="0.12"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="9" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Memo]]></text>
-			</staticText>
-			<staticText>
-				<reportElement mode="Opaque" x="1549" y="15" width="90" height="15" backcolor="#E6E1E1" uuid="432783f2-4004-4f21-b1c9-57c38d6d82a3">
-					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="1e990697-cab8-452c-8e2e-824d6a157e3f"/>
-				</reportElement>
-				<box>
-					<pen lineWidth="0.12"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="9" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Target]]></text>
-			</staticText>
-			<staticText>
-				<reportElement mode="Opaque" x="1549" y="0" width="333" height="15" backcolor="#E6E1E1" uuid="e313a062-fe4e-4c35-ad18-54567be6b9b8">
-					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="521c3bc5-647b-4b55-9770-359361c71e6c"/>
-				</reportElement>
-				<box>
-					<pen lineWidth="0.12"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="9" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Lighter]]></text>
-			</staticText>
-			<staticText>
-				<reportElement mode="Opaque" x="1639" y="15" width="90" height="15" backcolor="#E6E1E1" uuid="633b43e6-b7b5-4908-9222-720e833c2deb">
-					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="1e990697-cab8-452c-8e2e-824d6a157e3f"/>
-				</reportElement>
-				<box>
-					<pen lineWidth="0.12"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="9" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Sales]]></text>
-			</staticText>
 		</band>
 	</columnHeader>
 	<detail>
@@ -965,9 +1120,9 @@ order by vta.TERITORY_ID, vta.ZONE_ID, vta.ROUTE_ID]]>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="9"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{routeName}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{ROUTE_NAME}]]></textFieldExpression>
 			</textField>
-			<textField pattern="00">
+			<textField pattern="#,##0.###;#,##0.##">
 				<reportElement x="550" y="0" width="90" height="15" uuid="098ff642-0eb6-4aec-a3d8-0e3ae22bd527">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="1e990697-cab8-452c-8e2e-824d6a157e3f"/>
 				</reportElement>
@@ -977,9 +1132,9 @@ order by vta.TERITORY_ID, vta.ZONE_ID, vta.ROUTE_ID]]>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="9"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{cigTarget}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{CIG_TARGET}]]></textFieldExpression>
 			</textField>
-			<textField pattern="00">
+			<textField pattern="#,##0.###;#,##0.##">
 				<reportElement x="883" y="0" width="90" height="15" uuid="c1a4075c-7771-49a1-b944-05c77de76bf0">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="32ff8b10-dee5-4116-ac71-9e82ec3247b5"/>
 				</reportElement>
@@ -989,9 +1144,9 @@ order by vta.TERITORY_ID, vta.ZONE_ID, vta.ROUTE_ID]]>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="9"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{bidiTarget}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{BIDI_TARGET}]]></textFieldExpression>
 			</textField>
-			<textField pattern="00">
+			<textField pattern="#,##0.###;#,##0.##">
 				<reportElement x="1216" y="0" width="90" height="15" uuid="e91f2869-dad7-4db2-8e3a-c410f36e09c8">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="521c3bc5-647b-4b55-9770-359361c71e6c"/>
 				</reportElement>
@@ -1001,10 +1156,10 @@ order by vta.TERITORY_ID, vta.ZONE_ID, vta.ROUTE_ID]]>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="9"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{matchTarget}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{MATCH_TARGET}]]></textFieldExpression>
 			</textField>
-			<textField pattern="00">
-				<reportElement x="1882" y="0" width="111" height="15" uuid="b01ccf12-1a16-4230-9cd4-d229d3db320d">
+			<textField pattern="#,##0.###;#,##0.##">
+				<reportElement x="1549" y="0" width="111" height="15" uuid="b01ccf12-1a16-4230-9cd4-d229d3db320d">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="53484340-cabb-47b1-afc5-ed2200727c10"/>
 				</reportElement>
 				<box>
@@ -1013,9 +1168,9 @@ order by vta.TERITORY_ID, vta.ZONE_ID, vta.ROUTE_ID]]>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="9"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{memo}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{MEMO}]]></textFieldExpression>
 			</textField>
-			<textField pattern="00">
+			<textField pattern="#,##0.###;#,##0.##">
 				<reportElement x="640" y="0" width="90" height="15" uuid="10de6241-9398-4672-9972-8d70160da5dc">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="1e990697-cab8-452c-8e2e-824d6a157e3f"/>
 				</reportElement>
@@ -1025,9 +1180,9 @@ order by vta.TERITORY_ID, vta.ZONE_ID, vta.ROUTE_ID]]>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="9"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{cigSale}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{CIG_SALE}]]></textFieldExpression>
 			</textField>
-			<textField pattern="0.00%">
+			<textField pattern="#,##0.00%">
 				<reportElement x="730" y="0" width="90" height="15" uuid="b1496bd5-5543-42d0-8533-91e1b3085664">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="1e990697-cab8-452c-8e2e-824d6a157e3f"/>
 				</reportElement>
@@ -1037,9 +1192,9 @@ order by vta.TERITORY_ID, vta.ZONE_ID, vta.ROUTE_ID]]>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="9"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{cigAchivement}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{CIG_ACHIVEMENT}]]></textFieldExpression>
 			</textField>
-			<textField pattern="00">
+			<textField pattern="#,##0.###;#,##0.##">
 				<reportElement x="973" y="0" width="90" height="15" uuid="f2e968bb-a7c9-452c-b6b6-1e288d4bd797">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="32ff8b10-dee5-4116-ac71-9e82ec3247b5"/>
 				</reportElement>
@@ -1049,9 +1204,9 @@ order by vta.TERITORY_ID, vta.ZONE_ID, vta.ROUTE_ID]]>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="9"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{bidiSale}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{BIDI_SALE}]]></textFieldExpression>
 			</textField>
-			<textField pattern="0.00%">
+			<textField pattern="#,##0.00%">
 				<reportElement x="1063" y="0" width="90" height="15" uuid="4390be3a-edef-4e7f-9e2d-d580c0cb6109">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="32ff8b10-dee5-4116-ac71-9e82ec3247b5"/>
 				</reportElement>
@@ -1061,9 +1216,9 @@ order by vta.TERITORY_ID, vta.ZONE_ID, vta.ROUTE_ID]]>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="9"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{bidiAchivement}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{BIDI_ACHIVEMENT}]]></textFieldExpression>
 			</textField>
-			<textField pattern="00">
+			<textField pattern="#,##0.###;#,##0.##">
 				<reportElement x="1306" y="0" width="90" height="15" uuid="a153fe68-d158-4d99-8be2-acb0c5dbb582">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="521c3bc5-647b-4b55-9770-359361c71e6c"/>
 				</reportElement>
@@ -1073,9 +1228,9 @@ order by vta.TERITORY_ID, vta.ZONE_ID, vta.ROUTE_ID]]>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="9"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{matchSale}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{MATCH_SALE}]]></textFieldExpression>
 			</textField>
-			<textField pattern="0.00%">
+			<textField pattern="#,##0.00%">
 				<reportElement x="1396" y="0" width="90" height="15" uuid="386eff84-8ae3-418d-818a-ccf2abfce875">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="521c3bc5-647b-4b55-9770-359361c71e6c"/>
 				</reportElement>
@@ -1085,9 +1240,9 @@ order by vta.TERITORY_ID, vta.ZONE_ID, vta.ROUTE_ID]]>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="9"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{matchAchivement}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{MATCH_ACHIVEMENT}]]></textFieldExpression>
 			</textField>
-			<textField pattern="00">
+			<textField pattern="#,##0">
 				<reportElement x="820" y="0" width="63" height="15" uuid="9694e617-5aca-49e2-8d77-491d34fa3cdf">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="1e990697-cab8-452c-8e2e-824d6a157e3f"/>
 				</reportElement>
@@ -1097,9 +1252,9 @@ order by vta.TERITORY_ID, vta.ZONE_ID, vta.ROUTE_ID]]>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="9"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{cigMemo}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{CIG_MEMO}]]></textFieldExpression>
 			</textField>
-			<textField pattern="00">
+			<textField pattern="#,##0">
 				<reportElement x="1153" y="0" width="63" height="15" uuid="c1144762-6d23-4f3f-b6db-299dd58cdf77">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="1e990697-cab8-452c-8e2e-824d6a157e3f"/>
 				</reportElement>
@@ -1109,9 +1264,9 @@ order by vta.TERITORY_ID, vta.ZONE_ID, vta.ROUTE_ID]]>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="9"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{bidiMemo}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{BIDI_MEMO}]]></textFieldExpression>
 			</textField>
-			<textField pattern="00">
+			<textField pattern="#,##0">
 				<reportElement x="1486" y="0" width="63" height="15" uuid="06925df6-4e7b-4fc8-87b7-0e2523270b28">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="1e990697-cab8-452c-8e2e-824d6a157e3f"/>
 				</reportElement>
@@ -1121,7 +1276,7 @@ order by vta.TERITORY_ID, vta.ZONE_ID, vta.ROUTE_ID]]>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="9"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{matchMemo}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{MATCH_MEMO}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="291" y="0" width="148" height="15" uuid="9f8aff92-0346-4eba-9f97-549c37d95f21">
@@ -1133,7 +1288,7 @@ order by vta.TERITORY_ID, vta.ZONE_ID, vta.ROUTE_ID]]>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="9"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{teritoryName}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{TERITORY_NAME}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="143" y="0" width="148" height="15" uuid="8509c26a-810a-437c-8711-625fd00bc47c">
@@ -1145,7 +1300,7 @@ order by vta.TERITORY_ID, vta.ZONE_ID, vta.ROUTE_ID]]>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="9"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{divisionName}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{division_name}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="0" y="0" width="143" height="15" uuid="1f1f403a-7df9-4d37-87ad-0d11b27dea74">
@@ -1157,56 +1312,17 @@ order by vta.TERITORY_ID, vta.ZONE_ID, vta.ROUTE_ID]]>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="9"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{wingName}]]></textFieldExpression>
-			</textField>
-			<textField pattern="00">
-				<reportElement x="1639" y="0" width="90" height="15" uuid="923aca78-7c15-482c-a075-ca6ca4b0273f">
-					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="521c3bc5-647b-4b55-9770-359361c71e6c"/>
-				</reportElement>
-				<box>
-					<pen lineWidth="0.12"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="9"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{lighterSale}]]></textFieldExpression>
-			</textField>
-			<textField pattern="00">
-				<reportElement x="1549" y="0" width="90" height="15" uuid="550f84b0-11ff-4744-a09e-04c99ee115fa">
-					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="521c3bc5-647b-4b55-9770-359361c71e6c"/>
-				</reportElement>
-				<box>
-					<pen lineWidth="0.12"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="9"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{lighterTarget}]]></textFieldExpression>
-			</textField>
-			<textField pattern="00">
-				<reportElement x="1819" y="0" width="63" height="15" uuid="bacd6d8f-9752-4c4c-b5c8-dd13e7658194">
-					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="1e990697-cab8-452c-8e2e-824d6a157e3f"/>
-				</reportElement>
-				<box>
-					<pen lineWidth="0.12"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="9"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{lighterMemo}]]></textFieldExpression>
-			</textField>
-			<textField pattern="0.00%">
-				<reportElement x="1729" y="0" width="90" height="15" uuid="3351052e-56f2-4741-9800-1adadb9ddc80">
-					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="521c3bc5-647b-4b55-9770-359361c71e6c"/>
-				</reportElement>
-				<box>
-					<pen lineWidth="0.12"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="9"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{lighterAchivement}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{wing_name}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
 </jasperReport>
