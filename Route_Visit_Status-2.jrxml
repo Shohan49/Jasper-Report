@@ -1,0 +1,416 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.6.0.final using JasperReports Library version 6.6.0  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Route_Visit_Status" pageWidth="720" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="4ce1299f-2600-4d92-a8db-881d29b599d5">
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w1" value="353"/>
+	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w2" value="636"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="PROD_CON"/>
+	<parameter name="salesRepId" class="java.lang.String"/>
+	<parameter name="routeId" class="java.lang.String"/>
+	<parameter name="salesRepName" class="java.lang.String"/>
+	<parameter name="zoneName" class="java.lang.String"/>
+	<parameter name="amoName" class="java.lang.String"/>
+	<parameter name="visitDay" class="java.lang.String"/>
+	<parameter name="teritoryName" class="java.lang.String"/>
+	<parameter name="routeName" class="java.lang.String"/>
+	<queryString language="SQL">
+		<![CDATA[select
+   c.id,
+   c.customer_name,
+   (
+      case
+         when
+            c.mobile_no is null 
+         then
+            'Not Found' 
+         else
+            c.mobile_no 
+      end
+   )
+   mobile_no, c.trade_license_name, 
+   to_char(
+      case
+         when
+            cus.visit_start_time is null 
+         then
+            case
+               when
+                  v.entry_time is not null 
+               then
+                  'Not Found' 
+               else
+                  'Not Visited' 
+            end
+            else
+               to_char(cus.visit_start_time, 'dd-MON-yy HH:MI:SS PM') 
+      end
+   )
+   visit_start_time, 
+   to_char(
+      case
+         when
+            v.entry_time is null 
+         then
+            'Not Visited' 
+         else
+            to_char(v.entry_time, 'dd-MON-yy HH:MI:SS PM') 
+      end
+   )
+   visit_end_time, decode(nvl(v.status, 0), 0, 'Not visited', 1, 'Sales', 2, 'Stock Available', 3, 'Closed', 4, 'Other', 5, 'Visit Start') visit_status 
+from
+   consumer_teritory ct, consumer c 
+   left outer join
+      v_store_visit v 
+      on (c.id = v.consumer_id 
+      and sales_rep_id = $P{salesRepId} 
+      and to_char(entry_time, 'dd-mm-yyyy') = $P{visitDay}) 
+   left outer join
+      (
+         select
+            cc.id,
+            vv.entry_time visit_start_time 
+         from
+            consumer_teritory cct,
+            consumer cc 
+            left outer join
+               v_store_visit vv 
+               on (cc.id = vv.consumer_id 
+               and sales_rep_id = $P{salesRepId} 
+               and to_char(entry_time, 'dd-mm-yyyy') = $P{visitDay}) 
+         where
+            cct.consumer_id = cc.id 
+            and cct.teritory_id = $P{routeId}  
+            and cc.status = '1' 
+            and vv.status = '5' 
+         order by
+            cc.trade_license_name asc
+      )
+      cus 
+      on (c.id = cus.id) 
+where
+   ct.consumer_id = c.id 
+   and ct.teritory_id = $P{routeId} 
+   and c.status = '1' 
+   and decode(nvl(v.status, 0), 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5) != 5 
+order by
+   c.trade_license_name asc]]>
+	</queryString>
+	<field name="ID" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="ID"/>
+	</field>
+	<field name="CUSTOMER_NAME" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="CUSTOMER_NAME"/>
+	</field>
+	<field name="MOBILE_NO" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="MOBILE_NO"/>
+	</field>
+	<field name="TRADE_LICENSE_NAME" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="TRADE_LICENSE_NAME"/>
+	</field>
+	<field name="VISIT_START_TIME" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="VISIT_START_TIME"/>
+	</field>
+	<field name="VISIT_END_TIME" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="VISIT_END_TIME"/>
+	</field>
+	<field name="VISIT_STATUS" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="VISIT_STATUS"/>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="60" splitType="Stretch">
+			<staticText>
+				<reportElement x="1" y="0" width="679" height="30" uuid="38e7cea6-95ad-46d7-b200-83ff555b0e53"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="22" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Abul Khair Tobacco Company Limited]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1" y="30" width="679" height="30" uuid="22088f07-82e5-4087-883c-b5697031e801"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="18" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Daily Route Visit Status]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="45" splitType="Stretch">
+			<textField>
+				<reportElement mode="Opaque" x="132" y="0" width="231" height="15" backcolor="#F2EDED" uuid="65b35aa0-6e30-4a17-88ed-17f4f88c772b"/>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{teritoryName}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="0" width="132" height="15" backcolor="#F2EDED" uuid="a38ce63f-7a84-4072-9477-2c6abe815892"/>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Teritory Name]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="15" width="132" height="15" backcolor="#F2EDED" uuid="9f84fbdb-72d5-4312-8423-c094a58b7617"/>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Zone Name]]></text>
+			</staticText>
+			<textField>
+				<reportElement mode="Opaque" x="132" y="15" width="231" height="15" backcolor="#F2EDED" uuid="be96597e-cf15-4e98-be97-bf4be1e8d2a2"/>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{zoneName}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="30" width="132" height="15" backcolor="#F2EDED" uuid="e1ac3c2d-c3a5-4c35-afd6-f177c00964c8"/>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Route Name]]></text>
+			</staticText>
+			<textField>
+				<reportElement mode="Opaque" x="132" y="30" width="231" height="15" backcolor="#F2EDED" uuid="3c9ba0b2-c8c6-434b-ac53-334962cc78d2"/>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{routeName}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement mode="Opaque" x="480" y="0" width="200" height="15" backcolor="#F2EDED" uuid="3ec56b54-691a-429d-98a0-ac048598157c"/>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{amoName}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement mode="Opaque" x="363" y="0" width="117" height="15" backcolor="#F2EDED" uuid="0bb6256c-e8d7-4d65-ae96-1684ab06144b"/>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[AMO Name]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="363" y="15" width="117" height="15" backcolor="#F2EDED" uuid="65c615c8-b594-4600-87e6-3b11e22e6813"/>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[SR Name]]></text>
+			</staticText>
+			<textField>
+				<reportElement mode="Opaque" x="480" y="15" width="200" height="15" backcolor="#F2EDED" uuid="296846b4-3c15-4c7d-91dc-661fd0317319"/>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{salesRepName}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement mode="Opaque" x="363" y="30" width="117" height="15" backcolor="#F2EDED" uuid="0d3ba8f4-43a2-4648-baf6-ab4021b70ba5"/>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Day]]></text>
+			</staticText>
+			<textField>
+				<reportElement mode="Opaque" x="480" y="30" width="200" height="15" backcolor="#F2EDED" uuid="489fbf3a-689f-4c0d-842d-8e555bdb0e7d"/>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{visitDay}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="15" splitType="Stretch">
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="0" width="132" height="15" backcolor="#C7C3C3" uuid="56f43266-c4de-49c2-bdcc-695b1581e774">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="75c7e825-d154-462c-9d05-903d80422c71"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Customer Name]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="132" y="0" width="90" height="15" backcolor="#C7C3C3" uuid="76bbc888-b249-4f72-9c20-b50a514fc0e4">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="1ff51904-361d-4fa8-9b84-afe543a59db3"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Mobile No]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="222" y="0" width="141" height="15" backcolor="#C7C3C3" uuid="3b7fc957-7f8e-4215-be7f-637ff017ccbd">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="17bf0a82-16ce-417d-8160-8ad6cabe6274"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Store Name]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="363" y="0" width="117" height="15" backcolor="#C7C3C3" uuid="06f80e9d-74fe-4a35-b75d-98f4d6303f85">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="94d7b385-c714-4fc1-b19d-d3a4299ec73a"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Visit Start Time]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="480" y="0" width="120" height="15" backcolor="#C7C3C3" uuid="a8b50f0d-291d-4b93-9487-d3490227fa54">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="94d7b385-c714-4fc1-b19d-d3a4299ec73a"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Visit End Time]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="600" y="0" width="80" height="15" backcolor="#C7C3C3" uuid="8ca0b500-19c7-4e84-9970-065841a4e3c3">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="42aaa5cb-2c05-4920-bb24-d77dc023b1ad"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Status]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="15" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="132" height="15" uuid="fd4eefa3-ad33-44ce-a304-ac18866878cd">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="75c7e825-d154-462c-9d05-903d80422c71"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{CUSTOMER_NAME}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="132" y="0" width="90" height="15" uuid="1345d4fd-434f-48f3-a26f-f93555a7b347">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="1ff51904-361d-4fa8-9b84-afe543a59db3"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{MOBILE_NO}]]></textFieldExpression>
+			</textField>
+			<textField pattern="MMM d, yyyy h:mm:ss a">
+				<reportElement x="222" y="0" width="141" height="15" uuid="42f0e7b1-d57a-4960-82a5-2e3c6c4491d5">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="17bf0a82-16ce-417d-8160-8ad6cabe6274"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TRADE_LICENSE_NAME}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="363" y="0" width="117" height="15" uuid="1970982a-d5ff-429c-9169-fd1d07e8d148">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="94d7b385-c714-4fc1-b19d-d3a4299ec73a"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{VISIT_START_TIME}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="480" y="0" width="120" height="15" uuid="0847251c-8f6e-4f3a-a1bc-73650a6b0950">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="94d7b385-c714-4fc1-b19d-d3a4299ec73a"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{VISIT_END_TIME}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="600" y="0" width="80" height="15" uuid="d872003a-b5bd-4350-b02d-bbaf116c5cf5">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="42aaa5cb-2c05-4920-bb24-d77dc023b1ad"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{VISIT_STATUS}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

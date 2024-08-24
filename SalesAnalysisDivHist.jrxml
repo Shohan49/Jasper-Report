@@ -15,7 +15,7 @@
 	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w2" value="1000"/>
 	<property name="com.jaspersoft.studio.property.dataset.dialog.DatasetDialog.sash.w1" value="734"/>
 	<property name="com.jaspersoft.studio.property.dataset.dialog.DatasetDialog.sash.w2" value="256"/>
-	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="smprod_db"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="SM_TEST"/>
 	<parameter name="teritoryId" class="java.lang.String"/>
 	<parameter name="monthName" class="java.lang.String"/>
 	<parameter name="totalWorkingDay" class="java.lang.String"/>
@@ -24,57 +24,58 @@
 	<parameter name="territoryName" class="java.lang.String"/>
 	<queryString language="SQL">
 		<![CDATA[SELECT t1.WING_NAME, t1.DIVISION_NAME, t1.teritory_id,t1.teritory_name,t1.zone_id,t1.zone_name,t1.route_id,t1.route_name,t1.sales_rep_id,t1.outlet_no,t1.visit_frequency,t1.monthly_cig_target monthly_cig_target, t1.monthly_bidi_target monthly_bidi_target, t1.monthly_match_target monthly_match_target,
-sum(case when v_sr_inv.product_cat_id=101  and to_char(v_sr_inv.txn_dt,'mm-yyyy')=to_char(ADD_MONTHS(to_date($P{monthName},'mm-yyyy'),-1),'mm-yyyy') then v_sr_inv.quantity else 0 end )/$P{lastMonthWorkingDay} last_monthly_cig_sale,
-sum(case when v_sr_inv.product_cat_id=102  and to_char(v_sr_inv.txn_dt,'mm-yyyy')=to_char(ADD_MONTHS(to_date($P{monthName},'mm-yyyy'),-1),'mm-yyyy') then v_sr_inv.quantity else 0 end )/$P{lastMonthWorkingDay} last_monthly_bidi_sale,
-sum(case when v_sr_inv.product_cat_id=103  and to_char(v_sr_inv.txn_dt,'mm-yyyy')=to_char(ADD_MONTHS(to_date($P{monthName},'mm-yyyy'),-1),'mm-yyyy') then v_sr_inv.quantity else 0 end )/$P{lastMonthWorkingDay} last_monthly_match_sale,
+sum(case when v_sr_inv.product_cat_id=101 and to_char(v_sr_inv.txn_dt,'mm-yyyy')=to_char(ADD_MONTHS(to_date($P{monthName},'mm-yyyy'),-1),'mm-yyyy') then v_sr_inv.quantity else 0 end )/$P{lastMonthWorkingDay} last_monthly_cig_sale,
+sum(case when v_sr_inv.product_cat_id=102 and to_char(v_sr_inv.txn_dt,'mm-yyyy')=to_char(ADD_MONTHS(to_date($P{monthName},'mm-yyyy'),-1),'mm-yyyy') then v_sr_inv.quantity else 0 end )/$P{lastMonthWorkingDay} last_monthly_bidi_sale,
+sum(case when v_sr_inv.product_cat_id=103 and to_char(v_sr_inv.txn_dt,'mm-yyyy')=to_char(ADD_MONTHS(to_date($P{monthName},'mm-yyyy'),-1),'mm-yyyy') then v_sr_inv.quantity else 0 end )/$P{lastMonthWorkingDay} last_monthly_match_sale,
 sum(case when v_sr_inv.product_cat_id=101 and to_char(v_sr_inv.txn_dt,'mm-yyyy')= to_char(to_date($P{monthName},'mm-yyyy'),'mm-yyyy') then v_sr_inv.quantity else 0 end )/$P{workingDayPassed} monthly_cig_sale,
 sum(case when v_sr_inv.product_cat_id=102 and to_char(v_sr_inv.txn_dt,'mm-yyyy')= to_char(to_date($P{monthName},'mm-yyyy'),'mm-yyyy') then v_sr_inv.quantity else 0 end )/$P{workingDayPassed} monthly_bidi_sale,
 sum(case when v_sr_inv.product_cat_id=103 and to_char(v_sr_inv.txn_dt,'mm-yyyy')= to_char(to_date($P{monthName},'mm-yyyy'),'mm-yyyy') then v_sr_inv.quantity else 0 end )/$P{workingDayPassed} monthly_match_sale,
-(case when (sum(case when appsm.v_sr_inv.product_cat_id=101 and to_char(v_sr_inv.txn_dt,'mm-yyyy')=to_char(ADD_MONTHS(to_date($P{monthName},'mm-yyyy'),-1),'mm-yyyy') then v_sr_inv.quantity else 0 end )/$P{lastMonthWorkingDay} )>0 then 
-    (
-    ((sum(case when v_sr_inv.product_cat_id=101 and to_char(v_sr_inv.txn_dt,'mm-yyyy')= to_char(to_date($P{monthName},'mm-yyyy'),'mm-yyyy') then v_sr_inv.quantity else 0 end )/$P{workingDayPassed}) -
-    (sum(case when v_sr_inv.product_cat_id=101  and to_char(v_sr_inv.txn_dt,'mm-yyyy')=to_char(ADD_MONTHS(to_date($P{monthName},'mm-yyyy'),-1),'mm-yyyy') then v_sr_inv.quantity else 0 end )/$P{lastMonthWorkingDay} ))/
-    (sum(case when v_sr_inv.product_cat_id=101  and to_char(v_sr_inv.txn_dt,'mm-yyyy')=to_char(ADD_MONTHS(to_date($P{monthName},'mm-yyyy'),-1),'mm-yyyy') then v_sr_inv.quantity else 0 end )/$P{lastMonthWorkingDay} )
-    ) 
+(case when (sum(case when appsm.v_sr_inv.product_cat_id=101 and to_char(v_sr_inv.txn_dt,'mm-yyyy')=to_char(ADD_MONTHS(to_date($P{monthName},'mm-yyyy'),-1),'mm-yyyy') then v_sr_inv.quantity else 0 end )/$P{lastMonthWorkingDay} )>0 then
+(
+((sum(case when v_sr_inv.product_cat_id=101 and to_char(v_sr_inv.txn_dt,'mm-yyyy')= to_char(to_date($P{monthName},'mm-yyyy'),'mm-yyyy') then v_sr_inv.quantity else 0 end )/$P{workingDayPassed}) -
+(sum(case when v_sr_inv.product_cat_id=101 and to_char(v_sr_inv.txn_dt,'mm-yyyy')=to_char(ADD_MONTHS(to_date($P{monthName},'mm-yyyy'),-1),'mm-yyyy') then v_sr_inv.quantity else 0 end )/$P{lastMonthWorkingDay} ))/
+(sum(case when v_sr_inv.product_cat_id=101 and to_char(v_sr_inv.txn_dt,'mm-yyyy')=to_char(ADD_MONTHS(to_date($P{monthName},'mm-yyyy'),-1),'mm-yyyy') then v_sr_inv.quantity else 0 end )/$P{lastMonthWorkingDay} )
+)
 else 0 end) cig_groth_perc,
-(case when (sum(case when v_sr_inv.product_cat_id=102  and to_char(v_sr_inv.txn_dt,'mm-yyyy')=to_char(ADD_MONTHS(to_date($P{monthName},'mm-yyyy'),-1),'mm-yyyy') then v_sr_inv.quantity else 0 end )/$P{lastMonthWorkingDay} )>0 then 
-    (
-    ((sum(case when v_sr_inv.product_cat_id=102 and to_char(v_sr_inv.txn_dt,'mm-yyyy')= to_char(to_date($P{monthName},'mm-yyyy'),'mm-yyyy') then v_sr_inv.quantity else 0 end )/$P{workingDayPassed}) -
-    (sum(case when v_sr_inv.product_cat_id=102  and to_char(v_sr_inv.txn_dt,'mm-yyyy')=to_char(ADD_MONTHS(to_date($P{monthName},'mm-yyyy'),-1),'mm-yyyy') then v_sr_inv.quantity else 0 end )/$P{lastMonthWorkingDay} ))/
-    (sum(case when v_sr_inv.product_cat_id=102  and to_char(v_sr_inv.txn_dt,'mm-yyyy')=to_char(ADD_MONTHS(to_date($P{monthName},'mm-yyyy'),-1),'mm-yyyy') then v_sr_inv.quantity else 0 end )/$P{lastMonthWorkingDay} )
-    ) 
+(case when (sum(case when v_sr_inv.product_cat_id=102 and to_char(v_sr_inv.txn_dt,'mm-yyyy')=to_char(ADD_MONTHS(to_date($P{monthName},'mm-yyyy'),-1),'mm-yyyy') then v_sr_inv.quantity else 0 end )/$P{lastMonthWorkingDay} )>0 then
+(
+((sum(case when v_sr_inv.product_cat_id=102 and to_char(v_sr_inv.txn_dt,'mm-yyyy')= to_char(to_date($P{monthName},'mm-yyyy'),'mm-yyyy') then v_sr_inv.quantity else 0 end )/$P{workingDayPassed}) -
+(sum(case when v_sr_inv.product_cat_id=102 and to_char(v_sr_inv.txn_dt,'mm-yyyy')=to_char(ADD_MONTHS(to_date($P{monthName},'mm-yyyy'),-1),'mm-yyyy') then v_sr_inv.quantity else 0 end )/$P{lastMonthWorkingDay} ))/
+(sum(case when v_sr_inv.product_cat_id=102 and to_char(v_sr_inv.txn_dt,'mm-yyyy')=to_char(ADD_MONTHS(to_date($P{monthName},'mm-yyyy'),-1),'mm-yyyy') then v_sr_inv.quantity else 0 end )/$P{lastMonthWorkingDay} )
+)
 else 0 end) bidi_groth_perc,
-(case when (sum(case when v_sr_inv.product_cat_id=103  and to_char(v_sr_inv.txn_dt,'mm-yyyy')=to_char(ADD_MONTHS(to_date($P{monthName},'mm-yyyy'),-1),'mm-yyyy') then v_sr_inv.quantity else 0 end )/$P{lastMonthWorkingDay} )>0 then 
-    (
-    ((sum(case when v_sr_inv.product_cat_id=103 and to_char(v_sr_inv.txn_dt,'mm-yyyy')= to_char(to_date($P{monthName},'mm-yyyy'),'mm-yyyy') then v_sr_inv.quantity else 0 end )/$P{workingDayPassed}) -
-    (sum(case when v_sr_inv.product_cat_id=103  and to_char(v_sr_inv.txn_dt,'mm-yyyy')=to_char(ADD_MONTHS(to_date($P{monthName},'mm-yyyy'),-1),'mm-yyyy') then v_sr_inv.quantity else 0 end )/$P{lastMonthWorkingDay} ))/
-    (sum(case when v_sr_inv.product_cat_id=103  and to_char(v_sr_inv.txn_dt,'mm-yyyy')=to_char(ADD_MONTHS(to_date($P{monthName},'mm-yyyy'),-1),'mm-yyyy') then v_sr_inv.quantity else 0 end )/$P{lastMonthWorkingDay} )
-    ) 
+(case when (sum(case when v_sr_inv.product_cat_id=103 and to_char(v_sr_inv.txn_dt,'mm-yyyy')=to_char(ADD_MONTHS(to_date($P{monthName},'mm-yyyy'),-1),'mm-yyyy') then v_sr_inv.quantity else 0 end )/$P{lastMonthWorkingDay} )>0 then
+(
+((sum(case when v_sr_inv.product_cat_id=103 and to_char(v_sr_inv.txn_dt,'mm-yyyy')= to_char(to_date($P{monthName},'mm-yyyy'),'mm-yyyy') then v_sr_inv.quantity else 0 end )/$P{workingDayPassed}) -
+(sum(case when v_sr_inv.product_cat_id=103 and to_char(v_sr_inv.txn_dt,'mm-yyyy')=to_char(ADD_MONTHS(to_date($P{monthName},'mm-yyyy'),-1),'mm-yyyy') then v_sr_inv.quantity else 0 end )/$P{lastMonthWorkingDay} ))/
+(sum(case when v_sr_inv.product_cat_id=103 and to_char(v_sr_inv.txn_dt,'mm-yyyy')=to_char(ADD_MONTHS(to_date($P{monthName},'mm-yyyy'),-1),'mm-yyyy') then v_sr_inv.quantity else 0 end )/$P{lastMonthWorkingDay} )
+)
 else 0 end) match_groth_perc,
-round(sum(case when v_sr_inv.product_cat_id=101 and to_char(v_sr_inv.txn_dt,'mm-yyyy')= to_char(to_date($P{monthName},'mm-yyyy'),'mm-yyyy') then v_sr_inv.quantity else 0 end )* $P{totalWorkingDay} /  $P{workingDayPassed} ,0) projection_cig_sale,
-round(sum(case when v_sr_inv.product_cat_id=102 and to_char(v_sr_inv.txn_dt,'mm-yyyy')= to_char(to_date($P{monthName},'mm-yyyy'),'mm-yyyy') then v_sr_inv.quantity else 0 end )* $P{totalWorkingDay} /  $P{workingDayPassed} ,0) projection_bidi_sale,
-round(sum(case when v_sr_inv.product_cat_id=103 and to_char(v_sr_inv.txn_dt,'mm-yyyy')= to_char(to_date($P{monthName},'mm-yyyy'),'mm-yyyy') then v_sr_inv.quantity else 0 end )* $P{totalWorkingDay} /  $P{workingDayPassed} ,0) projection_match_sale,
- (case when t1.monthly_cig_target>0  then round(sum(case when v_sr_inv.product_cat_id=101 and to_char(v_sr_inv.txn_dt,'mm-yyyy')= to_char(to_date($P{monthName},'mm-yyyy'),'mm-yyyy') then v_sr_inv.quantity else 0 end )*$P{totalWorkingDay} /  $P{workingDayPassed},0)/t1.monthly_cig_target else 0 end) achivement_cig_sale,
- (case when t1.monthly_bidi_target>0  then round(sum(case when v_sr_inv.product_cat_id=102 and to_char(v_sr_inv.txn_dt,'mm-yyyy')= to_char(to_date($P{monthName},'mm-yyyy'),'mm-yyyy') then v_sr_inv.quantity else 0 end )*$P{totalWorkingDay} /  $P{workingDayPassed},0)/t1.monthly_bidi_target else 0 end) achivement_bidi_sale,
- (case when t1.monthly_match_target>0  then round(sum(case when v_sr_inv.product_cat_id=103 and to_char(v_sr_inv.txn_dt,'mm-yyyy')= to_char(to_date($P{monthName},'mm-yyyy'),'mm-yyyy') then v_sr_inv.quantity else 0 end )*$P{totalWorkingDay} /  $P{workingDayPassed},0)/t1.monthly_match_target else 0 end) achivement_match_sale
-from (SELECT vta.WING_NAME, vta.DIVISION_NAME, v_srs.teritory_name,v_srs.teritory_id,v_srs.zone_id,v_srs.zone_name,v_srs.route_id,v_srs.route_name,v_srs.sales_rep_id,v_srs.outlet_no,v_srs.visit_frequency, 
-		sum(case when v_pst.product_cat_id=101 and  target_month = to_char(to_date($P{monthName},'mm-yyyy'),'dd-MON-yy')  then v_pst.target_quantity else 0 end ) monthly_cig_target,
-		sum(case when v_pst.product_cat_id=102 and  target_month = to_char(to_date($P{monthName},'mm-yyyy'),'dd-MON-yy')  then v_pst.target_quantity else 0 end ) monthly_bidi_target,
-		sum(case when v_pst.product_cat_id=103 and  target_month = to_char(to_date($P{monthName},'mm-yyyy'),'dd-MON-yy')  then v_pst.target_quantity else 0 end ) monthly_match_target
-		from appsm.V_ROUTE_WISE_SALES_REP_OUTLET v_srs 
-		left join appsm.v_prod_cat_sr_rt_wise_mt_tgt v_pst on v_srs.route_id=v_pst.route_id
-		LEFT JOIN appsm.V_TERITORY_ALL vta ON v_srs.ROUTE_ID =  vta.ROUTE_ID 
-		where vta.TERITORY_ID IN(select id from appsm.teritory where id = $P{teritoryId} or parent_id in    
-            				(select id from appsm.teritory where  id = $P{teritoryId} or parent_id in
-            				 (select id from appsm.teritory where  id = $P{teritoryId} or parent_id= $P{teritoryId})))
-		group by vta.WING_NAME, vta.DIVISION_NAME, v_srs.teritory_name,v_srs.teritory_id,v_srs.zone_id,v_srs.zone_name,
-		v_srs.route_id,v_srs.route_name,v_srs.sales_rep_id,v_srs.outlet_no,v_srs.visit_frequency) t1 
-left outer join  appsm.v_sales_rep_inv_prod_cat v_sr_inv ON t1.sales_rep_id= v_sr_inv.sales_rep_id and t1.route_id=v_sr_inv.route_id 
-		LEFT JOIN appsm.V_TERITORY_ALL vta ON v_sr_inv.ROUTE_ID =  vta.ROUTE_ID 
-where vta.TERITORY_ID IN (select id from appsm.teritory where id = $P{teritoryId} or parent_id in    
-            				(select id from appsm.teritory where  id = $P{teritoryId} or parent_id in
-            				 (select id from appsm.teritory where  id = $P{teritoryId} or parent_id= $P{teritoryId})))
-group BY t1.WING_NAME, t1.DIVISION_NAME, t1.teritory_id,t1.teritory_name,t1.zone_id,t1.zone_name,t1.route_id,t1.route_name,t1.sales_rep_id,t1.outlet_no,t1.visit_frequency,t1.monthly_cig_target , t1.monthly_bidi_target , t1.monthly_match_target 
+round(sum(case when v_sr_inv.product_cat_id=101 and to_char(v_sr_inv.txn_dt,'mm-yyyy')= to_char(to_date($P{monthName},'mm-yyyy'),'mm-yyyy') then v_sr_inv.quantity else 0 end )* $P{totalWorkingDay} / $P{workingDayPassed} ,0) projection_cig_sale,
+round(sum(case when v_sr_inv.product_cat_id=102 and to_char(v_sr_inv.txn_dt,'mm-yyyy')= to_char(to_date($P{monthName},'mm-yyyy'),'mm-yyyy') then v_sr_inv.quantity else 0 end )* $P{totalWorkingDay} / $P{workingDayPassed} ,0) projection_bidi_sale,
+round(sum(case when v_sr_inv.product_cat_id=103 and to_char(v_sr_inv.txn_dt,'mm-yyyy')= to_char(to_date($P{monthName},'mm-yyyy'),'mm-yyyy') then v_sr_inv.quantity else 0 end )* $P{totalWorkingDay} / $P{workingDayPassed} ,0) projection_match_sale,
+(case when t1.monthly_cig_target>0 then round(sum(case when v_sr_inv.product_cat_id=101 and to_char(v_sr_inv.txn_dt,'mm-yyyy')= to_char(to_date($P{monthName},'mm-yyyy'),'mm-yyyy') then v_sr_inv.quantity else 0 end )*$P{totalWorkingDay} / $P{workingDayPassed},0)/t1.monthly_cig_target else 0 end) achivement_cig_sale,
+(case when t1.monthly_bidi_target>0 then round(sum(case when v_sr_inv.product_cat_id=102 and to_char(v_sr_inv.txn_dt,'mm-yyyy')= to_char(to_date($P{monthName},'mm-yyyy'),'mm-yyyy') then v_sr_inv.quantity else 0 end )*$P{totalWorkingDay} / $P{workingDayPassed},0)/t1.monthly_bidi_target else 0 end) achivement_bidi_sale,
+(case when t1.monthly_match_target>0 then round(sum(case when v_sr_inv.product_cat_id=103 and to_char(v_sr_inv.txn_dt,'mm-yyyy')= to_char(to_date($P{monthName},'mm-yyyy'),'mm-yyyy') then v_sr_inv.quantity else 0 end )*$P{totalWorkingDay} / $P{workingDayPassed},0)/t1.monthly_match_target else 0 end) achivement_match_sale
+from (SELECT vta.WING_NAME, vta.DIVISION_NAME, v_srs.teritory_name,v_srs.teritory_id,v_srs.zone_id,v_srs.zone_name,v_srs.route_id,v_srs.route_name,v_srs.sales_rep_id,v_srs.outlet_no,v_srs.visit_frequency,
+sum(case when v_pst.product_cat_id=101 and target_month = to_char(to_date($P{monthName},'mm-yyyy'),'dd-MON-yy') then v_pst.target_quantity else 0 end ) monthly_cig_target,
+sum(case when v_pst.product_cat_id=102 and target_month = to_char(to_date($P{monthName},'mm-yyyy'),'dd-MON-yy') then v_pst.target_quantity else 0 end ) monthly_bidi_target,
+sum(case when v_pst.product_cat_id=103 and target_month = to_char(to_date($P{monthName},'mm-yyyy'),'dd-MON-yy') then v_pst.target_quantity else 0 end ) monthly_match_target
+from appsm.V_ROUTE_WISE_SALES_REP_OUTLET v_srs
+left join appsm.v_prod_cat_sr_rt_wise_mt_tgt v_pst on v_srs.route_id=v_pst.route_id
+LEFT JOIN appsm.V_TERITORY_ALL vta ON v_srs.ROUTE_ID = vta.ROUTE_ID
+where vta.TERITORY_ID IN(select id from appsm.teritory where id = $P{teritoryId} or parent_id in
+(select id from appsm.teritory where id = $P{teritoryId} or parent_id in
+(select id from appsm.teritory where id = $P{teritoryId} or parent_id= $P{teritoryId})))
+group by vta.WING_NAME, vta.DIVISION_NAME, v_srs.teritory_name,v_srs.teritory_id,v_srs.zone_id,v_srs.zone_name,
+v_srs.route_id,v_srs.route_name,v_srs.sales_rep_id,v_srs.outlet_no,v_srs.visit_frequency) t1
+left outer join appsm.DAILY_INVOICE_SUMMARY_CAT v_sr_inv ON t1.sales_rep_id= v_sr_inv.sales_rep_id and t1.route_id=v_sr_inv.route_id
+JOIN appsm.DAILY_INVOICE_SUMMARY m ON v_sr_inv.SALES_REP_ID = m.SALES_REP_ID AND v_sr_inv.TXN_DT = m.TXN_DT
+LEFT JOIN appsm.V_TERITORY_ALL vta ON v_sr_inv.ROUTE_ID = vta.ROUTE_ID
+where vta.TERITORY_ID IN (select id from appsm.teritory where id = $P{teritoryId} or parent_id in
+(select id from appsm.teritory where id = $P{teritoryId} or parent_id in
+(select id from appsm.teritory where id = $P{teritoryId} or parent_id= $P{teritoryId})))
+group BY t1.WING_NAME, t1.DIVISION_NAME, t1.teritory_id,t1.teritory_name,t1.zone_id,t1.zone_name,t1.route_id,t1.route_name,t1.sales_rep_id,t1.outlet_no,t1.visit_frequency,t1.monthly_cig_target , t1.monthly_bidi_target , t1.monthly_match_target
 order by t1.teritory_id,t1.zone_id,t1.route_id]]>
 	</queryString>
 	<field name="TERITORY_ID" class="java.math.BigDecimal">
@@ -575,6 +576,10 @@ order by t1.teritory_id,t1.zone_id,t1.route_id]]>
 					<reportElement mode="Opaque" x="120" y="0" width="50" height="20" forecolor="#000000" backcolor="#66FFCC" uuid="71c7d6f5-38ef-4e81-b3ff-ba8dd3b82334"/>
 					<box>
 						<pen lineWidth="0.25" lineColor="#008000"/>
+						<topPen lineWidth="0.25" lineStyle="Solid" lineColor="#008000"/>
+						<leftPen lineWidth="0.25" lineStyle="Solid" lineColor="#008000"/>
+						<bottomPen lineWidth="0.25" lineStyle="Solid" lineColor="#008000"/>
+						<rightPen lineWidth="0.25" lineStyle="Solid" lineColor="#008000"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="9" isBold="true"/>
@@ -585,6 +590,10 @@ order by t1.teritory_id,t1.zone_id,t1.route_id]]>
 					<reportElement mode="Opaque" x="210" y="0" width="68" height="20" forecolor="#000000" backcolor="#66FFCC" uuid="bf784f11-f3a7-46fd-80fb-6e7a08728586"/>
 					<box>
 						<pen lineWidth="0.25" lineColor="#008000"/>
+						<topPen lineWidth="0.25" lineStyle="Solid" lineColor="#008000"/>
+						<leftPen lineWidth="0.25" lineStyle="Solid" lineColor="#008000"/>
+						<bottomPen lineWidth="0.25" lineStyle="Solid" lineColor="#008000"/>
+						<rightPen lineWidth="0.25" lineStyle="Solid" lineColor="#008000"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="9" isBold="true"/>
@@ -595,6 +604,10 @@ order by t1.teritory_id,t1.zone_id,t1.route_id]]>
 					<reportElement mode="Opaque" x="580" y="0" width="68" height="20" forecolor="#000000" backcolor="#66FFCC" uuid="b84b61fb-647d-4c22-b165-0c1a20021bd0"/>
 					<box>
 						<pen lineWidth="0.25" lineColor="#008000"/>
+						<topPen lineWidth="0.25" lineStyle="Solid" lineColor="#008000"/>
+						<leftPen lineWidth="0.25" lineStyle="Solid" lineColor="#008000"/>
+						<bottomPen lineWidth="0.25" lineStyle="Solid" lineColor="#008000"/>
+						<rightPen lineWidth="0.25" lineStyle="Solid" lineColor="#008000"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="9" isBold="true"/>
@@ -605,6 +618,10 @@ order by t1.teritory_id,t1.zone_id,t1.route_id]]>
 					<reportElement mode="Opaque" x="951" y="0" width="68" height="20" forecolor="#000000" backcolor="#66FFCC" uuid="e33d8f34-6f28-4b35-aed5-c43e6bef2a18"/>
 					<box>
 						<pen lineWidth="0.25" lineColor="#008000"/>
+						<topPen lineWidth="0.25" lineStyle="Solid" lineColor="#008000"/>
+						<leftPen lineWidth="0.25" lineStyle="Solid" lineColor="#008000"/>
+						<bottomPen lineWidth="0.25" lineStyle="Solid" lineColor="#008000"/>
+						<rightPen lineWidth="0.25" lineStyle="Solid" lineColor="#008000"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="9" isBold="true"/>
@@ -615,6 +632,10 @@ order by t1.teritory_id,t1.zone_id,t1.route_id]]>
 					<reportElement mode="Opaque" x="278" y="0" width="66" height="20" forecolor="#000000" backcolor="#66FFCC" uuid="364c741e-08f1-4ae3-a3a6-b300f2b823ec"/>
 					<box>
 						<pen lineWidth="0.25" lineColor="#008000"/>
+						<topPen lineWidth="0.25" lineStyle="Solid" lineColor="#008000"/>
+						<leftPen lineWidth="0.25" lineStyle="Solid" lineColor="#008000"/>
+						<bottomPen lineWidth="0.25" lineStyle="Solid" lineColor="#008000"/>
+						<rightPen lineWidth="0.25" lineStyle="Solid" lineColor="#008000"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="9" isBold="true"/>
@@ -625,6 +646,10 @@ order by t1.teritory_id,t1.zone_id,t1.route_id]]>
 					<reportElement mode="Opaque" x="648" y="0" width="66" height="20" forecolor="#000000" backcolor="#66FFCC" uuid="f9f50619-02c8-4207-bf5b-a91bb6171191"/>
 					<box>
 						<pen lineWidth="0.25" lineColor="#008000"/>
+						<topPen lineWidth="0.25" lineStyle="Solid" lineColor="#008000"/>
+						<leftPen lineWidth="0.25" lineStyle="Solid" lineColor="#008000"/>
+						<bottomPen lineWidth="0.25" lineStyle="Solid" lineColor="#008000"/>
+						<rightPen lineWidth="0.25" lineStyle="Solid" lineColor="#008000"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="9" isBold="true"/>
@@ -635,6 +660,10 @@ order by t1.teritory_id,t1.zone_id,t1.route_id]]>
 					<reportElement mode="Opaque" x="1019" y="0" width="66" height="20" forecolor="#000000" backcolor="#66FFCC" uuid="b15f05d4-dae1-4e8d-9934-67b8f4c4e834"/>
 					<box>
 						<pen lineWidth="0.25" lineColor="#008000"/>
+						<topPen lineWidth="0.25" lineStyle="Solid" lineColor="#008000"/>
+						<leftPen lineWidth="0.25" lineStyle="Solid" lineColor="#008000"/>
+						<bottomPen lineWidth="0.25" lineStyle="Solid" lineColor="#008000"/>
+						<rightPen lineWidth="0.25" lineStyle="Solid" lineColor="#008000"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="9" isBold="true"/>
@@ -645,6 +674,10 @@ order by t1.teritory_id,t1.zone_id,t1.route_id]]>
 					<reportElement mode="Opaque" x="410" y="0" width="70" height="20" forecolor="#000000" backcolor="#66FFCC" uuid="cd279c99-8e16-4b33-b6ea-2c034a2f2f56"/>
 					<box>
 						<pen lineWidth="0.25" lineColor="#008000"/>
+						<topPen lineWidth="0.25" lineStyle="Solid" lineColor="#008000"/>
+						<leftPen lineWidth="0.25" lineStyle="Solid" lineColor="#008000"/>
+						<bottomPen lineWidth="0.25" lineStyle="Solid" lineColor="#008000"/>
+						<rightPen lineWidth="0.25" lineStyle="Solid" lineColor="#008000"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="9" isBold="true"/>
@@ -655,6 +688,10 @@ order by t1.teritory_id,t1.zone_id,t1.route_id]]>
 					<reportElement mode="Opaque" x="780" y="0" width="71" height="20" forecolor="#000000" backcolor="#66FFCC" uuid="99a4a367-9a67-4159-8f83-fb4a8bc3cc2e"/>
 					<box>
 						<pen lineWidth="0.25" lineColor="#008000"/>
+						<topPen lineWidth="0.25" lineStyle="Solid" lineColor="#008000"/>
+						<leftPen lineWidth="0.25" lineStyle="Solid" lineColor="#008000"/>
+						<bottomPen lineWidth="0.25" lineStyle="Solid" lineColor="#008000"/>
+						<rightPen lineWidth="0.25" lineStyle="Solid" lineColor="#008000"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="9" isBold="true"/>
@@ -665,6 +702,10 @@ order by t1.teritory_id,t1.zone_id,t1.route_id]]>
 					<reportElement mode="Opaque" x="1151" y="0" width="71" height="20" forecolor="#000000" backcolor="#66FFCC" uuid="7aa18e27-4b98-412c-9a07-d25146884274"/>
 					<box>
 						<pen lineWidth="0.25" lineColor="#008000"/>
+						<topPen lineWidth="0.25" lineStyle="Solid" lineColor="#008000"/>
+						<leftPen lineWidth="0.25" lineStyle="Solid" lineColor="#008000"/>
+						<bottomPen lineWidth="0.25" lineStyle="Solid" lineColor="#008000"/>
+						<rightPen lineWidth="0.25" lineStyle="Solid" lineColor="#008000"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="9" isBold="true"/>
@@ -675,6 +716,10 @@ order by t1.teritory_id,t1.zone_id,t1.route_id]]>
 					<reportElement mode="Opaque" x="0" y="0" width="120" height="20" forecolor="#000000" backcolor="#66FFCC" uuid="e82a9ab4-b4eb-4fb8-a84e-87e83eb27da7"/>
 					<box>
 						<pen lineWidth="0.25" lineStyle="Solid" lineColor="#008000"/>
+						<topPen lineWidth="0.25" lineStyle="Solid" lineColor="#008000"/>
+						<leftPen lineWidth="0.25" lineStyle="Solid" lineColor="#008000"/>
+						<bottomPen lineWidth="0.25" lineStyle="Solid" lineColor="#008000"/>
+						<rightPen lineWidth="0.25" lineStyle="Solid" lineColor="#008000"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="9" isBold="true"/>
@@ -685,6 +730,10 @@ order by t1.teritory_id,t1.zone_id,t1.route_id]]>
 					<reportElement mode="Opaque" x="170" y="0" width="40" height="20" forecolor="#000000" backcolor="#66FFCC" uuid="60095614-3654-4808-9b03-5c063e8c8f89"/>
 					<box>
 						<pen lineWidth="0.25" lineColor="#008000"/>
+						<topPen lineWidth="0.25" lineStyle="Solid" lineColor="#008000"/>
+						<leftPen lineWidth="0.25" lineStyle="Solid" lineColor="#008000"/>
+						<bottomPen lineWidth="0.25" lineStyle="Solid" lineColor="#008000"/>
+						<rightPen lineWidth="0.25" lineStyle="Solid" lineColor="#008000"/>
 					</box>
 					<textElement>
 						<font isBold="true"/>
@@ -695,6 +744,10 @@ order by t1.teritory_id,t1.zone_id,t1.route_id]]>
 					<reportElement mode="Opaque" x="344" y="0" width="66" height="20" forecolor="#000000" backcolor="#66FFCC" uuid="9e28ec3a-bbb3-490c-b093-b80f3f3055eb"/>
 					<box>
 						<pen lineWidth="0.25" lineColor="#008000"/>
+						<topPen lineWidth="0.25" lineStyle="Solid" lineColor="#008000"/>
+						<leftPen lineWidth="0.25" lineStyle="Solid" lineColor="#008000"/>
+						<bottomPen lineWidth="0.25" lineStyle="Solid" lineColor="#008000"/>
+						<rightPen lineWidth="0.25" lineStyle="Solid" lineColor="#008000"/>
 					</box>
 					<textElement>
 						<font isBold="true"/>
@@ -705,6 +758,10 @@ order by t1.teritory_id,t1.zone_id,t1.route_id]]>
 					<reportElement mode="Opaque" x="714" y="0" width="66" height="20" forecolor="#000000" backcolor="#66FFCC" uuid="be0a389e-29ef-4b77-a10d-467a113d2f41"/>
 					<box>
 						<pen lineWidth="0.25" lineColor="#008000"/>
+						<topPen lineWidth="0.25" lineStyle="Solid" lineColor="#008000"/>
+						<leftPen lineWidth="0.25" lineStyle="Solid" lineColor="#008000"/>
+						<bottomPen lineWidth="0.25" lineStyle="Solid" lineColor="#008000"/>
+						<rightPen lineWidth="0.25" lineStyle="Solid" lineColor="#008000"/>
 					</box>
 					<textElement>
 						<font isBold="true"/>
@@ -715,6 +772,10 @@ order by t1.teritory_id,t1.zone_id,t1.route_id]]>
 					<reportElement mode="Opaque" x="1085" y="0" width="66" height="20" forecolor="#000000" backcolor="#66FFCC" uuid="3ed5ebac-0d32-4ce1-861d-a87efa4c6910"/>
 					<box>
 						<pen lineWidth="0.25" lineColor="#008000"/>
+						<topPen lineWidth="0.25" lineStyle="Solid" lineColor="#008000"/>
+						<leftPen lineWidth="0.25" lineStyle="Solid" lineColor="#008000"/>
+						<bottomPen lineWidth="0.25" lineStyle="Solid" lineColor="#008000"/>
+						<rightPen lineWidth="0.25" lineStyle="Solid" lineColor="#008000"/>
 					</box>
 					<textElement>
 						<font isBold="true"/>
@@ -725,6 +786,10 @@ order by t1.teritory_id,t1.zone_id,t1.route_id]]>
 					<reportElement mode="Opaque" x="1222" y="0" width="50" height="20" forecolor="#000000" backcolor="#66FFCC" uuid="bc243bf3-9004-43be-9f6c-425553450080"/>
 					<box>
 						<pen lineWidth="0.25" lineColor="#008000"/>
+						<topPen lineWidth="0.25" lineStyle="Solid" lineColor="#008000"/>
+						<leftPen lineWidth="0.25" lineStyle="Solid" lineColor="#008000"/>
+						<bottomPen lineWidth="0.25" lineStyle="Solid" lineColor="#008000"/>
+						<rightPen lineWidth="0.25" lineStyle="Solid" lineColor="#008000"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="9" isBold="true"/>
@@ -735,6 +800,10 @@ order by t1.teritory_id,t1.zone_id,t1.route_id]]>
 					<reportElement mode="Opaque" x="1272" y="0" width="50" height="20" forecolor="#000000" backcolor="#66FFCC" uuid="9e7bc0ff-36bf-4e38-b880-6a3cf4225b42"/>
 					<box>
 						<pen lineWidth="0.25" lineColor="#008000"/>
+						<topPen lineWidth="0.25" lineStyle="Solid" lineColor="#008000"/>
+						<leftPen lineWidth="0.25" lineStyle="Solid" lineColor="#008000"/>
+						<bottomPen lineWidth="0.25" lineStyle="Solid" lineColor="#008000"/>
+						<rightPen lineWidth="0.25" lineStyle="Solid" lineColor="#008000"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="9" isBold="true"/>
@@ -745,6 +814,10 @@ order by t1.teritory_id,t1.zone_id,t1.route_id]]>
 					<reportElement mode="Opaque" x="851" y="0" width="50" height="20" forecolor="#000000" backcolor="#66FFCC" uuid="ac356848-2966-4827-872b-9b7557f54e1f"/>
 					<box>
 						<pen lineWidth="0.25" lineColor="#008000"/>
+						<topPen lineWidth="0.25" lineStyle="Solid" lineColor="#008000"/>
+						<leftPen lineWidth="0.25" lineStyle="Solid" lineColor="#008000"/>
+						<bottomPen lineWidth="0.25" lineStyle="Solid" lineColor="#008000"/>
+						<rightPen lineWidth="0.25" lineStyle="Solid" lineColor="#008000"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="9" isBold="true"/>
@@ -755,6 +828,10 @@ order by t1.teritory_id,t1.zone_id,t1.route_id]]>
 					<reportElement mode="Opaque" x="901" y="0" width="50" height="20" forecolor="#000000" backcolor="#66FFCC" uuid="36a44107-3c16-46c0-965a-924769b69c3d"/>
 					<box>
 						<pen lineWidth="0.25" lineColor="#008000"/>
+						<topPen lineWidth="0.25" lineStyle="Solid" lineColor="#008000"/>
+						<leftPen lineWidth="0.25" lineStyle="Solid" lineColor="#008000"/>
+						<bottomPen lineWidth="0.25" lineStyle="Solid" lineColor="#008000"/>
+						<rightPen lineWidth="0.25" lineStyle="Solid" lineColor="#008000"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="9" isBold="true"/>
@@ -765,6 +842,10 @@ order by t1.teritory_id,t1.zone_id,t1.route_id]]>
 					<reportElement mode="Opaque" x="480" y="0" width="50" height="20" forecolor="#000000" backcolor="#66FFCC" uuid="1048b7b4-c83e-46d5-b038-5b3e0c492cd5"/>
 					<box>
 						<pen lineWidth="0.25" lineColor="#008000"/>
+						<topPen lineWidth="0.25" lineStyle="Solid" lineColor="#008000"/>
+						<leftPen lineWidth="0.25" lineStyle="Solid" lineColor="#008000"/>
+						<bottomPen lineWidth="0.25" lineStyle="Solid" lineColor="#008000"/>
+						<rightPen lineWidth="0.25" lineStyle="Solid" lineColor="#008000"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="9" isBold="true"/>
@@ -775,6 +856,10 @@ order by t1.teritory_id,t1.zone_id,t1.route_id]]>
 					<reportElement mode="Opaque" x="530" y="0" width="50" height="20" forecolor="#000000" backcolor="#66FFCC" uuid="f25fcb30-7d42-4617-9377-98d60881e0ae"/>
 					<box>
 						<pen lineWidth="0.25" lineColor="#008000"/>
+						<topPen lineWidth="0.25" lineStyle="Solid" lineColor="#008000"/>
+						<leftPen lineWidth="0.25" lineStyle="Solid" lineColor="#008000"/>
+						<bottomPen lineWidth="0.25" lineStyle="Solid" lineColor="#008000"/>
+						<rightPen lineWidth="0.25" lineStyle="Solid" lineColor="#008000"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="9" isBold="true"/>

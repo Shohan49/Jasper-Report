@@ -1,0 +1,1335 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.6.0.final using JasperReports Library version 6.6.0  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SalesManDailyActivityFormat" pageWidth="1342" pageHeight="695" orientation="Landscape" columnWidth="1302" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="652fc8e4-78a6-44e6-bcce-85dafbf171ed">
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="SMPRODDB"/>
+	<property name="com.jaspersoft.studio.unit." value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageHeight" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.topMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.bottomMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.leftMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.rightMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnSpacing" value="pixel"/>
+	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w1" value="214"/>
+	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w2" value="781"/>
+	<parameter name="salesRepId" class="java.lang.String"/>
+	<parameter name="monthName" class="java.lang.String"/>
+	<parameter name="totalWorkingDay" class="java.lang.String"/>
+	<parameter name="passWorkingDay" class="java.lang.String"/>
+	<parameter name="routeId" class="java.lang.String"/>
+	<parameter name="routeName" class="java.lang.String"/>
+	<parameter name="zoneName" class="java.lang.String"/>
+	<parameter name="outletNo" class="java.lang.String"/>
+	<parameter name="salesRepName" class="java.lang.String"/>
+	<parameter name="teritoryName" class="java.lang.String"/>
+	<queryString language="SQL">
+		<![CDATA[select t1.dd, st.cig_target,st.bidi_target,st.match_target,
+t1.cig_sale, t1.bidi_sale,t1.match_sale,'0' slide_sale,t1.memo memo_sale,
+SUM(t2.cig_sale)  std_cig,SUM(t2.bidi_sale)  std_bidi,SUM(t2.match_sale)  std_match, '0' std_slide,SUM(t2.memo)  std_memo,
+AVG(t2.cig_sale)  pads_cig,AVG(t2.bidi_sale)  pads_bidi,AVG(t2.match_sale)  pads_match,'0' pads_slide, AVG(t2.memo)  pads_memo,
+
+(case when st.cig_target> 0 then t1.cig_sale/st.cig_target else 0 end) cig_achivement,
+(case when st.bidi_target> 0 then t1.bidi_sale/st.bidi_target else 0 end) bidi_achivement,
+(case when st.match_target> 0 then t1.match_sale/st.match_target else 0 end) match_achivement,
+(SUM(t2.cig_sale)* $P{totalWorkingDay}/$P{passWorkingDay}) cig_projection,
+(SUM(t2.bidi_sale)*$P{totalWorkingDay}/$P{passWorkingDay}) bidi_projection,
+(SUM(t2.match_sale)*$P{totalWorkingDay}/$P{passWorkingDay}) match_projection,
+(SUM(t2.memo)*$P{totalWorkingDay}/$P{passWorkingDay}) memo_projection
+
+from  v_sr_daily_sales_target_new st left outer join v_sr_daily_sales_quantity_new t1 on (st.sales_rep_id=t1.sales_rep_id and st.route_id=t1.route_id and st.target_date=t1.dd and substr(st.target_date,1,7) =  to_char(to_date( $P{monthName} ,'mm-yyyy'),'yyyy-mm')  )
+inner join v_sr_daily_sales_quantity_new t2 on (t1.dd >= t2.dd and t1.sales_rep_id=t2.sales_rep_id)
+where t1.sales_rep_id=  $P{salesRepId} 
+and t1.route_id=   $P{routeId} 
+and substr(t1.dd,1,7) = to_char(to_date( $P{monthName} ,'mm-yyyy'),'yyyy-mm')
+and substr(t2.dd,1,7) =   to_char(to_date( $P{monthName} ,'mm-yyyy'),'yyyy-mm')
+and substr(st.target_date,1,7) = to_char(to_date( $P{monthName} ,'mm-yyyy'),'yyyy-mm')
+group by t1.dd, st.cig_target,st.bidi_target,st.match_target,t1.cig_sale, t1.bidi_sale,t1.match_sale,'0',t1.memo
+order by t1.dd]]>
+	</queryString>
+	<field name="DD" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="DD"/>
+	</field>
+	<field name="CIG_TARGET" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="CIG_TARGET"/>
+	</field>
+	<field name="BIDI_TARGET" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="BIDI_TARGET"/>
+	</field>
+	<field name="MATCH_TARGET" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="MATCH_TARGET"/>
+	</field>
+	<field name="CIG_SALE" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="CIG_SALE"/>
+	</field>
+	<field name="BIDI_SALE" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="BIDI_SALE"/>
+	</field>
+	<field name="MATCH_SALE" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="MATCH_SALE"/>
+	</field>
+	<field name="SLIDE_SALE" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="SLIDE_SALE"/>
+	</field>
+	<field name="MEMO_SALE" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="MEMO_SALE"/>
+	</field>
+	<field name="STD_CIG" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="STD_CIG"/>
+	</field>
+	<field name="STD_BIDI" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="STD_BIDI"/>
+	</field>
+	<field name="STD_MATCH" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="STD_MATCH"/>
+	</field>
+	<field name="STD_SLIDE" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="STD_SLIDE"/>
+	</field>
+	<field name="STD_MEMO" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="STD_MEMO"/>
+	</field>
+	<field name="PADS_CIG" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="PADS_CIG"/>
+	</field>
+	<field name="PADS_BIDI" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="PADS_BIDI"/>
+	</field>
+	<field name="PADS_MATCH" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="PADS_MATCH"/>
+	</field>
+	<field name="PADS_SLIDE" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="PADS_SLIDE"/>
+	</field>
+	<field name="PADS_MEMO" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="PADS_MEMO"/>
+	</field>
+	<field name="CIG_ACHIVEMENT" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="CIG_ACHIVEMENT"/>
+	</field>
+	<field name="BIDI_ACHIVEMENT" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="BIDI_ACHIVEMENT"/>
+	</field>
+	<field name="MATCH_ACHIVEMENT" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="MATCH_ACHIVEMENT"/>
+	</field>
+	<field name="CIG_PROJECTION" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="CIG_PROJECTION"/>
+	</field>
+	<field name="BIDI_PROJECTION" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="BIDI_PROJECTION"/>
+	</field>
+	<field name="MATCH_PROJECTION" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="MATCH_PROJECTION"/>
+	</field>
+	<field name="MEMO_PROJECTION" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="MEMO_PROJECTION"/>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="60" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="30" width="1302" height="30" uuid="bd1212de-9978-4431-b97f-013fb44cae9c"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="20" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Salesman Daily Sales Activity Format]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="0" width="1302" height="30" uuid="bc0df6fd-8476-43c7-a48c-3cf41f46fa7b"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="22" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Abul Khair Tobacco Company Limited]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="60" splitType="Stretch">
+			<textField pattern="MMMMM dd, yyyy">
+				<reportElement x="1152" y="45" width="150" height="15" uuid="7b46b457-3a0b-446b-86f3-97db2e9407fd"/>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="0" width="102" height="15" uuid="596b9d77-2b70-4f71-bf47-4ef49ac302a4"/>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="102" y="0" width="50" height="15" uuid="02b96fb8-3c4d-4107-aaad-1759aa83e7df"/>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[CIG]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="15" width="102" height="15" uuid="cd92b2b4-3746-4079-9023-2afa5496821e"/>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Last Month Sales]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="152" y="0" width="50" height="15" uuid="06d39744-acd6-4b1e-b3d0-f6787647bc01"/>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[BIDI]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="202" y="0" width="50" height="15" uuid="ae1f81e1-530b-4d66-ab13-5fe589d8b9f8"/>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[MATCH]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="252" y="0" width="50" height="15" uuid="637c9182-5c10-4a81-b0d2-c03ab1a56c2c"/>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[SLIDE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="302" y="0" width="50" height="15" uuid="6ecfa6e1-593c-4180-9f90-3054ef4064ed"/>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[MEMO]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="102" y="15" width="50" height="15" uuid="c474a9d1-7645-4a44-bf23-6e651618bec3"/>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{STD_CIG}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="152" y="15" width="50" height="15" uuid="edfe4f72-2b21-449f-a0a8-494e6b2441e6"/>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{STD_BIDI}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="252" y="15" width="50" height="15" uuid="f510f176-9870-4d0e-b5e2-32aaa8545387"/>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{STD_SLIDE}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="202" y="15" width="50" height="15" uuid="a0c5af93-55e6-43a7-a35d-c727f910148d"/>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{STD_MATCH}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="302" y="15" width="50" height="15" uuid="24083d3f-74da-41d2-8118-9cdf60a7045b"/>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{STD_MEMO}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="30" width="102" height="15" uuid="e42da5cb-72ef-4e4a-b2ae-e6005285056c"/>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Last Month ADS]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="102" y="30" width="50" height="15" uuid="73c7324b-b38b-4e89-b8ef-dd1209f50991"/>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{outletNo}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="152" y="30" width="50" height="15" uuid="042c868d-c566-4160-bfff-fde06f8eee10"/>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{outletNo}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="202" y="30" width="50" height="15" uuid="70343352-2608-4d8c-9f78-0ad9e6b6db87"/>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{outletNo}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="252" y="30" width="50" height="15" uuid="310f12b4-3e88-4811-be3d-683fb71b93c0"/>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{outletNo}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="302" y="30" width="50" height="15" uuid="608976de-5c2e-4924-9fc0-efca04771972"/>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{outletNo}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="952" y="0" width="100" height="15" uuid="092d57ea-6c84-4be7-a09b-5b040c1234f9"/>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1052" y="0" width="50" height="15" uuid="5ed3d8f6-53cd-45a9-baf1-a009a99553d9"/>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[CIG]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="952" y="15" width="100" height="15" uuid="d1bb4502-49f3-4664-a442-13442445f5b5"/>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[This Month Sales]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1102" y="0" width="50" height="15" uuid="9fc101e4-d08f-4372-86a1-6b5e2a0ffd60"/>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[BIDI]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1152" y="0" width="50" height="15" uuid="9e559c55-c8a7-4d00-8999-3cd17221cedb"/>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[MATCH]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1202" y="0" width="50" height="15" uuid="696ff620-40cb-40a0-b5e2-d9e391271eae"/>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[SLIDE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1252" y="0" width="50" height="15" uuid="797fa11d-fc19-4867-a114-97947806288c"/>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[MEMO]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="1052" y="15" width="50" height="15" uuid="3d4b2dc0-afd1-42f5-a60b-5f4d62844b08"/>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{STD_CIG}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="1102" y="15" width="50" height="15" uuid="7ff4cdd3-6d07-455f-a63c-85f9e4b24964"/>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{STD_BIDI}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="1202" y="15" width="50" height="15" uuid="5c4a5e5e-4a4a-40f0-87f1-dfa49173e635"/>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{STD_SLIDE}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="1152" y="15" width="50" height="15" uuid="387eb36c-2593-498f-9da6-b972ad5726b4"/>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{STD_MATCH}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="1252" y="15" width="50" height="15" uuid="8780c9f4-32cb-45ed-96d9-29019ca1e27f"/>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{STD_MEMO}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="952" y="30" width="100" height="15" uuid="33d27c99-d29a-4e44-9c0b-2b3e4d8da692"/>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[This Month ADS]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="1052" y="30" width="50" height="15" uuid="6cf9313b-af07-4a51-9767-ac32f8502a22"/>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{outletNo}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="1102" y="30" width="50" height="15" uuid="62a0f9f5-7533-4a43-8e31-4fd0d89da2e3"/>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{outletNo}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="1152" y="30" width="50" height="15" uuid="0fc0e751-e755-4267-ae29-34beb9688205"/>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{outletNo}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="1202" y="30" width="50" height="15" uuid="20a6426d-005e-4ff1-ba7d-0d357a323583"/>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{outletNo}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="1252" y="30" width="50" height="15" uuid="65be5359-cd37-4f63-b44c-561d1e736327"/>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{outletNo}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="502" y="0" width="150" height="15" uuid="fca1204e-75ce-42ff-91bd-38207951965d"/>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{teritoryName}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="402" y="0" width="100" height="15" uuid="367aeec7-3f72-464e-a653-992b45a54040"/>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Teritory Name]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="502" y="15" width="150" height="15" uuid="8be0b047-4ab7-41bf-8321-d23b643fd42d"/>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{zoneName}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="402" y="15" width="100" height="15" uuid="4b6940dc-c4f3-49ba-afe8-21e818075909"/>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Zone Name]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="402" y="30" width="100" height="15" uuid="0442c820-bd5d-4dec-b0ce-34714c8f5acb"/>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Route Name]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="502" y="30" width="150" height="15" uuid="24d7d6d1-cd1d-4081-a8b1-937d161acdb2"/>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{routeName}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="752" y="0" width="150" height="15" uuid="b099947b-b65e-4527-8767-1f14104300cf"/>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{salesRepName}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="652" y="0" width="100" height="15" uuid="88c84830-3f4e-4b37-87f7-0ede95cea847"/>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[SR Name]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="752" y="15" width="150" height="15" uuid="d12e35af-20db-423c-9f16-ce40986ebc4a"/>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{monthName}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="652" y="15" width="100" height="15" uuid="0de766c2-2f37-4c46-844e-4b18eb78cdc8"/>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Month]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="652" y="30" width="100" height="15" uuid="343478f8-e518-4154-b6a2-773c4e634fe9"/>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Outlet No]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="752" y="30" width="150" height="15" uuid="2cb6edeb-d9c8-4b3d-97b2-4a5fa6a3cd40"/>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{outletNo}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="30" splitType="Stretch">
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="0" width="60" height="30" backcolor="#E3E3E3" uuid="6a482369-4b71-426d-bc97-709342a6641f">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="4c95ca60-ef62-4de8-a076-8ae70a6d2632"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[DATE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="60" y="15" width="42" height="15" backcolor="#DAF0F7" uuid="d3c62691-8a4e-44ec-b28e-486233266497">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="14d3db4c-46c9-4779-a23e-5263efd3bb6d"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[CIG]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="102" y="15" width="50" height="15" backcolor="#DAF0F7" uuid="f4489afa-62d2-4718-9d43-c10a24c3a861">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="6fdc47fd-a768-42c4-85d6-39783640a8b3"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[BIDI]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="152" y="15" width="50" height="15" backcolor="#DAF0F7" uuid="3cdebda7-0a2d-4c47-a38d-df6e2d9ee6c0">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="eb3ce2f2-4e8e-4c43-8770-6dc3370972c4"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[MATCH]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="202" y="15" width="50" height="15" backcolor="#DAF0F7" uuid="89214e56-273a-4fbb-abc4-fd44a746e702">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="76a96821-cd9f-419d-b5cb-aa45f64a57bc"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[SLIDE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="252" y="15" width="50" height="15" backcolor="#DAF0F7" uuid="ace458c8-c31f-4421-becc-094cd7ae0b79">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="55bdb153-8457-4810-9bd4-c982f98ceecf"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[MEMO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="302" y="15" width="50" height="15" backcolor="#E3E3E3" uuid="a4e97616-c373-40a0-a676-091f6d0a4a2a">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="c14b4936-6f35-4188-b331-c35489a1d151"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[CIG]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="352" y="15" width="50" height="15" backcolor="#E3E3E3" uuid="90651a41-11c2-4cb9-b3b2-c45db60f4051">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="a96e1698-54ef-4af6-99d7-874f069fa1ad"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[BIDI]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="402" y="15" width="50" height="15" backcolor="#E3E3E3" uuid="9a01e703-e8eb-4277-9f7a-33ef98533935">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="cb72dfe7-5e3b-4de4-96c6-176cc8c924c6"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[MATCH]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="452" y="15" width="50" height="15" backcolor="#E3E3E3" uuid="3ecea8a8-9afa-4714-9d9d-4b74f07b1fc0">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="8a265c29-255b-4afe-95cb-42b89288aac0"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[SLIDE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="502" y="15" width="50" height="15" backcolor="#E3E3E3" uuid="dc98a204-a484-4bd4-8ad5-655790a7a1d1">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="ddc6758c-2919-437f-9c2c-81e233b37e54"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[MEMO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="552" y="15" width="50" height="15" backcolor="#DAF0F7" uuid="0218a06b-aafb-42cf-b439-98c61b943441">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="73db95ee-9014-4047-8b92-bc5142d3f428"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[CIG]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="602" y="15" width="50" height="15" backcolor="#DAF0F7" uuid="e74b2bd6-a2e8-4860-b682-2502dc2f9a01">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="c385ea7d-f513-443a-9ef4-15c7c0694231"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[BIDI]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="652" y="15" width="50" height="15" backcolor="#DAF0F7" uuid="c0306c8b-c328-48df-bff1-af86d07ef646">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="c5c7c28b-e100-4870-a8ad-60c7b96a3a71"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[MATCH]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="702" y="15" width="50" height="15" backcolor="#DAF0F7" uuid="1b492c72-f8a9-476d-9a51-94e1f0d71d09">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="5398c495-96e2-44a1-aaeb-18589dbac399"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[SLIDE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="752" y="15" width="50" height="15" backcolor="#DAF0F7" uuid="facac803-b3f0-4a08-bf4a-956bcc55cf5c">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="a6c5db5c-2cc8-4bb2-9f5b-c8fbe2369a27"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[MEMO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="60" y="0" width="242" height="15" backcolor="#DAF0F7" uuid="66bb25d8-6281-4bba-9a48-2a194bf42fcb"/>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[DAILY SALES]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="302" y="0" width="250" height="15" backcolor="#E3E3E3" uuid="a4377d3a-34c4-4ea9-aad6-6a61ad1dd81e"/>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[STD]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="552" y="0" width="250" height="15" backcolor="#DAF0F7" uuid="6b2dd9e3-80bf-4d01-8449-ee242f91334e"/>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[PADS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="802" y="0" width="250" height="15" backcolor="#E3E3E3" uuid="612e5ffb-bbd7-4bde-9860-6f0d37446455"/>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[PROJECTION]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="802" y="15" width="50" height="15" backcolor="#E3E3E3" uuid="7f6d203c-ad76-4901-ad7f-78d00d5c96ff">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="73db95ee-9014-4047-8b92-bc5142d3f428"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[CIG]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="852" y="15" width="50" height="15" backcolor="#E3E3E3" uuid="9792c7e0-0067-46d1-89c5-e91b86dcae24">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="c385ea7d-f513-443a-9ef4-15c7c0694231"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[BIDI]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="902" y="15" width="50" height="15" backcolor="#E3E3E3" uuid="6d635e3d-5a6e-41c6-962c-10c8b6ad1948">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="c5c7c28b-e100-4870-a8ad-60c7b96a3a71"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[MATCH]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="952" y="15" width="50" height="15" backcolor="#E3E3E3" uuid="a8473147-17ea-432d-83f2-aede7eae4c60">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="5398c495-96e2-44a1-aaeb-18589dbac399"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[SLIDE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="1002" y="15" width="50" height="15" backcolor="#E3E3E3" uuid="8f1bb349-dced-40e1-a17e-fe1055207b7e">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="a6c5db5c-2cc8-4bb2-9f5b-c8fbe2369a27"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[MEMO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="1052" y="0" width="250" height="15" backcolor="#DAF0F7" uuid="8a4f9748-d139-494b-bf75-4dd878d70af9"/>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ACHIVEMENT]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="1052" y="15" width="50" height="15" backcolor="#DAF0F7" uuid="3b205d9c-6beb-423f-b893-7f23d263b520">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="73db95ee-9014-4047-8b92-bc5142d3f428"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[CIG]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="1102" y="15" width="50" height="15" backcolor="#DAF0F7" uuid="3c66a320-51d9-489c-b5d1-a49f8ebb82ab">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="c385ea7d-f513-443a-9ef4-15c7c0694231"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[BIDI]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="1152" y="15" width="50" height="15" backcolor="#DAF0F7" uuid="3cc2dfeb-3fa3-450c-9606-7997b32291ac">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="c5c7c28b-e100-4870-a8ad-60c7b96a3a71"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[MATCH]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="1202" y="15" width="50" height="15" backcolor="#DAF0F7" uuid="5d72a2e4-4ceb-4a04-8fbf-f7b4478d5668">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="5398c495-96e2-44a1-aaeb-18589dbac399"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[SLIDE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="1252" y="15" width="50" height="15" backcolor="#DAF0F7" uuid="0fb3ecc3-8ec7-404d-bee2-8420585adc8c">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="a6c5db5c-2cc8-4bb2-9f5b-c8fbe2369a27"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[MEMO]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="15" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="60" height="15" uuid="21bec4ad-4cca-4ae9-9580-2ee919c916e8">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="4c95ca60-ef62-4de8-a076-8ae70a6d2632"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{DD}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.###">
+				<reportElement mode="Opaque" x="60" y="0" width="42" height="15" backcolor="#EBF8FC" uuid="3e6a982f-8620-46a9-b57a-b8c4e8c2bf8a">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="14d3db4c-46c9-4779-a23e-5263efd3bb6d"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{CIG_SALE}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.###">
+				<reportElement mode="Opaque" x="102" y="0" width="50" height="15" backcolor="#EBF8FC" uuid="9213d2e0-e860-42e4-87da-294ef5c360d1">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="6fdc47fd-a768-42c4-85d6-39783640a8b3"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{BIDI_SALE}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.###">
+				<reportElement mode="Opaque" x="152" y="0" width="50" height="15" backcolor="#EBF8FC" uuid="622dbd19-8078-40d1-86e5-271baeb5c5c4">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="eb3ce2f2-4e8e-4c43-8770-6dc3370972c4"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{MATCH_SALE}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.###">
+				<reportElement mode="Opaque" x="202" y="0" width="50" height="15" backcolor="#EBF8FC" uuid="ffe3f493-84b2-4b83-8cbd-2c993fc6c1f1">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="76a96821-cd9f-419d-b5cb-aa45f64a57bc"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{SLIDE_SALE}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.###">
+				<reportElement mode="Opaque" x="252" y="0" width="50" height="15" backcolor="#EBF8FC" uuid="f5058d53-581d-42c6-9070-b347260eba9b">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="55bdb153-8457-4810-9bd4-c982f98ceecf"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{MEMO_SALE}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.###">
+				<reportElement x="302" y="0" width="50" height="15" uuid="15266f1a-ca68-45c9-96ca-8f6fdc788b55">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="c14b4936-6f35-4188-b331-c35489a1d151"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{STD_CIG}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.###">
+				<reportElement x="352" y="0" width="50" height="15" uuid="4f539960-2f0b-4cce-8276-8e9a372ae9af">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="a96e1698-54ef-4af6-99d7-874f069fa1ad"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{STD_BIDI}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.###">
+				<reportElement x="402" y="0" width="50" height="15" uuid="b22ef01a-c6b0-4ff0-9fbe-f2a3db601fef">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="cb72dfe7-5e3b-4de4-96c6-176cc8c924c6"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{STD_MATCH}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.###">
+				<reportElement x="452" y="0" width="50" height="15" uuid="b32cd6b9-629f-48bb-950b-c59c40880f4f">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="8a265c29-255b-4afe-95cb-42b89288aac0"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{STD_SLIDE}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.###">
+				<reportElement x="502" y="0" width="50" height="15" uuid="fda88beb-f471-48e4-80bb-4e5b0d553803">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="ddc6758c-2919-437f-9c2c-81e233b37e54"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{STD_MEMO}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement mode="Opaque" x="552" y="0" width="50" height="15" backcolor="#EBF8FC" uuid="576097cd-48e9-4e05-a95f-d970b496204d">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="73db95ee-9014-4047-8b92-bc5142d3f428"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{PADS_CIG}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement mode="Opaque" x="602" y="0" width="50" height="15" backcolor="#EBF8FC" uuid="ca3ad8a3-6bff-4af2-b1f9-3710d981e3c9">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="c385ea7d-f513-443a-9ef4-15c7c0694231"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{PADS_BIDI}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement mode="Opaque" x="652" y="0" width="50" height="15" backcolor="#EBF8FC" uuid="180f4972-36af-469d-90f6-0dadddee0d81">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="c5c7c28b-e100-4870-a8ad-60c7b96a3a71"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{PADS_MATCH}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement mode="Opaque" x="702" y="0" width="50" height="15" backcolor="#EBF8FC" uuid="586ccc61-c790-4f23-89c1-56852bdcb1ac">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="5398c495-96e2-44a1-aaeb-18589dbac399"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{PADS_SLIDE}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement mode="Opaque" x="752" y="0" width="50" height="15" backcolor="#EBF8FC" uuid="787726d2-2393-4f6f-b96a-691be1c9dba8">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="a6c5db5c-2cc8-4bb2-9f5b-c8fbe2369a27"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{PADS_MEMO}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement x="1002" y="0" width="50" height="15" uuid="adf79c59-8454-4947-8785-b54c4944ab0a">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="a6c5db5c-2cc8-4bb2-9f5b-c8fbe2369a27"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{MEMO_PROJECTION}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement x="952" y="0" width="50" height="15" uuid="00b57ef3-92f6-4c8c-8a89-a500aaefd03e">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="5398c495-96e2-44a1-aaeb-18589dbac399"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{PADS_SLIDE}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement x="902" y="0" width="50" height="15" uuid="206c3235-de8c-44bf-ae9e-3097a31b514a">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="c5c7c28b-e100-4870-a8ad-60c7b96a3a71"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{MATCH_PROJECTION}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement x="852" y="0" width="50" height="15" uuid="98148687-01b2-4b3a-b728-8e30b154719b">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="c385ea7d-f513-443a-9ef4-15c7c0694231"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{BIDI_PROJECTION}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement x="802" y="0" width="50" height="15" uuid="4ffe9688-66bc-4a30-b5e8-5b38fbd8d199">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="73db95ee-9014-4047-8b92-bc5142d3f428"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{CIG_PROJECTION}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00%">
+				<reportElement mode="Opaque" x="1252" y="0" width="50" height="15" backcolor="#EBF8FC" uuid="34239baa-de5b-48d7-bbca-f76277469ebb">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="a6c5db5c-2cc8-4bb2-9f5b-c8fbe2369a27"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{PADS_SLIDE}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00%">
+				<reportElement mode="Opaque" x="1202" y="0" width="50" height="15" backcolor="#EBF8FC" uuid="22eb6f8e-afa6-4295-984a-da9c0f26778e">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="5398c495-96e2-44a1-aaeb-18589dbac399"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{PADS_SLIDE}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00%">
+				<reportElement mode="Opaque" x="1152" y="0" width="50" height="15" backcolor="#EBF8FC" uuid="ee4fd94f-5ae4-4520-8b25-d8ed46da6462">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="c5c7c28b-e100-4870-a8ad-60c7b96a3a71"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{MATCH_ACHIVEMENT}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00%">
+				<reportElement mode="Opaque" x="1102" y="0" width="50" height="15" backcolor="#EBF8FC" uuid="6baee976-f857-4549-b1db-0f206bf6b2f2">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="c385ea7d-f513-443a-9ef4-15c7c0694231"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{BIDI_ACHIVEMENT}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00%">
+				<reportElement mode="Opaque" x="1052" y="0" width="50" height="15" backcolor="#EBF8FC" uuid="163df1d9-e74d-412f-88e5-fa20db0cc1c3">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="73db95ee-9014-4047-8b92-bc5142d3f428"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.12"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{CIG_ACHIVEMENT}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>
