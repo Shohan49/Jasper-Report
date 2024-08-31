@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.20.0.final using JasperReports Library version 6.20.0-2bc7ab61c56f459e8176eb05c7705e145cd400ad  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Steam_Generation_Details_Daily" pageWidth="380" pageHeight="800" orientation="Landscape" columnWidth="340" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="5a01d566-305c-4627-b812-2a5eb8a2f843">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="PRODUCTION_IOT_DB"/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<parameter name="firstDate" class="java.lang.String"/>
+	<parameter name="lastDate" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[select  dd,
+        date_wise dateWise,
+        sum(case when device_id=1003 then boiler_consumption else 0 end)/1000 gb01,
+        sum(case when device_id=1004 then boiler_consumption else 0 end)/1000 db02,
+        sum(case when device_id=1005 then boiler_consumption else 0 end)/1000 db03,
+        sum(case when device_id in (1003,1004,1005) then boiler_consumption else 0 end)/1000 totalBoiler
+from
+(select  device_id,to_char(date_time,'dd-mm-yyyy')dd, to_char(date_time,'MON DD, YYYY') date_wise,
+                max(BOILER_CONSUMPTION)-min(BOILER_CONSUMPTION) boiler_consumption
+        from    device_type dt 
+        left    join device d on (dt.id=d.device_type_id
+        and     dt.parent_id=103
+        and     d.unit_id=101
+        and     input_type=0
+        and     d.is_active=1)
+        join    device_reading dr on (d.id=dr.device_id and to_char(dr.date_time,'yyyy-mm')=to_char(sysdate,'yyyy-mm'))
+        group   by device_id,to_char(date_time,'dd-mm-yyyy'),to_char(date_time,'MON DD, YYYY'))
+        group   by dd,date_wise
+        order   by dd]]>
+	</queryString>
+	<field name="dateWise" class="java.lang.String"/>
+	<field name="gb01" class="java.lang.Double"/>
+	<field name="db02" class="java.lang.Double"/>
+	<field name="totalBoiler" class="java.lang.Double"/>
+	<field name="db03" class="java.lang.Double"/>
+	<variable name="waterPump01" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{gb01}]]></variableExpression>
+	</variable>
+	<variable name="waterPump02" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{db02}]]></variableExpression>
+	</variable>
+	<variable name="totalM3" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{totalBoiler}]]></variableExpression>
+	</variable>
+	<variable name="db03" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{db03}]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="40" splitType="Stretch">
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="0" width="340" height="40" backcolor="#E3E1E6" uuid="8ad4bcf0-2625-4ab4-9d2f-93019d4e26e9">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="18" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Steam Generation Details Daily]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="340" height="20" uuid="d5332d20-0826-4f06-8e51-b992d93f9e50">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$P{firstDate}+" "+$P{lastDate}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="30" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="110" height="30" uuid="d8fb1f79-8b05-47b4-b4b1-6662ff4b441c"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Date]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="110" y="0" width="60" height="30" uuid="3137c98b-3f10-4711-9d77-9f89541b8275">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Steam Boiler Tons]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="170" y="0" width="60" height="30" uuid="8ead85df-c76d-403d-9def-827904249942">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Inc Boiler Tons]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="230" y="0" width="60" height="30" uuid="112c8a26-e073-42c9-831a-e721d44e8ea2">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Diesel Boiler]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="290" y="0" width="50" height="30" uuid="9bc75f16-19ea-4576-b4a5-907bc239350a"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Total Tons]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField isBlankWhenNull="true">
+				<reportElement mode="Opaque" x="0" y="0" width="110" height="20" backcolor="#CCCFCE" uuid="5481a07c-e204-4847-9fad-0ed44674c476">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="1.0" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{dateWise}]]></textFieldExpression>
+			</textField>
+			<textField pattern="0.00" isBlankWhenNull="true">
+				<reportElement mode="Opaque" x="110" y="0" width="60" height="20" backcolor="#CCCFCE" uuid="53127c8f-60b6-4a74-b790-f1b0edec5b32">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="1.0" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{gb01}]]></textFieldExpression>
+			</textField>
+			<textField pattern="0.00" isBlankWhenNull="true">
+				<reportElement mode="Opaque" x="170" y="0" width="60" height="20" backcolor="#CCCFCE" uuid="b6b5bd23-acce-4190-bcba-59b2fac0aaca">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="1.0" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{db02}]]></textFieldExpression>
+			</textField>
+			<textField pattern="0.00" isBlankWhenNull="true">
+				<reportElement mode="Opaque" x="230" y="0" width="60" height="20" backcolor="#CCCFCE" uuid="b86c3042-c608-4aa5-ba0d-c8113f214596">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="1.0" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{db03}]]></textFieldExpression>
+			</textField>
+			<textField pattern="0.00" isBlankWhenNull="true">
+				<reportElement mode="Opaque" x="290" y="0" width="50" height="20" backcolor="#CCCFCE" uuid="91d93e2e-061b-4f4c-94b3-75224c6550e3">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="1.0" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{totalBoiler}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<summary>
+		<band height="20">
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="0" width="110" height="20" backcolor="#EBE8E8" uuid="6d31e70e-45c6-4736-a179-c71746e48cc5">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Total (Tons)]]></text>
+			</staticText>
+			<textField pattern="0.00" isBlankWhenNull="true">
+				<reportElement mode="Opaque" x="170" y="0" width="60" height="20" backcolor="#EBE8E8" uuid="30a24003-40d7-44da-93f8-c1e7f5344c53">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$V{waterPump02}]]></textFieldExpression>
+			</textField>
+			<textField pattern="0.00" isBlankWhenNull="true">
+				<reportElement mode="Opaque" x="110" y="0" width="60" height="20" backcolor="#EBE8E8" uuid="4bea68e1-eb7c-4ccb-b5a8-c5dfdae44196">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$V{waterPump01}]]></textFieldExpression>
+			</textField>
+			<textField pattern="0.00" isBlankWhenNull="true">
+				<reportElement mode="Opaque" x="230" y="0" width="60" height="20" backcolor="#EBE8E8" uuid="06a7cfa2-bc2c-4a91-991c-db1553eecd63">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$V{db03}]]></textFieldExpression>
+			</textField>
+			<textField pattern="0.00" isBlankWhenNull="true">
+				<reportElement mode="Opaque" x="290" y="0" width="50" height="20" backcolor="#EBE8E8" uuid="9428fb6f-c4cc-41a2-b372-8d9b64710bac">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$V{totalM3}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>
