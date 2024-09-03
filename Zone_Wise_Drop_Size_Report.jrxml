@@ -1,17 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.20.0.final using JasperReports Library version 6.20.0-2bc7ab61c56f459e8176eb05c7705e145cd400ad  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Zone_Wise_Drop_Size_Report" pageWidth="950" pageHeight="612" orientation="Landscape" columnWidth="910" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="e9755a2e-a2ef-4c94-a46f-11cc987ddd11">
-	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="PRODUCTION_SM_DB"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="TEST_SM"/>
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
-	<property name="com.jaspersoft.studio.unit." value="pixel"/>
-	<property name="com.jaspersoft.studio.unit.pageHeight" value="pixel"/>
-	<property name="com.jaspersoft.studio.unit.pageWidth" value="pixel"/>
-	<property name="com.jaspersoft.studio.unit.topMargin" value="pixel"/>
-	<property name="com.jaspersoft.studio.unit.bottomMargin" value="pixel"/>
-	<property name="com.jaspersoft.studio.unit.leftMargin" value="pixel"/>
-	<property name="com.jaspersoft.studio.unit.rightMargin" value="pixel"/>
-	<property name="com.jaspersoft.studio.unit.columnWidth" value="pixel"/>
-	<property name="com.jaspersoft.studio.unit.columnSpacing" value="pixel"/>
 	<parameter name="fromDate" class="java.lang.String"/>
 	<parameter name="toDate" class="java.lang.String"/>
 	<parameter name="wingId" class="java.lang.String"/>
@@ -21,10 +12,6 @@
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
-	<field name="teritoryId" class="java.math.BigDecimal"/>
-	<field name="teritoryName" class="java.lang.String"/>
-	<field name="zoneId" class="java.math.BigDecimal"/>
-	<field name="zoneName" class="java.lang.String"/>
 	<field name="serviceOutlet" class="java.math.BigDecimal"/>
 	<field name="wingName" class="java.lang.String"/>
 	<field name="divisionName" class="java.lang.String"/>
@@ -36,6 +23,10 @@
 	<field name="memoCount" class="java.math.BigDecimal"/>
 	<field name="totalSaleAmo" class="java.math.BigDecimal"/>
 	<field name="dropSize" class="java.math.BigDecimal"/>
+	<field name="zoneId" class="java.math.BigDecimal"/>
+	<field name="zoneName" class="java.lang.String"/>
+	<field name="teritoryId" class="java.math.BigDecimal"/>
+	<field name="teritoryName" class="java.lang.String"/>
 	<variable name="serviceOutlet" class="java.math.BigDecimal" calculation="Sum">
 		<variableExpression><![CDATA[$F{serviceOutlet}]]></variableExpression>
 	</variable>
@@ -51,10 +42,8 @@
 	<variable name="targetAmount" class="java.math.BigDecimal" calculation="Sum">
 		<variableExpression><![CDATA[$F{targetAmount}]]></variableExpression>
 	</variable>
-	<variable name="totalOutAmo" class="java.math.BigDecimal">
-		<variableExpression><![CDATA[$V{targetAmount} != null && $V{serviceOutlet} != null && $V{serviceOutlet}.compareTo(BigDecimal.ZERO) != 0
-    ? $V{targetAmount}.divide($V{serviceOutlet}, java.math.RoundingMode.HALF_UP)
-    : BigDecimal.ZERO]]></variableExpression>
+	<variable name="totalOutAmo" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{totalOutAmo}]]></variableExpression>
 	</variable>
 	<variable name="saleAmount" class="java.math.BigDecimal" calculation="Sum">
 		<variableExpression><![CDATA[$F{saleAmount}]]></variableExpression>
@@ -62,18 +51,17 @@
 	<variable name="memoCount" class="java.math.BigDecimal" calculation="Sum">
 		<variableExpression><![CDATA[$F{memoCount}]]></variableExpression>
 	</variable>
-	<variable name="totalSaleAmo" class="java.math.BigDecimal">
-		<variableExpression><![CDATA[$V{saleAmount} != null && $V{memoCount} != null && $V{memoCount}.compareTo(BigDecimal.ZERO) != 0
-    ? $V{saleAmount}.divide($V{memoCount}, java.math.RoundingMode.HALF_UP)
-    : BigDecimal.ZERO]]></variableExpression>
+	<variable name="totalSaleAmo" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{totalSaleAmo}]]></variableExpression>
+	</variable>
+	<variable name="dropSize" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{dropSize}]]></variableExpression>
 	</variable>
 	<variable name="territorytargetAmount" class="java.math.BigDecimal" resetType="Group" resetGroup="territoryName" calculation="Sum">
 		<variableExpression><![CDATA[$F{targetAmount}]]></variableExpression>
 	</variable>
-	<variable name="territorytotalOutAmo" class="java.math.BigDecimal" resetType="Group" resetGroup="territoryName">
-		<variableExpression><![CDATA[$V{territorytargetAmount} != null && $V{teritoryServiceOutlet} != null && $V{teritoryServiceOutlet}.compareTo(BigDecimal.ZERO) != 0
-    ? $V{territorytargetAmount}.divide($V{teritoryServiceOutlet}, java.math.RoundingMode.HALF_UP)
-    : BigDecimal.ZERO]]></variableExpression>
+	<variable name="territorytotalOutAmo" class="java.math.BigDecimal" resetType="Group" resetGroup="territoryName" calculation="Sum">
+		<variableExpression><![CDATA[$F{totalOutAmo}]]></variableExpression>
 	</variable>
 	<variable name="territorysaleAmount" class="java.math.BigDecimal" resetType="Group" resetGroup="territoryName" calculation="Sum">
 		<variableExpression><![CDATA[$F{saleAmount}]]></variableExpression>
@@ -81,18 +69,17 @@
 	<variable name="territorymemoCount" class="java.math.BigDecimal" resetType="Group" resetGroup="territoryName" calculation="Sum">
 		<variableExpression><![CDATA[$F{memoCount}]]></variableExpression>
 	</variable>
-	<variable name="territorytotalSaleAmo" class="java.math.BigDecimal" resetType="Group" resetGroup="territoryName">
-		<variableExpression><![CDATA[$V{territorysaleAmount} != null && $V{territorymemoCount} != null && $V{territorymemoCount}.compareTo(BigDecimal.ZERO) != 0
-    ? $V{territorysaleAmount}.divide($V{territorymemoCount}, java.math.RoundingMode.HALF_UP)
-    : BigDecimal.ZERO]]></variableExpression>
+	<variable name="territorytotalSaleAmo" class="java.math.BigDecimal" resetType="Group" resetGroup="territoryName" calculation="Sum">
+		<variableExpression><![CDATA[$F{totalSaleAmo}]]></variableExpression>
+	</variable>
+	<variable name="territorydropSize" class="java.math.BigDecimal" resetType="Group" resetGroup="territoryName" calculation="Sum">
+		<variableExpression><![CDATA[$F{dropSize}]]></variableExpression>
 	</variable>
 	<variable name="divisiontargetAmount" class="java.math.BigDecimal" resetType="Group" resetGroup="divisionName" calculation="Sum">
 		<variableExpression><![CDATA[$F{targetAmount}]]></variableExpression>
 	</variable>
-	<variable name="divisiontotalOutAmo" class="java.math.BigDecimal" resetType="Group" resetGroup="divisionName">
-		<variableExpression><![CDATA[$V{divisiontargetAmount} != null && $V{divisionServiceOutlet} != null && $V{divisionServiceOutlet}.compareTo(BigDecimal.ZERO) != 0
-    ? $V{divisiontargetAmount}.divide($V{divisionServiceOutlet}, java.math.RoundingMode.HALF_UP)
-    : BigDecimal.ZERO]]></variableExpression>
+	<variable name="divisiontotalOutAmo" class="java.math.BigDecimal" resetType="Group" resetGroup="divisionName" calculation="Sum">
+		<variableExpression><![CDATA[$F{totalOutAmo}]]></variableExpression>
 	</variable>
 	<variable name="divisionsaleAmount" class="java.math.BigDecimal" resetType="Group" resetGroup="divisionName" calculation="Sum">
 		<variableExpression><![CDATA[$F{saleAmount}]]></variableExpression>
@@ -100,18 +87,17 @@
 	<variable name="divisionmemoCount" class="java.math.BigDecimal" resetType="Group" resetGroup="divisionName" calculation="Sum">
 		<variableExpression><![CDATA[$F{memoCount}]]></variableExpression>
 	</variable>
-	<variable name="divisiontotalSaleAmo" class="java.math.BigDecimal" resetType="Group" resetGroup="divisionName">
-		<variableExpression><![CDATA[$V{divisionsaleAmount} != null && $V{divisionmemoCount} != null && $V{divisionmemoCount}.compareTo(BigDecimal.ZERO) != 0
-    ? $V{divisionsaleAmount}.divide($V{divisionmemoCount}, java.math.RoundingMode.HALF_UP)
-    : BigDecimal.ZERO]]></variableExpression>
+	<variable name="divisiontotalSaleAmo" class="java.math.BigDecimal" resetType="Group" resetGroup="divisionName" calculation="Sum">
+		<variableExpression><![CDATA[$F{totalSaleAmo}]]></variableExpression>
+	</variable>
+	<variable name="divisiondropSize" class="java.math.BigDecimal" resetType="Group" resetGroup="divisionName" calculation="Sum">
+		<variableExpression><![CDATA[$F{dropSize}]]></variableExpression>
 	</variable>
 	<variable name="wingtargetAmount" class="java.math.BigDecimal" resetType="Group" resetGroup="wingName" calculation="Sum">
 		<variableExpression><![CDATA[$F{targetAmount}]]></variableExpression>
 	</variable>
-	<variable name="wingtotalOutAmo" class="java.math.BigDecimal" resetType="Group" resetGroup="wingName">
-		<variableExpression><![CDATA[$V{wingtargetAmount} != null && $V{wingServiceOutlet} != null && $V{wingServiceOutlet}.compareTo(BigDecimal.ZERO) != 0
-    ? $V{wingtargetAmount}.divide($V{wingServiceOutlet}, java.math.RoundingMode.HALF_UP)
-    : BigDecimal.ZERO]]></variableExpression>
+	<variable name="wingtotalOutAmo" class="java.math.BigDecimal" resetType="Group" resetGroup="wingName" calculation="Sum">
+		<variableExpression><![CDATA[$F{totalOutAmo}]]></variableExpression>
 	</variable>
 	<variable name="wingsaleAmount" class="java.math.BigDecimal" resetType="Group" resetGroup="wingName" calculation="Sum">
 		<variableExpression><![CDATA[$F{saleAmount}]]></variableExpression>
@@ -119,30 +105,11 @@
 	<variable name="wingmemoCount" class="java.math.BigDecimal" resetType="Group" resetGroup="wingName" calculation="Sum">
 		<variableExpression><![CDATA[$F{memoCount}]]></variableExpression>
 	</variable>
-	<variable name="wingtotalSaleAmo" class="java.math.BigDecimal" resetType="Group" resetGroup="wingName">
-		<variableExpression><![CDATA[$V{wingsaleAmount} != null && $V{wingmemoCount} != null && $V{wingmemoCount}.compareTo(BigDecimal.ZERO) != 0
-    ? $V{wingsaleAmount}.divide($V{wingmemoCount}, java.math.RoundingMode.HALF_UP)
-    : BigDecimal.ZERO]]></variableExpression>
+	<variable name="wingtotalSaleAmo" class="java.math.BigDecimal" resetType="Group" resetGroup="wingName" calculation="Sum">
+		<variableExpression><![CDATA[$F{totalSaleAmo}]]></variableExpression>
 	</variable>
-	<variable name="territorydropSize" class="java.math.BigDecimal" resetType="Group" resetGroup="territoryName">
-		<variableExpression><![CDATA[$V{territorytotalSaleAmo} != null && $V{territorytotalOutAmo} != null 
-    ? $V{territorytotalSaleAmo}.subtract($V{territorytotalOutAmo}) 
-    : BigDecimal.ZERO]]></variableExpression>
-	</variable>
-	<variable name="divisiondropSize" class="java.math.BigDecimal" resetType="Group" resetGroup="divisionName">
-		<variableExpression><![CDATA[$V{divisiontotalSaleAmo} != null && $V{divisiontotalOutAmo} != null 
-    ? $V{divisiontotalSaleAmo}.subtract($V{divisiontotalOutAmo}) 
-    : BigDecimal.ZERO]]></variableExpression>
-	</variable>
-	<variable name="wingdropSize" class="java.math.BigDecimal" resetType="Group" resetGroup="wingName">
-		<variableExpression><![CDATA[$V{wingtotalSaleAmo} != null && $V{wingtotalOutAmo} != null 
-    ? $V{wingtotalSaleAmo}.subtract($V{wingtotalOutAmo}) 
-    : BigDecimal.ZERO]]></variableExpression>
-	</variable>
-	<variable name="dropSize" class="java.math.BigDecimal">
-		<variableExpression><![CDATA[$V{totalSaleAmo} != null && $V{totalOutAmo} != null 
-    ? $V{totalSaleAmo}.subtract($V{totalOutAmo}) 
-    : BigDecimal.ZERO]]></variableExpression>
+	<variable name="wingdropSize" class="java.math.BigDecimal" resetType="Group" resetGroup="wingName" calculation="Sum">
+		<variableExpression><![CDATA[$F{dropSize}]]></variableExpression>
 	</variable>
 	<group name="wingName">
 		<groupExpression><![CDATA[$F{wingId}]]></groupExpression>
@@ -603,7 +570,7 @@
 	<title>
 		<band height="30" splitType="Stretch">
 			<staticText>
-				<reportElement x="0" y="0" width="510" height="30" uuid="cebc528f-63b7-47f6-bc8e-2b3ed1b9f402"/>
+				<reportElement x="0" y="0" width="350" height="30" uuid="cebc528f-63b7-47f6-bc8e-2b3ed1b9f402"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font size="19" isBold="true"/>
 				</textElement>
@@ -694,22 +661,7 @@
 				<text><![CDATA[SL No]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="120" y="0" width="150" height="30" backcolor="#D1EDA4" uuid="60570000-467c-4a18-98ec-08f3818dc767">
-					<property name="com.jaspersoft.studio.unit.width" value="px"/>
-				</reportElement>
-				<box>
-					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="10" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Zone Name]]></text>
-			</staticText>
-			<staticText>
-				<reportElement mode="Opaque" x="40" y="0" width="80" height="30" backcolor="#D1EDA4" uuid="d8426294-d0d4-4bbb-9de0-cecea95c99f0">
+				<reportElement mode="Opaque" x="40" y="0" width="80" height="30" backcolor="#D1EDA4" uuid="e75dbfe4-68f2-4f16-ba97-6806319de2d5">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<box>
@@ -722,6 +674,21 @@
 					<font size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Zone ID]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="120" y="0" width="150" height="30" backcolor="#D1EDA4" uuid="c3dd0347-8afc-4580-915a-a3d1ae2a7b7c">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Zone Name]]></text>
 			</staticText>
 			<staticText>
 				<reportElement mode="Opaque" x="270" y="0" width="80" height="30" backcolor="#D1EDA4" uuid="c9bf1553-5514-428d-9c28-0d85af2631be">
@@ -918,7 +885,7 @@
 				<textFieldExpression><![CDATA[$V{REPORT_COUNT}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="40" y="0" width="80" height="20" uuid="4b23e474-b9ff-4284-80e3-e851f63f849e">
+				<reportElement x="40" y="0" width="80" height="20" uuid="257fde18-0c1a-4b89-af94-78f8a5a4bfa9">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
@@ -934,7 +901,7 @@
 				<textFieldExpression><![CDATA[$F{zoneId}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="120" y="0" width="150" height="20" uuid="275e5cce-87f7-40b4-9e18-fd68774e988d">
+				<reportElement x="120" y="0" width="150" height="20" uuid="c071d519-632b-4187-8717-6474afccfd60">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
