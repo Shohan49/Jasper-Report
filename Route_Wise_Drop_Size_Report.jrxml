@@ -1,16 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.20.0.final using JasperReports Library version 6.20.0-2bc7ab61c56f459e8176eb05c7705e145cd400ad  -->
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Route_Wise_Drop_Size_Report" pageWidth="1490" pageHeight="912" orientation="Landscape" columnWidth="1450" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="e9755a2e-a2ef-4c94-a46f-11cc987ddd11">
-	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="PRODUCTION_SM_DB"/>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Route_Wise_Drop_Size_Report" pageWidth="1720" pageHeight="812" orientation="Landscape" columnWidth="1680" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="e9755a2e-a2ef-4c94-a46f-11cc987ddd11">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="TEST_SM"/>
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.unit." value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageHeight" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.topMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.bottomMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.leftMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.rightMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnSpacing" value="pixel"/>
 	<parameter name="fromDate" class="java.lang.String"/>
 	<parameter name="toDate" class="java.lang.String"/>
 	<parameter name="wingId" class="java.lang.String"/>
 	<parameter name="divisionId" class="java.lang.String"/>
 	<parameter name="teritoryId" class="java.lang.String"/>
+	<parameter name="routeId" class="java.lang.String"/>
 	<parameter name="zoneId" class="java.lang.String"/>
 	<parameter name="srId" class="java.lang.String"/>
-	<parameter name="routeId" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
@@ -18,6 +27,8 @@
 	<field name="teritoryName" class="java.lang.String"/>
 	<field name="zoneId" class="java.math.BigDecimal"/>
 	<field name="zoneName" class="java.lang.String"/>
+	<field name="routeId" class="java.math.BigDecimal"/>
+	<field name="routeName" class="java.lang.String"/>
 	<field name="srId" class="java.lang.String"/>
 	<field name="srName" class="java.lang.String"/>
 	<field name="visitFre" class="java.math.BigDecimal"/>
@@ -32,8 +43,6 @@
 	<field name="memoCount" class="java.math.BigDecimal"/>
 	<field name="totalSaleAmo" class="java.math.BigDecimal"/>
 	<field name="dropSize" class="java.math.BigDecimal"/>
-	<field name="routeId" class="java.math.BigDecimal"/>
-	<field name="routeName" class="java.lang.String"/>
 	<variable name="serviceOutlet" class="java.math.BigDecimal" calculation="Sum">
 		<variableExpression><![CDATA[$F{serviceOutlet}]]></variableExpression>
 	</variable>
@@ -52,10 +61,8 @@
 	<variable name="targetAmount" class="java.math.BigDecimal" calculation="Sum">
 		<variableExpression><![CDATA[$F{targetAmount}]]></variableExpression>
 	</variable>
-	<variable name="totalOutAmo" class="java.math.BigDecimal">
-		<variableExpression><![CDATA[$V{targetAmount} != null && $V{serviceOutlet} != null && $V{serviceOutlet}.compareTo(BigDecimal.ZERO) != 0
-    ? $V{targetAmount}.divide($V{serviceOutlet}, java.math.RoundingMode.HALF_UP)
-    : BigDecimal.ZERO]]></variableExpression>
+	<variable name="totalOutAmo" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{totalOutAmo}]]></variableExpression>
 	</variable>
 	<variable name="saleAmount" class="java.math.BigDecimal" calculation="Sum">
 		<variableExpression><![CDATA[$F{saleAmount}]]></variableExpression>
@@ -63,18 +70,17 @@
 	<variable name="memoCount" class="java.math.BigDecimal" calculation="Sum">
 		<variableExpression><![CDATA[$F{memoCount}]]></variableExpression>
 	</variable>
-	<variable name="totalSaleAmo" class="java.math.BigDecimal">
-		<variableExpression><![CDATA[$V{saleAmount} != null && $V{memoCount} != null && $V{memoCount}.compareTo(BigDecimal.ZERO) != 0
-    ? $V{saleAmount}.divide($V{memoCount}, java.math.RoundingMode.HALF_UP)
-    : BigDecimal.ZERO]]></variableExpression>
+	<variable name="totalSaleAmo" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{totalSaleAmo}]]></variableExpression>
+	</variable>
+	<variable name="dropSize" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{dropSize}]]></variableExpression>
 	</variable>
 	<variable name="zonetargetAmount" class="java.math.BigDecimal" resetType="Group" resetGroup="zoneName" calculation="Sum">
 		<variableExpression><![CDATA[$F{targetAmount}]]></variableExpression>
 	</variable>
-	<variable name="zonetotalOutAmo" class="java.math.BigDecimal" resetType="Group" resetGroup="zoneName">
-		<variableExpression><![CDATA[$V{zonetargetAmount} != null && $V{zoneServiceOutlet} != null && $V{zoneServiceOutlet}.compareTo(BigDecimal.ZERO) != 0
-    ? $V{zonetargetAmount}.divide($V{zoneServiceOutlet}, java.math.RoundingMode.HALF_UP)
-    : BigDecimal.ZERO]]></variableExpression>
+	<variable name="zonetotalOutAmo" class="java.math.BigDecimal" resetType="Group" resetGroup="zoneName" calculation="Sum">
+		<variableExpression><![CDATA[$F{totalOutAmo}]]></variableExpression>
 	</variable>
 	<variable name="zonesaleAmount" class="java.math.BigDecimal" resetType="Group" resetGroup="zoneName" calculation="Sum">
 		<variableExpression><![CDATA[$F{saleAmount}]]></variableExpression>
@@ -82,18 +88,17 @@
 	<variable name="zonememoCount" class="java.math.BigDecimal" resetType="Group" resetGroup="zoneName" calculation="Sum">
 		<variableExpression><![CDATA[$F{memoCount}]]></variableExpression>
 	</variable>
-	<variable name="zonetotalSaleAmo" class="java.math.BigDecimal" resetType="Group" resetGroup="zoneName">
-		<variableExpression><![CDATA[$V{zonesaleAmount} != null && $V{zonememoCount} != null && $V{zonememoCount}.compareTo(BigDecimal.ZERO) != 0
-    ? $V{zonesaleAmount}.divide($V{zonememoCount}, java.math.RoundingMode.HALF_UP)
-    : BigDecimal.ZERO]]></variableExpression>
+	<variable name="zonetotalSaleAmo" class="java.math.BigDecimal" resetType="Group" resetGroup="zoneName" calculation="Sum">
+		<variableExpression><![CDATA[$F{totalSaleAmo}]]></variableExpression>
+	</variable>
+	<variable name="zonedropSize" class="java.math.BigDecimal" resetType="Group" resetGroup="zoneName" calculation="Sum">
+		<variableExpression><![CDATA[$F{dropSize}]]></variableExpression>
 	</variable>
 	<variable name="territorytargetAmount" class="java.math.BigDecimal" resetType="Group" resetGroup="territoryName" calculation="Sum">
 		<variableExpression><![CDATA[$F{targetAmount}]]></variableExpression>
 	</variable>
-	<variable name="territorytotalOutAmo" class="java.math.BigDecimal" resetType="Group" resetGroup="territoryName">
-		<variableExpression><![CDATA[$V{territorytargetAmount} != null && $V{teritoryServiceOutlet} != null && $V{teritoryServiceOutlet}.compareTo(BigDecimal.ZERO) != 0
-    ? $V{territorytargetAmount}.divide($V{teritoryServiceOutlet}, java.math.RoundingMode.HALF_UP)
-    : BigDecimal.ZERO]]></variableExpression>
+	<variable name="territorytotalOutAmo" class="java.math.BigDecimal" resetType="Group" resetGroup="territoryName" calculation="Sum">
+		<variableExpression><![CDATA[$F{totalOutAmo}]]></variableExpression>
 	</variable>
 	<variable name="territorysaleAmount" class="java.math.BigDecimal" resetType="Group" resetGroup="territoryName" calculation="Sum">
 		<variableExpression><![CDATA[$F{saleAmount}]]></variableExpression>
@@ -101,18 +106,17 @@
 	<variable name="territorymemoCount" class="java.math.BigDecimal" resetType="Group" resetGroup="territoryName" calculation="Sum">
 		<variableExpression><![CDATA[$F{memoCount}]]></variableExpression>
 	</variable>
-	<variable name="territorytotalSaleAmo" class="java.math.BigDecimal" resetType="Group" resetGroup="territoryName">
-		<variableExpression><![CDATA[$V{territorysaleAmount} != null && $V{territorymemoCount} != null && $V{territorymemoCount}.compareTo(BigDecimal.ZERO) != 0
-    ? $V{territorysaleAmount}.divide($V{territorymemoCount}, java.math.RoundingMode.HALF_UP)
-    : BigDecimal.ZERO]]></variableExpression>
+	<variable name="territorytotalSaleAmo" class="java.math.BigDecimal" resetType="Group" resetGroup="territoryName" calculation="Sum">
+		<variableExpression><![CDATA[$F{totalSaleAmo}]]></variableExpression>
+	</variable>
+	<variable name="territorydropSize" class="java.math.BigDecimal" resetType="Group" resetGroup="territoryName" calculation="Sum">
+		<variableExpression><![CDATA[$F{dropSize}]]></variableExpression>
 	</variable>
 	<variable name="divisiontargetAmount" class="java.math.BigDecimal" resetType="Group" resetGroup="divisionName" calculation="Sum">
 		<variableExpression><![CDATA[$F{targetAmount}]]></variableExpression>
 	</variable>
-	<variable name="divisiontotalOutAmo" class="java.math.BigDecimal" resetType="Group" resetGroup="divisionName">
-		<variableExpression><![CDATA[$V{divisiontargetAmount} != null && $V{divisionServiceOutlet} != null && $V{divisionServiceOutlet}.compareTo(BigDecimal.ZERO) != 0
-    ? $V{divisiontargetAmount}.divide($V{divisionServiceOutlet}, java.math.RoundingMode.HALF_UP)
-    : BigDecimal.ZERO]]></variableExpression>
+	<variable name="divisiontotalOutAmo" class="java.math.BigDecimal" resetType="Group" resetGroup="divisionName" calculation="Sum">
+		<variableExpression><![CDATA[$F{totalOutAmo}]]></variableExpression>
 	</variable>
 	<variable name="divisionsaleAmount" class="java.math.BigDecimal" resetType="Group" resetGroup="divisionName" calculation="Sum">
 		<variableExpression><![CDATA[$F{saleAmount}]]></variableExpression>
@@ -120,18 +124,17 @@
 	<variable name="divisionmemoCount" class="java.math.BigDecimal" resetType="Group" resetGroup="divisionName" calculation="Sum">
 		<variableExpression><![CDATA[$F{memoCount}]]></variableExpression>
 	</variable>
-	<variable name="divisiontotalSaleAmo" class="java.math.BigDecimal" resetType="Group" resetGroup="divisionName">
-		<variableExpression><![CDATA[$V{divisionsaleAmount} != null && $V{divisionmemoCount} != null && $V{divisionmemoCount}.compareTo(BigDecimal.ZERO) != 0
-    ? $V{divisionsaleAmount}.divide($V{divisionmemoCount}, java.math.RoundingMode.HALF_UP)
-    : BigDecimal.ZERO]]></variableExpression>
+	<variable name="divisiontotalSaleAmo" class="java.math.BigDecimal" resetType="Group" resetGroup="divisionName" calculation="Sum">
+		<variableExpression><![CDATA[$F{totalSaleAmo}]]></variableExpression>
+	</variable>
+	<variable name="divisiondropSize" class="java.math.BigDecimal" resetType="Group" resetGroup="divisionName" calculation="Sum">
+		<variableExpression><![CDATA[$F{dropSize}]]></variableExpression>
 	</variable>
 	<variable name="wingtargetAmount" class="java.math.BigDecimal" resetType="Group" resetGroup="wingName" calculation="Sum">
 		<variableExpression><![CDATA[$F{targetAmount}]]></variableExpression>
 	</variable>
-	<variable name="wingtotalOutAmo" class="java.math.BigDecimal" resetType="Group" resetGroup="wingName">
-		<variableExpression><![CDATA[$V{wingtargetAmount} != null && $V{wingServiceOutlet} != null && $V{wingServiceOutlet}.compareTo(BigDecimal.ZERO) != 0
-    ? $V{wingtargetAmount}.divide($V{wingServiceOutlet}, java.math.RoundingMode.HALF_UP)
-    : BigDecimal.ZERO]]></variableExpression>
+	<variable name="wingtotalOutAmo" class="java.math.BigDecimal" resetType="Group" resetGroup="wingName" calculation="Sum">
+		<variableExpression><![CDATA[$F{totalOutAmo}]]></variableExpression>
 	</variable>
 	<variable name="wingsaleAmount" class="java.math.BigDecimal" resetType="Group" resetGroup="wingName" calculation="Sum">
 		<variableExpression><![CDATA[$F{saleAmount}]]></variableExpression>
@@ -139,42 +142,18 @@
 	<variable name="wingmemoCount" class="java.math.BigDecimal" resetType="Group" resetGroup="wingName" calculation="Sum">
 		<variableExpression><![CDATA[$F{memoCount}]]></variableExpression>
 	</variable>
-	<variable name="wingtotalSaleAmo" class="java.math.BigDecimal" resetType="Group" resetGroup="wingName">
-		<variableExpression><![CDATA[$V{wingsaleAmount} != null && $V{wingmemoCount} != null && $V{wingmemoCount}.compareTo(BigDecimal.ZERO) != 0
-    ? $V{wingsaleAmount}.divide($V{wingmemoCount}, java.math.RoundingMode.HALF_UP)
-    : BigDecimal.ZERO]]></variableExpression>
+	<variable name="wingtotalSaleAmo" class="java.math.BigDecimal" resetType="Group" resetGroup="wingName" calculation="Sum">
+		<variableExpression><![CDATA[$F{totalSaleAmo}]]></variableExpression>
 	</variable>
-	<variable name="zonedropSize" class="java.math.BigDecimal" resetType="Group" resetGroup="zoneName">
-		<variableExpression><![CDATA[$V{zonetotalSaleAmo} != null && $V{zonetotalOutAmo} != null 
-    ? $V{zonetotalSaleAmo}.subtract($V{zonetotalOutAmo}) 
-    : BigDecimal.ZERO]]></variableExpression>
-	</variable>
-	<variable name="territorydropSize" class="java.math.BigDecimal" resetType="Group" resetGroup="territoryName">
-		<variableExpression><![CDATA[$V{territorytotalSaleAmo} != null && $V{territorytotalOutAmo} != null 
-    ? $V{territorytotalSaleAmo}.subtract($V{territorytotalOutAmo}) 
-    : BigDecimal.ZERO]]></variableExpression>
-	</variable>
-	<variable name="divisiondropSize" class="java.math.BigDecimal" resetType="Group" resetGroup="divisionName">
-		<variableExpression><![CDATA[$V{divisiontotalSaleAmo} != null && $V{divisiontotalOutAmo} != null 
-    ? $V{divisiontotalSaleAmo}.subtract($V{divisiontotalOutAmo}) 
-    : BigDecimal.ZERO]]></variableExpression>
-	</variable>
-	<variable name="wingdropSize" class="java.math.BigDecimal" resetType="Group" resetGroup="wingName">
-		<variableExpression><![CDATA[$V{wingtotalSaleAmo} != null && $V{wingtotalOutAmo} != null 
-    ? $V{wingtotalSaleAmo}.subtract($V{wingtotalOutAmo}) 
-    : BigDecimal.ZERO]]></variableExpression>
-	</variable>
-	<variable name="dropSize" class="java.math.BigDecimal">
-		<variableExpression><![CDATA[$V{totalSaleAmo} != null && $V{totalOutAmo} != null 
-    ? $V{totalSaleAmo}.subtract($V{totalOutAmo}) 
-    : BigDecimal.ZERO]]></variableExpression>
+	<variable name="wingdropSize" class="java.math.BigDecimal" resetType="Group" resetGroup="wingName" calculation="Sum">
+		<variableExpression><![CDATA[$F{dropSize}]]></variableExpression>
 	</variable>
 	<group name="wingName">
 		<groupExpression><![CDATA[$F{wingId}]]></groupExpression>
 		<groupFooter>
 			<band height="20">
 				<textField isBlankWhenNull="true">
-					<reportElement mode="Opaque" x="810" y="0" width="80" height="20" backcolor="#F7E4D5" uuid="f9c42da5-4fb8-4127-bb76-6d8ca721e6b9">
+					<reportElement mode="Opaque" x="1040" y="0" width="80" height="20" backcolor="#F7E4D5" uuid="f9c42da5-4fb8-4127-bb76-6d8ca721e6b9">
 						<property name="com.jaspersoft.studio.unit.width" value="px"/>
 						<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					</reportElement>
@@ -190,7 +169,7 @@
 					<textFieldExpression><![CDATA[$V{wingServiceOutlet}]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="true">
-					<reportElement mode="Opaque" x="890" y="0" width="80" height="20" backcolor="#F7E4D5" uuid="f7f49516-2be9-404a-a89e-e226b55a99c7">
+					<reportElement mode="Opaque" x="1120" y="0" width="80" height="20" backcolor="#F7E4D5" uuid="f7f49516-2be9-404a-a89e-e226b55a99c7">
 						<property name="com.jaspersoft.studio.unit.width" value="px"/>
 						<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					</reportElement>
@@ -206,7 +185,7 @@
 					<textFieldExpression><![CDATA[$V{wingtargetAmount}]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="true">
-					<reportElement mode="Opaque" x="970" y="0" width="80" height="20" backcolor="#F7E4D5" uuid="40cf9586-5c75-466b-af99-268fe614f8da">
+					<reportElement mode="Opaque" x="1200" y="0" width="80" height="20" backcolor="#F7E4D5" uuid="40cf9586-5c75-466b-af99-268fe614f8da">
 						<property name="com.jaspersoft.studio.unit.width" value="px"/>
 						<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					</reportElement>
@@ -222,7 +201,7 @@
 					<textFieldExpression><![CDATA[$V{wingtotalOutAmo}]]></textFieldExpression>
 				</textField>
 				<textField>
-					<reportElement mode="Opaque" x="0" y="0" width="730" height="20" backcolor="#F7E4D5" uuid="6ff12318-2235-4260-9940-65016d04cf35">
+					<reportElement mode="Opaque" x="0" y="0" width="1040" height="20" backcolor="#F7E4D5" uuid="6ff12318-2235-4260-9940-65016d04cf35">
 						<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					</reportElement>
 					<box>
@@ -237,7 +216,7 @@
 					<textFieldExpression><![CDATA["Wing Name: "+$F{wingName}]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="true">
-					<reportElement mode="Opaque" x="1050" y="0" width="80" height="20" backcolor="#F7E4D5" uuid="57e021b4-5dd5-4c29-915d-699d84020e14">
+					<reportElement mode="Opaque" x="1280" y="0" width="80" height="20" backcolor="#F7E4D5" uuid="57e021b4-5dd5-4c29-915d-699d84020e14">
 						<property name="com.jaspersoft.studio.unit.width" value="px"/>
 						<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					</reportElement>
@@ -253,7 +232,7 @@
 					<textFieldExpression><![CDATA[$V{wingmemoCount}]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="true">
-					<reportElement mode="Opaque" x="1130" y="0" width="80" height="20" backcolor="#F7E4D5" uuid="7aa5b722-c3b1-4183-bf47-d9a414d7cff9">
+					<reportElement mode="Opaque" x="1360" y="0" width="80" height="20" backcolor="#F7E4D5" uuid="7aa5b722-c3b1-4183-bf47-d9a414d7cff9">
 						<property name="com.jaspersoft.studio.unit.width" value="px"/>
 						<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					</reportElement>
@@ -269,7 +248,7 @@
 					<textFieldExpression><![CDATA[$V{wingsaleAmount}]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="true">
-					<reportElement mode="Opaque" x="1210" y="0" width="80" height="20" backcolor="#F7E4D5" uuid="e1fab8af-d929-47be-b7db-2768d24472e2">
+					<reportElement mode="Opaque" x="1440" y="0" width="80" height="20" backcolor="#F7E4D5" uuid="e1fab8af-d929-47be-b7db-2768d24472e2">
 						<property name="com.jaspersoft.studio.unit.width" value="px"/>
 						<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					</reportElement>
@@ -285,7 +264,7 @@
 					<textFieldExpression><![CDATA[$V{wingtotalSaleAmo}]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="true">
-					<reportElement mode="Opaque" x="1290" y="0" width="80" height="20" backcolor="#F7E4D5" uuid="fe54d7f9-9cc9-485b-82a5-f6b1b7ee02a1">
+					<reportElement mode="Opaque" x="1520" y="0" width="80" height="20" backcolor="#F7E4D5" uuid="fe54d7f9-9cc9-485b-82a5-f6b1b7ee02a1">
 						<property name="com.jaspersoft.studio.unit.width" value="px"/>
 						<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					</reportElement>
@@ -301,7 +280,7 @@
 					<textFieldExpression><![CDATA[$V{wingdropSize}]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="true">
-					<reportElement mode="Opaque" x="1370" y="0" width="80" height="20" backcolor="#F7E4D5" uuid="c53a5090-a53d-4f8e-9698-b3bf005beae4">
+					<reportElement mode="Opaque" x="1600" y="0" width="80" height="20" backcolor="#F7E4D5" uuid="c53a5090-a53d-4f8e-9698-b3bf005beae4">
 						<property name="com.jaspersoft.studio.unit.width" value="px"/>
 						<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					</reportElement>
@@ -317,21 +296,6 @@
 					<textFieldExpression><![CDATA[$V{wingtotalOutAmo}.compareTo(new BigDecimal(0))  > 0 ? $V{wingdropSize}.multiply(new BigDecimal(100)).divide($V{wingtotalOutAmo},RoundingMode.HALF_UP) .toString() + "%" 
     : "0%"]]></textFieldExpression>
 				</textField>
-				<textField isBlankWhenNull="true">
-					<reportElement mode="Opaque" x="730" y="0" width="80" height="20" backcolor="#F7E4D5" uuid="1a09529b-3e16-463c-813f-4e301dc0306a">
-						<property name="com.jaspersoft.studio.unit.width" value="px"/>
-						<property name="com.jaspersoft.studio.unit.height" value="px"/>
-					</reportElement>
-					<box>
-						<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-						<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-						<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					</box>
-					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font size="8"/>
-					</textElement>
-				</textField>
 			</band>
 		</groupFooter>
 	</group>
@@ -340,7 +304,7 @@
 		<groupFooter>
 			<band height="20">
 				<textField isBlankWhenNull="true">
-					<reportElement mode="Opaque" x="810" y="0" width="80" height="20" backcolor="#D4DBC3" uuid="c85e1913-b4c4-4622-b375-7dfb3762ef31">
+					<reportElement mode="Opaque" x="1040" y="0" width="80" height="20" backcolor="#D4DBC3" uuid="c85e1913-b4c4-4622-b375-7dfb3762ef31">
 						<property name="com.jaspersoft.studio.unit.width" value="px"/>
 						<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					</reportElement>
@@ -356,7 +320,7 @@
 					<textFieldExpression><![CDATA[$V{divisionServiceOutlet}]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="true">
-					<reportElement mode="Opaque" x="890" y="0" width="80" height="20" backcolor="#D4DBC3" uuid="4640d744-da3d-419f-93bd-ffe54529481c">
+					<reportElement mode="Opaque" x="1120" y="0" width="80" height="20" backcolor="#D4DBC3" uuid="4640d744-da3d-419f-93bd-ffe54529481c">
 						<property name="com.jaspersoft.studio.unit.width" value="px"/>
 						<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					</reportElement>
@@ -372,7 +336,7 @@
 					<textFieldExpression><![CDATA[$V{divisiontargetAmount}]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="true">
-					<reportElement mode="Opaque" x="970" y="0" width="80" height="20" backcolor="#D4DBC3" uuid="da482c08-6f1d-444d-8cdb-3ea0d4f6500b">
+					<reportElement mode="Opaque" x="1200" y="0" width="80" height="20" backcolor="#D4DBC3" uuid="da482c08-6f1d-444d-8cdb-3ea0d4f6500b">
 						<property name="com.jaspersoft.studio.unit.width" value="px"/>
 						<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					</reportElement>
@@ -388,7 +352,7 @@
 					<textFieldExpression><![CDATA[$V{divisiontotalOutAmo}]]></textFieldExpression>
 				</textField>
 				<textField>
-					<reportElement mode="Opaque" x="0" y="0" width="730" height="20" backcolor="#D4DBC3" uuid="f9aa1cfa-ddd3-4eab-8a4a-ac7e9883bdf6">
+					<reportElement mode="Opaque" x="0" y="0" width="1040" height="20" backcolor="#D4DBC3" uuid="f9aa1cfa-ddd3-4eab-8a4a-ac7e9883bdf6">
 						<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					</reportElement>
 					<box>
@@ -403,7 +367,7 @@
 					<textFieldExpression><![CDATA["Division Name: "+$F{divisionName}]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="true">
-					<reportElement mode="Opaque" x="1050" y="0" width="80" height="20" backcolor="#D4DBC3" uuid="2e4a0bae-1f10-4263-997b-2765490ff81b">
+					<reportElement mode="Opaque" x="1280" y="0" width="80" height="20" backcolor="#D4DBC3" uuid="2e4a0bae-1f10-4263-997b-2765490ff81b">
 						<property name="com.jaspersoft.studio.unit.width" value="px"/>
 						<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					</reportElement>
@@ -419,7 +383,7 @@
 					<textFieldExpression><![CDATA[$V{divisionmemoCount}]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="true">
-					<reportElement mode="Opaque" x="1130" y="0" width="80" height="20" backcolor="#D4DBC3" uuid="7ea9f236-6297-42f0-a30a-7c44094271f2">
+					<reportElement mode="Opaque" x="1360" y="0" width="80" height="20" backcolor="#D4DBC3" uuid="7ea9f236-6297-42f0-a30a-7c44094271f2">
 						<property name="com.jaspersoft.studio.unit.width" value="px"/>
 						<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					</reportElement>
@@ -435,7 +399,7 @@
 					<textFieldExpression><![CDATA[$V{divisionsaleAmount}]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="true">
-					<reportElement mode="Opaque" x="1210" y="0" width="80" height="20" backcolor="#D4DBC3" uuid="95109c3d-8c93-475e-93c9-436868f221a0">
+					<reportElement mode="Opaque" x="1440" y="0" width="80" height="20" backcolor="#D4DBC3" uuid="95109c3d-8c93-475e-93c9-436868f221a0">
 						<property name="com.jaspersoft.studio.unit.width" value="px"/>
 						<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					</reportElement>
@@ -451,7 +415,7 @@
 					<textFieldExpression><![CDATA[$V{divisiontotalSaleAmo}]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="true">
-					<reportElement mode="Opaque" x="1290" y="0" width="80" height="20" backcolor="#D4DBC3" uuid="6f3fa0dc-ee7a-46fe-b4bd-94f97526420b">
+					<reportElement mode="Opaque" x="1520" y="0" width="80" height="20" backcolor="#D4DBC3" uuid="6f3fa0dc-ee7a-46fe-b4bd-94f97526420b">
 						<property name="com.jaspersoft.studio.unit.width" value="px"/>
 						<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					</reportElement>
@@ -467,7 +431,7 @@
 					<textFieldExpression><![CDATA[$V{divisiondropSize}]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="true">
-					<reportElement mode="Opaque" x="1370" y="0" width="80" height="20" backcolor="#D4DBC3" uuid="db8fd046-2baa-4f4b-a798-43da754e7c7e">
+					<reportElement mode="Opaque" x="1600" y="0" width="80" height="20" backcolor="#D4DBC3" uuid="db8fd046-2baa-4f4b-a798-43da754e7c7e">
 						<property name="com.jaspersoft.studio.unit.width" value="px"/>
 						<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					</reportElement>
@@ -483,21 +447,6 @@
 					<textFieldExpression><![CDATA[$V{divisiontotalOutAmo}.compareTo(new BigDecimal(0))  > 0 ? $V{divisiondropSize}.multiply(new BigDecimal(100)).divide($V{divisiontotalOutAmo},RoundingMode.HALF_UP) .toString() + "%" 
     : "0%"]]></textFieldExpression>
 				</textField>
-				<textField isBlankWhenNull="true">
-					<reportElement mode="Opaque" x="730" y="0" width="80" height="20" backcolor="#D4DBC3" uuid="635e609f-46ea-4baf-8660-649218f12d68">
-						<property name="com.jaspersoft.studio.unit.width" value="px"/>
-						<property name="com.jaspersoft.studio.unit.height" value="px"/>
-					</reportElement>
-					<box>
-						<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-						<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-						<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					</box>
-					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font size="8"/>
-					</textElement>
-				</textField>
 			</band>
 		</groupFooter>
 	</group>
@@ -506,7 +455,7 @@
 		<groupFooter>
 			<band height="20">
 				<textField>
-					<reportElement mode="Opaque" x="0" y="0" width="730" height="20" backcolor="#BBC3A4" uuid="ec337320-df6f-407d-a5ae-044926ac11d0">
+					<reportElement mode="Opaque" x="0" y="0" width="1040" height="20" backcolor="#BBC3A4" uuid="ec337320-df6f-407d-a5ae-044926ac11d0">
 						<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					</reportElement>
 					<box>
@@ -521,7 +470,7 @@
 					<textFieldExpression><![CDATA["Territory Name: "+$F{teritoryName}]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="true">
-					<reportElement mode="Opaque" x="810" y="0" width="80" height="20" backcolor="#BBC3A4" uuid="e72a26d6-8b48-4cb9-b2be-b6080e15fd75">
+					<reportElement mode="Opaque" x="1040" y="0" width="80" height="20" backcolor="#BBC3A4" uuid="e72a26d6-8b48-4cb9-b2be-b6080e15fd75">
 						<property name="com.jaspersoft.studio.unit.width" value="px"/>
 						<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					</reportElement>
@@ -537,7 +486,7 @@
 					<textFieldExpression><![CDATA[$V{teritoryServiceOutlet}]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="true">
-					<reportElement mode="Opaque" x="970" y="0" width="80" height="20" backcolor="#BBC3A4" uuid="3bc7d4b0-fe7e-45e5-ac75-584662ee88d1">
+					<reportElement mode="Opaque" x="1200" y="0" width="80" height="20" backcolor="#BBC3A4" uuid="3bc7d4b0-fe7e-45e5-ac75-584662ee88d1">
 						<property name="com.jaspersoft.studio.unit.width" value="px"/>
 						<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					</reportElement>
@@ -553,7 +502,7 @@
 					<textFieldExpression><![CDATA[$V{territorytotalOutAmo}]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="true">
-					<reportElement mode="Opaque" x="890" y="0" width="80" height="20" backcolor="#BBC3A4" uuid="8a77f39f-5817-44f6-a295-82a865b1720a">
+					<reportElement mode="Opaque" x="1120" y="0" width="80" height="20" backcolor="#BBC3A4" uuid="8a77f39f-5817-44f6-a295-82a865b1720a">
 						<property name="com.jaspersoft.studio.unit.width" value="px"/>
 						<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					</reportElement>
@@ -569,7 +518,7 @@
 					<textFieldExpression><![CDATA[$V{territorytargetAmount}]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="true">
-					<reportElement mode="Opaque" x="1050" y="0" width="80" height="20" backcolor="#BBC3A4" uuid="3de816dd-d28b-4edb-a3f8-51b00ce3c7d5">
+					<reportElement mode="Opaque" x="1280" y="0" width="80" height="20" backcolor="#BBC3A4" uuid="3de816dd-d28b-4edb-a3f8-51b00ce3c7d5">
 						<property name="com.jaspersoft.studio.unit.width" value="px"/>
 						<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					</reportElement>
@@ -585,7 +534,7 @@
 					<textFieldExpression><![CDATA[$V{territorymemoCount}]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="true">
-					<reportElement mode="Opaque" x="1130" y="0" width="80" height="20" backcolor="#BBC3A4" uuid="e26b3806-3ab0-4a47-90e7-f4047f2345c0">
+					<reportElement mode="Opaque" x="1360" y="0" width="80" height="20" backcolor="#BBC3A4" uuid="e26b3806-3ab0-4a47-90e7-f4047f2345c0">
 						<property name="com.jaspersoft.studio.unit.width" value="px"/>
 						<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					</reportElement>
@@ -601,7 +550,7 @@
 					<textFieldExpression><![CDATA[$V{territorysaleAmount}]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="true">
-					<reportElement mode="Opaque" x="1210" y="0" width="80" height="20" backcolor="#BBC3A4" uuid="6e139dd4-b073-45da-a873-1f673aee842e">
+					<reportElement mode="Opaque" x="1440" y="0" width="80" height="20" backcolor="#BBC3A4" uuid="6e139dd4-b073-45da-a873-1f673aee842e">
 						<property name="com.jaspersoft.studio.unit.width" value="px"/>
 						<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					</reportElement>
@@ -617,7 +566,7 @@
 					<textFieldExpression><![CDATA[$V{territorytotalSaleAmo}]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="true">
-					<reportElement mode="Opaque" x="1290" y="0" width="80" height="20" backcolor="#BBC3A4" uuid="d05c0503-7ec1-454a-974f-ca001effd4da">
+					<reportElement mode="Opaque" x="1520" y="0" width="80" height="20" backcolor="#BBC3A4" uuid="d05c0503-7ec1-454a-974f-ca001effd4da">
 						<property name="com.jaspersoft.studio.unit.width" value="px"/>
 						<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					</reportElement>
@@ -633,7 +582,7 @@
 					<textFieldExpression><![CDATA[$V{territorydropSize}]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="true">
-					<reportElement mode="Opaque" x="1370" y="0" width="80" height="20" backcolor="#BBC3A4" uuid="53ccef5e-5b0d-4cbd-a9fd-e1c44264205f">
+					<reportElement mode="Opaque" x="1600" y="0" width="80" height="20" backcolor="#BBC3A4" uuid="53ccef5e-5b0d-4cbd-a9fd-e1c44264205f">
 						<property name="com.jaspersoft.studio.unit.width" value="px"/>
 						<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					</reportElement>
@@ -649,21 +598,6 @@
 					<textFieldExpression><![CDATA[$V{territorytotalOutAmo}.compareTo(new BigDecimal(0))  > 0 ? $V{territorydropSize}.multiply(new BigDecimal(100)).divide($V{territorytotalOutAmo},RoundingMode.HALF_UP) .toString() + "%" 
     : "0%"]]></textFieldExpression>
 				</textField>
-				<textField isBlankWhenNull="true">
-					<reportElement mode="Opaque" x="730" y="0" width="80" height="20" backcolor="#BBC3A4" uuid="9efe98c6-a19c-4d15-a22c-016f911835b7">
-						<property name="com.jaspersoft.studio.unit.width" value="px"/>
-						<property name="com.jaspersoft.studio.unit.height" value="px"/>
-					</reportElement>
-					<box>
-						<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-						<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-						<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					</box>
-					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font size="8"/>
-					</textElement>
-				</textField>
 			</band>
 		</groupFooter>
 	</group>
@@ -672,7 +606,7 @@
 		<groupFooter>
 			<band height="20">
 				<textField isBlankWhenNull="true">
-					<reportElement mode="Opaque" x="890" y="0" width="80" height="20" backcolor="#D0EDC0" uuid="a971489c-6a48-4f85-b94c-a5b23f4410d6">
+					<reportElement mode="Opaque" x="1120" y="0" width="80" height="20" backcolor="#D0EDC0" uuid="a971489c-6a48-4f85-b94c-a5b23f4410d6">
 						<property name="com.jaspersoft.studio.unit.width" value="px"/>
 						<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					</reportElement>
@@ -688,7 +622,7 @@
 					<textFieldExpression><![CDATA[$V{zonetargetAmount}]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="true">
-					<reportElement mode="Opaque" x="810" y="0" width="80" height="20" backcolor="#D0EDC0" uuid="7fb95e54-927b-4eed-a0bf-e2cf88644696">
+					<reportElement mode="Opaque" x="1040" y="0" width="80" height="20" backcolor="#D0EDC0" uuid="7fb95e54-927b-4eed-a0bf-e2cf88644696">
 						<property name="com.jaspersoft.studio.unit.width" value="px"/>
 						<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					</reportElement>
@@ -704,7 +638,7 @@
 					<textFieldExpression><![CDATA[$V{zoneServiceOutlet}]]></textFieldExpression>
 				</textField>
 				<textField>
-					<reportElement mode="Opaque" x="0" y="0" width="730" height="20" backcolor="#D0EDC0" uuid="d177de45-00fa-46fd-8d4b-bd47513a7d26">
+					<reportElement mode="Opaque" x="0" y="0" width="1040" height="20" backcolor="#D0EDC0" uuid="d177de45-00fa-46fd-8d4b-bd47513a7d26">
 						<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					</reportElement>
 					<box>
@@ -719,7 +653,7 @@
 					<textFieldExpression><![CDATA["Zone Name: "+$F{zoneName}]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="true">
-					<reportElement mode="Opaque" x="970" y="0" width="80" height="20" backcolor="#D0EDC0" uuid="753f175c-0bc5-4806-96b6-b73b6c37a9cf">
+					<reportElement mode="Opaque" x="1200" y="0" width="80" height="20" backcolor="#D0EDC0" uuid="753f175c-0bc5-4806-96b6-b73b6c37a9cf">
 						<property name="com.jaspersoft.studio.unit.width" value="px"/>
 						<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					</reportElement>
@@ -732,10 +666,10 @@
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="8"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$V{zoneServiceOutlet}.compareTo(BigDecimal.ZERO) != 0 ? $V{zonetargetAmount}.divide($V{zoneServiceOutlet}, RoundingMode.HALF_UP) : BigDecimal.ZERO]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$V{zonetotalOutAmo}]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="true">
-					<reportElement mode="Opaque" x="1050" y="0" width="80" height="20" backcolor="#D0EDC0" uuid="ee4e53dd-ae98-4ee4-9698-590c942ba385">
+					<reportElement mode="Opaque" x="1280" y="0" width="80" height="20" backcolor="#D0EDC0" uuid="ee4e53dd-ae98-4ee4-9698-590c942ba385">
 						<property name="com.jaspersoft.studio.unit.width" value="px"/>
 						<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					</reportElement>
@@ -751,7 +685,7 @@
 					<textFieldExpression><![CDATA[$V{zonememoCount}]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="true">
-					<reportElement mode="Opaque" x="1130" y="0" width="80" height="20" backcolor="#D0EDC0" uuid="f6d61a64-c7d1-4daa-9eb2-275c62d729bc">
+					<reportElement mode="Opaque" x="1360" y="0" width="80" height="20" backcolor="#D0EDC0" uuid="f6d61a64-c7d1-4daa-9eb2-275c62d729bc">
 						<property name="com.jaspersoft.studio.unit.width" value="px"/>
 						<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					</reportElement>
@@ -767,7 +701,7 @@
 					<textFieldExpression><![CDATA[$V{zonesaleAmount}]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="true">
-					<reportElement mode="Opaque" x="1210" y="0" width="80" height="20" backcolor="#D0EDC0" uuid="16515920-5713-4838-b6af-590fce3bae9c">
+					<reportElement mode="Opaque" x="1440" y="0" width="80" height="20" backcolor="#D0EDC0" uuid="16515920-5713-4838-b6af-590fce3bae9c">
 						<property name="com.jaspersoft.studio.unit.width" value="px"/>
 						<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					</reportElement>
@@ -783,7 +717,7 @@
 					<textFieldExpression><![CDATA[$V{zonetotalSaleAmo}]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="true">
-					<reportElement mode="Opaque" x="1290" y="0" width="80" height="20" backcolor="#D0EDC0" uuid="fe34d645-bc17-419e-9f03-276bb4fa572c">
+					<reportElement mode="Opaque" x="1520" y="0" width="80" height="20" backcolor="#D0EDC0" uuid="fe34d645-bc17-419e-9f03-276bb4fa572c">
 						<property name="com.jaspersoft.studio.unit.width" value="px"/>
 						<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					</reportElement>
@@ -799,7 +733,7 @@
 					<textFieldExpression><![CDATA[$V{zonedropSize}]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="true">
-					<reportElement mode="Opaque" x="1370" y="0" width="80" height="20" backcolor="#D0EDC0" uuid="efe41c08-7453-4f89-a02c-e2ec17e6200d">
+					<reportElement mode="Opaque" x="1600" y="0" width="80" height="20" backcolor="#D0EDC0" uuid="efe41c08-7453-4f89-a02c-e2ec17e6200d">
 						<property name="com.jaspersoft.studio.unit.width" value="px"/>
 						<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					</reportElement>
@@ -814,21 +748,6 @@
 					</textElement>
 					<textFieldExpression><![CDATA[$V{zonetotalOutAmo}.compareTo(new BigDecimal(0))  > 0 ? $V{zonedropSize}.multiply(new BigDecimal(100)).divide($V{zonetotalOutAmo},RoundingMode.HALF_UP) .toString() + "%" 
     : "0%"]]></textFieldExpression>
-				</textField>
-				<textField isBlankWhenNull="true">
-					<reportElement mode="Opaque" x="730" y="0" width="80" height="20" backcolor="#D0EDC0" uuid="73abc2ae-7dfa-49eb-996e-6792b2f598a2">
-						<property name="com.jaspersoft.studio.unit.width" value="px"/>
-						<property name="com.jaspersoft.studio.unit.height" value="px"/>
-					</reportElement>
-					<box>
-						<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-						<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-						<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					</box>
-					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font size="8"/>
-					</textElement>
 				</textField>
 			</band>
 		</groupFooter>
@@ -850,7 +769,7 @@
 	<pageHeader>
 		<band height="160" splitType="Stretch">
 			<textField>
-				<reportElement x="1130" y="140" width="320" height="20" uuid="a39efd0b-b637-438b-a36e-6a2a415f5a06">
+				<reportElement x="1360" y="140" width="320" height="20" uuid="a39efd0b-b637-438b-a36e-6a2a415f5a06">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
@@ -911,6 +830,15 @@
 				<textFieldExpression><![CDATA["Territory Name: "+$P{teritoryId}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
+				<reportElement x="0" y="120" width="270" height="20" uuid="9e63f401-3a4c-47fc-b028-07e31d5f586d">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Route Name: "+$P{routeId}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
 				<reportElement x="0" y="140" width="270" height="20" uuid="73ba69cf-420f-452f-a8c0-6209ac3993be">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
@@ -918,15 +846,6 @@
 					<font isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA["SR Name: "+$P{srId}]]></textFieldExpression>
-			</textField>
-			<textField isBlankWhenNull="true">
-				<reportElement x="0" y="120" width="270" height="20" uuid="8ebda79d-7150-49b6-9aad-ec1bce320bf2">
-					<property name="com.jaspersoft.studio.unit.height" value="px"/>
-				</reportElement>
-				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA["Route Name: "+$P{routeId}]]></textFieldExpression>
 			</textField>
 		</band>
 	</pageHeader>
@@ -1008,22 +927,7 @@
 				<text><![CDATA[Zone ID]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="580" y="0" width="150" height="30" backcolor="#D1EDA4" uuid="6127f507-4e5d-4fd3-9b77-0909f023a0b6">
-					<property name="com.jaspersoft.studio.unit.width" value="px"/>
-				</reportElement>
-				<box>
-					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="10" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Route Name]]></text>
-			</staticText>
-			<staticText>
-				<reportElement mode="Opaque" x="500" y="0" width="80" height="30" backcolor="#D1EDA4" uuid="c36c57f4-b02d-457d-a733-54b88d2fa706">
+				<reportElement mode="Opaque" x="500" y="0" width="80" height="30" backcolor="#D1EDA4" uuid="359c9707-dbc8-4ef4-9924-75527b58f885">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<box>
@@ -1038,7 +942,52 @@
 				<text><![CDATA[Route ID]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="730" y="0" width="80" height="30" backcolor="#D1EDA4" uuid="5c69a3c7-825e-4b5e-8cef-34d7bf0304e9">
+				<reportElement mode="Opaque" x="580" y="0" width="150" height="30" backcolor="#D1EDA4" uuid="39f9de24-54b1-4aaf-99d8-911b94416c7e">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Route Name]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="810" y="0" width="150" height="30" backcolor="#D1EDA4" uuid="6127f507-4e5d-4fd3-9b77-0909f023a0b6">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[SR Name]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="730" y="0" width="80" height="30" backcolor="#D1EDA4" uuid="c36c57f4-b02d-457d-a733-54b88d2fa706">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[SR ID]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="960" y="0" width="80" height="30" backcolor="#D1EDA4" uuid="5c69a3c7-825e-4b5e-8cef-34d7bf0304e9">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<box>
@@ -1053,7 +1002,7 @@
 				<text><![CDATA[Frequency]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="810" y="0" width="80" height="30" backcolor="#D1EDA4" uuid="c9bf1553-5514-428d-9c28-0d85af2631be">
+				<reportElement mode="Opaque" x="1040" y="0" width="80" height="30" backcolor="#D1EDA4" uuid="c9bf1553-5514-428d-9c28-0d85af2631be">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<box>
@@ -1068,7 +1017,7 @@
 				<text><![CDATA[Service Outlet]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="890" y="0" width="160" height="15" backcolor="#D1EDA4" uuid="a0fbac79-7936-47d2-bf7b-ed05aba98ced">
+				<reportElement mode="Opaque" x="1120" y="0" width="160" height="15" backcolor="#D1EDA4" uuid="a0fbac79-7936-47d2-bf7b-ed05aba98ced">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
@@ -1084,7 +1033,7 @@
 				<text><![CDATA[Target (TK)]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="1050" y="0" width="80" height="30" backcolor="#D1EDA4" uuid="d2153e36-b9cc-48c2-863e-a641679afd0e">
+				<reportElement mode="Opaque" x="1280" y="0" width="80" height="30" backcolor="#D1EDA4" uuid="d2153e36-b9cc-48c2-863e-a641679afd0e">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<box>
@@ -1099,7 +1048,7 @@
 				<text><![CDATA[Memo Outlet]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="1130" y="0" width="160" height="15" backcolor="#D1EDA4" uuid="c7909698-d9e2-4712-bfac-937e19a5c7ad">
+				<reportElement mode="Opaque" x="1360" y="0" width="160" height="15" backcolor="#D1EDA4" uuid="c7909698-d9e2-4712-bfac-937e19a5c7ad">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
@@ -1115,7 +1064,7 @@
 				<text><![CDATA[Sales (TK)]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="1290" y="0" width="160" height="15" backcolor="#D1EDA4" uuid="bea0714c-d890-4dce-a49a-afce6dc1fa8d">
+				<reportElement mode="Opaque" x="1520" y="0" width="160" height="15" backcolor="#D1EDA4" uuid="bea0714c-d890-4dce-a49a-afce6dc1fa8d">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
@@ -1131,7 +1080,7 @@
 				<text><![CDATA[Drop Size]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="1290" y="15" width="80" height="15" backcolor="#D1EDA4" uuid="6ce6b452-b409-480b-bb55-5164e71dc237">
+				<reportElement mode="Opaque" x="1520" y="15" width="80" height="15" backcolor="#D1EDA4" uuid="6ce6b452-b409-480b-bb55-5164e71dc237">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
@@ -1147,7 +1096,7 @@
 				<text><![CDATA[Drop Value]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="1370" y="15" width="80" height="15" backcolor="#D1EDA4" uuid="007f1bee-fc48-43d5-b7df-bd4582beb764">
+				<reportElement mode="Opaque" x="1600" y="15" width="80" height="15" backcolor="#D1EDA4" uuid="007f1bee-fc48-43d5-b7df-bd4582beb764">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
@@ -1163,7 +1112,7 @@
 				<text><![CDATA[Drop %]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="970" y="15" width="80" height="15" backcolor="#D1EDA4" uuid="f70ec76e-aad1-4ed6-8206-77ede45e7ce5">
+				<reportElement mode="Opaque" x="1200" y="15" width="80" height="15" backcolor="#D1EDA4" uuid="f70ec76e-aad1-4ed6-8206-77ede45e7ce5">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
@@ -1179,7 +1128,7 @@
 				<text><![CDATA[Per Outlet]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="890" y="15" width="80" height="15" backcolor="#D1EDA4" uuid="d6c37690-e8e2-4935-956e-864affe70bd4">
+				<reportElement mode="Opaque" x="1120" y="15" width="80" height="15" backcolor="#D1EDA4" uuid="d6c37690-e8e2-4935-956e-864affe70bd4">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
@@ -1195,7 +1144,7 @@
 				<text><![CDATA[Total]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="1130" y="15" width="80" height="15" backcolor="#D1EDA4" uuid="10330910-36ea-4946-8a0b-f6ccfebc6003">
+				<reportElement mode="Opaque" x="1360" y="15" width="80" height="15" backcolor="#D1EDA4" uuid="10330910-36ea-4946-8a0b-f6ccfebc6003">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
@@ -1211,7 +1160,7 @@
 				<text><![CDATA[Total]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="1210" y="15" width="80" height="15" backcolor="#D1EDA4" uuid="e56243f7-c103-467d-8a69-38ac9287aa9a">
+				<reportElement mode="Opaque" x="1440" y="15" width="80" height="15" backcolor="#D1EDA4" uuid="e56243f7-c103-467d-8a69-38ac9287aa9a">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
@@ -1311,7 +1260,7 @@
 				<textFieldExpression><![CDATA[$F{zoneName}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="500" y="0" width="80" height="20" uuid="ace957d1-011a-4562-942a-dfc5293c0023">
+				<reportElement x="500" y="0" width="80" height="20" uuid="8dcd95f3-3ec1-4068-85af-ad53d4e15e9b">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
@@ -1327,7 +1276,7 @@
 				<textFieldExpression><![CDATA[$F{routeId}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="580" y="0" width="150" height="20" uuid="0d5ff71f-e4e6-49ac-8896-34e3ff042573">
+				<reportElement x="580" y="0" width="150" height="20" uuid="48f54c4a-a3d1-4ed3-9296-86098c970998">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
@@ -1343,7 +1292,39 @@
 				<textFieldExpression><![CDATA[$F{routeName}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="730" y="0" width="80" height="20" uuid="48b99aaa-965b-4a7a-a7e4-86ec59ef3746">
+				<reportElement x="730" y="0" width="80" height="20" uuid="ace957d1-011a-4562-942a-dfc5293c0023">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{srId}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="810" y="0" width="150" height="20" uuid="0d5ff71f-e4e6-49ac-8896-34e3ff042573">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{srName}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="960" y="0" width="80" height="20" uuid="48b99aaa-965b-4a7a-a7e4-86ec59ef3746">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
@@ -1359,7 +1340,7 @@
 				<textFieldExpression><![CDATA[$F{visitFre}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="810" y="0" width="80" height="20" uuid="adb05846-4bdc-497a-8fb8-15ddc0ff67aa">
+				<reportElement x="1040" y="0" width="80" height="20" uuid="adb05846-4bdc-497a-8fb8-15ddc0ff67aa">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
@@ -1375,7 +1356,7 @@
 				<textFieldExpression><![CDATA[$F{serviceOutlet}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="970" y="0" width="80" height="20" uuid="05758878-8a08-48ca-a0c3-fcab0aed50a0">
+				<reportElement x="1200" y="0" width="80" height="20" uuid="05758878-8a08-48ca-a0c3-fcab0aed50a0">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
@@ -1391,7 +1372,7 @@
 				<textFieldExpression><![CDATA[$F{totalOutAmo}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="890" y="0" width="80" height="20" uuid="bf823799-a35a-4d79-bd67-4248deb4848f">
+				<reportElement x="1120" y="0" width="80" height="20" uuid="bf823799-a35a-4d79-bd67-4248deb4848f">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
@@ -1407,7 +1388,7 @@
 				<textFieldExpression><![CDATA[$F{targetAmount}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="1050" y="0" width="80" height="20" uuid="effa549e-6e33-4ed8-a4b3-b864e85ce824">
+				<reportElement x="1280" y="0" width="80" height="20" uuid="effa549e-6e33-4ed8-a4b3-b864e85ce824">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
@@ -1423,7 +1404,7 @@
 				<textFieldExpression><![CDATA[$F{memoCount}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="1130" y="0" width="80" height="20" uuid="464bc52d-af51-40c9-bc96-d4cde37b3a39">
+				<reportElement x="1360" y="0" width="80" height="20" uuid="464bc52d-af51-40c9-bc96-d4cde37b3a39">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
@@ -1439,7 +1420,7 @@
 				<textFieldExpression><![CDATA[$F{saleAmount}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="1210" y="0" width="80" height="20" uuid="b447a4a8-314c-4e5f-aa5a-7a933aa53f3b">
+				<reportElement x="1440" y="0" width="80" height="20" uuid="b447a4a8-314c-4e5f-aa5a-7a933aa53f3b">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
@@ -1455,7 +1436,7 @@
 				<textFieldExpression><![CDATA[$F{totalSaleAmo}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="1290" y="0" width="80" height="20" uuid="a058aca5-40cb-42d9-8bd0-b4307723353e">
+				<reportElement x="1520" y="0" width="80" height="20" uuid="a058aca5-40cb-42d9-8bd0-b4307723353e">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
@@ -1471,7 +1452,7 @@
 				<textFieldExpression><![CDATA[$F{dropSize}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="1370" y="0" width="80" height="20" uuid="7e2e0711-5a6c-4e0c-93e3-6d1ab905328a">
+				<reportElement x="1600" y="0" width="80" height="20" uuid="7e2e0711-5a6c-4e0c-93e3-6d1ab905328a">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
@@ -1492,7 +1473,7 @@
 	<summary>
 		<band height="20" splitType="Stretch">
 			<textField>
-				<reportElement mode="Opaque" x="0" y="0" width="730" height="20" backcolor="#C7A68F" uuid="ab060860-ffae-4113-b209-0ac44aefa1ec">
+				<reportElement mode="Opaque" x="0" y="0" width="1040" height="20" backcolor="#C7A68F" uuid="ab060860-ffae-4113-b209-0ac44aefa1ec">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
 				<box>
@@ -1507,7 +1488,7 @@
 				<textFieldExpression><![CDATA["National"]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement mode="Opaque" x="810" y="0" width="80" height="20" backcolor="#C7A68F" uuid="dddbb90d-a64b-4f88-be86-7be845188369">
+				<reportElement mode="Opaque" x="1040" y="0" width="80" height="20" backcolor="#C7A68F" uuid="dddbb90d-a64b-4f88-be86-7be845188369">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
@@ -1523,7 +1504,7 @@
 				<textFieldExpression><![CDATA[$V{serviceOutlet}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement mode="Opaque" x="890" y="0" width="80" height="20" backcolor="#C7A68F" uuid="6078bb06-2c7f-41dc-a2be-886ae5103d08">
+				<reportElement mode="Opaque" x="1120" y="0" width="80" height="20" backcolor="#C7A68F" uuid="6078bb06-2c7f-41dc-a2be-886ae5103d08">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
@@ -1539,7 +1520,7 @@
 				<textFieldExpression><![CDATA[$V{targetAmount}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement mode="Opaque" x="970" y="0" width="80" height="20" backcolor="#C7A68F" uuid="39bd5d86-7139-4169-bae5-ddb81744f866">
+				<reportElement mode="Opaque" x="1200" y="0" width="80" height="20" backcolor="#C7A68F" uuid="39bd5d86-7139-4169-bae5-ddb81744f866">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
@@ -1555,7 +1536,7 @@
 				<textFieldExpression><![CDATA[$V{totalOutAmo}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement mode="Opaque" x="1050" y="0" width="80" height="20" backcolor="#C7A68F" uuid="bcb256c4-f215-4956-98a0-127219a83bfa">
+				<reportElement mode="Opaque" x="1280" y="0" width="80" height="20" backcolor="#C7A68F" uuid="bcb256c4-f215-4956-98a0-127219a83bfa">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
@@ -1571,7 +1552,7 @@
 				<textFieldExpression><![CDATA[$V{memoCount}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement mode="Opaque" x="1130" y="0" width="80" height="20" backcolor="#C7A68F" uuid="14501cf7-c738-4d47-a89e-da9bf3b94a65">
+				<reportElement mode="Opaque" x="1360" y="0" width="80" height="20" backcolor="#C7A68F" uuid="14501cf7-c738-4d47-a89e-da9bf3b94a65">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
@@ -1587,7 +1568,7 @@
 				<textFieldExpression><![CDATA[$V{saleAmount}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement mode="Opaque" x="1210" y="0" width="80" height="20" backcolor="#C7A68F" uuid="f2393a05-fee0-433d-b394-9ed0f1c4f222">
+				<reportElement mode="Opaque" x="1440" y="0" width="80" height="20" backcolor="#C7A68F" uuid="f2393a05-fee0-433d-b394-9ed0f1c4f222">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
@@ -1603,7 +1584,7 @@
 				<textFieldExpression><![CDATA[$V{totalSaleAmo}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement mode="Opaque" x="1290" y="0" width="80" height="20" backcolor="#C7A68F" uuid="dadd0f5d-f030-482c-b473-d67cc501fb3f">
+				<reportElement mode="Opaque" x="1520" y="0" width="80" height="20" backcolor="#C7A68F" uuid="dadd0f5d-f030-482c-b473-d67cc501fb3f">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
@@ -1619,7 +1600,7 @@
 				<textFieldExpression><![CDATA[$V{dropSize}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement mode="Opaque" x="1370" y="0" width="80" height="20" backcolor="#C7A68F" uuid="f1eb3c56-43cc-4884-a689-df1b1a512ed0">
+				<reportElement mode="Opaque" x="1600" y="0" width="80" height="20" backcolor="#C7A68F" uuid="f1eb3c56-43cc-4884-a689-df1b1a512ed0">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
@@ -1634,21 +1615,6 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$V{totalOutAmo}.compareTo(new BigDecimal(0))  > 0 ? $V{dropSize}.multiply(new BigDecimal(100)).divide($V{totalOutAmo},RoundingMode.HALF_UP) .toString() + "%" 
     : "0%"]]></textFieldExpression>
-			</textField>
-			<textField isBlankWhenNull="true">
-				<reportElement mode="Opaque" x="730" y="0" width="80" height="20" backcolor="#C7A68F" uuid="27e73b14-c625-46e3-9abc-2bfd184f85b7">
-					<property name="com.jaspersoft.studio.unit.width" value="px"/>
-					<property name="com.jaspersoft.studio.unit.height" value="px"/>
-				</reportElement>
-				<box>
-					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="8"/>
-				</textElement>
 			</textField>
 		</band>
 	</summary>
