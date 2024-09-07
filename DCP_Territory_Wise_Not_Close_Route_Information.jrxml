@@ -17,64 +17,7 @@
 	<parameter name="divisionId" class="java.lang.String"/>
 	<parameter name="teritoryId" class="java.lang.String"/>
 	<queryString>
-		<![CDATA[SELECT  
-        vta.wing_id wingId,
-        vta.wing_name wingName,
-        vta.division_id divisionId,
-        vta.division_name divisionName,
-        vta.teritory_id teritoryId,
-        vta.teritory_name teritoryName,
-        count(distinct vta.route_id) routeCount,
-        NVL(sum(fbo.outlet_quantity),0) serviceOutlet,
-        NVL(sum(mc.memo_count),0) memoCount,
-        round(case when (sum(fbo.outlet_quantity)) > 0 then (NVL(sum(mc.memo_count),0)/sum(fbo.outlet_quantity)) * 100 else 0 end) dcpCpr,
-        count(distinct sr.sales_rep_id) salesUnit,
-        NVL(sum(scsd.sync),0) sync,
-        NVL(sum(scsd.closed),0) closed,
-        NVL(LISTAGG(case  when sc.PROCESS_COMPLETION_TIME is null or sales_close_status  in (0,1)  then sc.route_id end, ', ') WITHIN GROUP (ORDER BY vta.teritory_id),' ') routeId,
-        NVL(LISTAGG(case  when sc.PROCESS_COMPLETION_TIME is null or sales_close_status  in (0,1)  then sc.route_name end, ', ') WITHIN GROUP (ORDER BY vta.teritory_id),' ') routeName
-FROM    appsm.v_teritory_all vta
-JOIN    appsm.sales_rep_teritory srt ON vta.route_id=srt.teritory_id
-JOIN    appsm.sales_rep sr ON srt.sales_rep_id=sr.id
-and     vta.route_name NOT LIKE 'TMA%'
-and     vta.route_name NOT LIKE 'PRIME%'
-and     vta.route_name NOT LIKE 'PRISON%'
-and     vta.route_name NOT LIKE 'SALES_MARKETING%'
-and     vta.wing_id like $P{wingId} || '%'
-and     vta.division_id like $P{divisionId} || '%'
-and     vta.teritory_id like $P{teritoryId} || '%'
-LEFT    JOIN (select  route_id,sum(outlet_quantity) outlet_quantity
-                from    appsm.FBO
-                where   fbo.outlet_quantity > 0
-                and     to_char(fbo.target_date,'dd-mm-yyyy') =$P{targetDate}
-                GROUP   by route_id
-            ) fbo ON vta.route_id=fbo.route_id
-LEFT    JOIN (  select  ct.teritory_id route_id,count(distinct im.inv_no) memo_count
-                from    appsm.invoice_main im
-                JOIN    appsm.invoice_items ii ON im.inv_no=ii.inv_no
-                JOIN    appsm.consumer_teritory ct ON im.consumer_id=ct.consumer_id
-                where   to_char(im.txn_dt,'dd-mm-yyyy')= $P{targetDate}
-                and     im.inv_type='I'
-                and     ii.quantity > 0
-                GROUP   by ct.teritory_id
-            ) mc ON vta.route_id=mc.route_id
-LEFT    JOIN (select  sales_rep_id,sc.teritory_id route_id,
-                        count(case when sc.sync_time is not null or sc.SALES_CLOSING_TIME is not null or sales_close_status !=0 then sales_rep_id end) sync,
-                        count(case when sc.PROCESS_COMPLETION_TIME is not null or sales_close_status not in (0,1) then sales_rep_id end) closed
-                from    appsm.sales_close_status_details sc
-                where   to_char(target_date,'dd-mm-yyyy')= $P{targetDate}
-                group   by sales_rep_id,sc.teritory_id) scsd 
-        ON (vta.route_id=scsd.route_id and sr.id=scsd.sales_rep_id)
-LEFT    JOIN    (select v.route_id,v.route_name,sc.*
-                from    appsm.sales_close_status_details sc
-                JOIN    appsm.v_teritory_all v on sc.teritory_id=v.route_id
-                where   to_char(sc.target_date,'dd-mm-yyyy')=$P{targetDate}
-                and     sc.SYNC_TIME is not null
-                and     (sc.PROCESS_COMPLETION_TIME is null and sc.sales_close_status in (0,1))) sc
-        ON (vta.route_id=sc.teritory_id and sr.id=sc.sales_rep_id)
-GROUP   by vta.wing_id,vta.wing_name,vta.division_id,vta.division_name,vta.teritory_id,
-        vta.teritory_name
-ORDER   by vta.wing_id,vta.division_id,vta.teritory_id]]>
+		<![CDATA[]]>
 	</queryString>
 	<field name="wingId" class="java.math.BigDecimal"/>
 	<field name="wingName" class="java.lang.String"/>
@@ -634,41 +577,10 @@ RoundingMode.HALF_UP
 				</textElement>
 				<text><![CDATA[Closed Device]]></text>
 			</staticText>
-			<textField>
-				<reportElement x="815" y="0" width="400" height="15" uuid="0470848f-d0c1-40f6-b206-cb1018f0477c">
-					<property name="com.jaspersoft.studio.unit.height" value="px"/>
-				</reportElement>
-				<box>
-					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA["Not Sales Closed"]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="815" y="15" width="200" height="15" uuid="1abb1754-0e7a-445a-b9b3-829650bd55e9">
-					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<staticText>
+				<reportElement mode="Opaque" x="815" y="15" width="200" height="15" backcolor="#D7EAF7" uuid="ed70dc72-ff55-4281-8d44-00695847a7c6">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
-				</reportElement>
-				<box>
-					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA["Route ID"]]></textFieldExpression>
-			</textField isStretchWithOverflow="true">
-			<textField>
-				<reportElement positionType="float" x="1015" y="15" width="200" height="15" uuid="ec472ca6-f982-4eed-8402-e8f08a02620a">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
-					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -679,8 +591,40 @@ RoundingMode.HALF_UP
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Route Name"]]></textFieldExpression>
-			</textField>
+				<text><![CDATA[Route ID]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="1015" y="15" width="200" height="15" backcolor="#D7EAF7" uuid="7b699354-d51d-4428-ab94-4f9fad2e27d5">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Route Name]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="815" y="0" width="400" height="15" backcolor="#D7EAF7" uuid="4cbb2c3d-1750-4f38-b747-d2bae586e13a">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Not Sales Closed]]></text>
+			</staticText>
 		</band>
 	</columnHeader>
 	<detail>
