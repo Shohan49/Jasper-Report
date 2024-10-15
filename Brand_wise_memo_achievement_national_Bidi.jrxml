@@ -15,7 +15,7 @@
 	<field name="wingName" class="java.lang.String"/>
 	<field name="serviceOutlet" class="java.math.BigDecimal"/>
 	<field name="first100" class="java.math.BigDecimal"/>
-	<field name="second500," class="java.math.BigDecimal"/>
+	<field name="second500" class="java.math.BigDecimal"/>
 	<field name="third1000" class="java.math.BigDecimal"/>
 	<field name="thousandPlus" class="java.math.BigDecimal"/>
 	<field name="brandMemo" class="java.math.BigDecimal"/>
@@ -23,7 +23,7 @@
 		<variableExpression><![CDATA[$F{first100}]]></variableExpression>
 	</variable>
 	<variable name="fortyTo50" class="java.math.BigDecimal" calculation="Sum">
-		<variableExpression><![CDATA[$F{second500,}]]></variableExpression>
+		<variableExpression><![CDATA[$F{second500}]]></variableExpression>
 	</variable>
 	<variable name="sixtyTo90" class="java.math.BigDecimal" calculation="Sum">
 		<variableExpression><![CDATA[$F{third1000}]]></variableExpression>
@@ -402,7 +402,7 @@
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$F{second500,}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{second500}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="1016" y="0" width="100" height="20" uuid="5316be8b-b028-4ba4-8afd-419b02d65d6f"/>
@@ -438,7 +438,7 @@
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[String.format("%.2f", $F{brandMemo}.compareTo(new BigDecimal(0))  > 0 ? ($F{second500,}.multiply(new BigDecimal(100)).divide($F{brandMemo}, 2, RoundingMode.HALF_UP)) : new BigDecimal(0)) + "%"]]></textFieldExpression>
+				<textFieldExpression><![CDATA[String.format("%.2f", $F{brandMemo}.compareTo(new BigDecimal(0))  > 0 ? ($F{second500}.multiply(new BigDecimal(100)).divide($F{brandMemo}, 2, RoundingMode.HALF_UP)) : new BigDecimal(0)) + "%"]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="816" y="0" width="100" height="20" uuid="82b64128-3928-45f7-8633-f6c8931baf31"/>
