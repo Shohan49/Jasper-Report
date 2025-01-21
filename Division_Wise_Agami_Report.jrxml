@@ -6,63 +6,7 @@
 	<parameter name="divisionId" class="java.lang.String"/>
 	<parameter name="targetMonth" class="java.lang.String"/>
 	<queryString>
-		<![CDATA[SELECT  wing_id wingId,
-        wing_name wingName,
-        division_id divisionId,
-        division_name divisionName,
-        sum(case when visit_frequency = 6 then nosofOutlet else 0 end) nosofOutlet6,
-        sum(case when visit_frequency = 3 then nosofOutlet else 0 end) nosofOutlet3,
-        sum(case when visit_frequency = 2 then nosofOutlet else 0 end) nosofOutlet2,
-        sum(nosofOutlet) totalNosofOutlet,
-        sum(case when visit_frequency = 6 then onlyAchMemo else 0 end) onlyAchMemo6,
-        sum(case when visit_frequency = 3 then onlyAchMemo else 0 end) onlyAchMemo3,
-        sum(case when visit_frequency = 2 then onlyAchMemo else 0 end) onlyAchMemo2,
-        sum(onlyAchMemo) totalOnlyAchMemo
-FROM(   
-        SELECT  
-        vta.wing_id,
-        vta.wing_name,
-        vta.division_id,
-        vta.division_name,
-        vta.teritory_id,
-        vta.teritory_name,
-        vta.zone_id,
-        vta.zone_name,
-        vta.route_id,
-        vta.route_name,
-        srt.visit_frequency,
-        count(ac.consumer_id) nosofOutlet,
-        sum(amis.ach_memo_sales) onlyAchMemo
-FROM    (SELECT * FROM v_teritory_all 
-        WHERE teritory_id IN (SELECT DISTINCT TERRITORY_ID FROM agami_territory)
-        and   ($P{wingId} is null or wing_id = $P{wingId})
-        and   ($P{divisionId} is null or division_id = $P{divisionId} )
-        ) vta
-JOIN    sales_rep_teritory srt  ON vta.route_id = srt.teritory_id
-JOIN    consumer_teritory ct ON srt.teritory_id = ct.teritory_id
-JOIN    consumer c ON ct.consumer_id = c.id
-JOIN    agami_consumer ac ON c.id = ac.consumer_id
-JOIN    agami_monthly_invoice_summary amis ON ac.id = amis.agami_consumer_id
-AND     amis.product_id=7
-AND     amis.target_month = $P{targetMonth}
-AND     ac.is_active = 1
-LEFT    JOIN (
-                    SELECT  ac.consumer_id,
-                    SUM(ii.quantity) totalSales
-            FROM    agami_consumer ac
-            JOIN    invoice_main partition(JAN_25) im ON ac.consumer_id = im.consumer_id
-            AND     ac.is_active = 1
-            JOIN    invoice_items partition(JAN_25) ii ON IM.inv_no = ii.inv_no
-            AND     ii.quantity > 0
-            AND     im.inv_type = 'I'
-		AND     ii.product_id=7
-            GROUP   BY ac.consumer_id) sale
-            ON ac.consumer_id = sale.consumer_id
-GROUP   BY vta.wing_id,vta.wing_name,vta.division_id,vta.division_name,vta.teritory_id,vta.teritory_name,vta.zone_id,
-        vta.zone_name,vta.route_id,vta.route_name,srt.visit_frequency
-)
-GROUP   BY wing_id,wing_name,division_id,division_name
-ORDER   BY wing_id,division_id]]>
+		<![CDATA[]]>
 	</queryString>
 	<field name="wingId" class="java.math.BigDecimal"/>
 	<field name="wingName" class="java.lang.String"/>
@@ -154,7 +98,7 @@ ORDER   BY wing_id,division_id]]>
 						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font size="8" isBold="true"/>
+						<font size="8" isBold="false"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{winAgami6F}]]></textFieldExpression>
 				</textField>
@@ -170,7 +114,7 @@ ORDER   BY wing_id,division_id]]>
 						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font size="8" isBold="true"/>
+						<font size="8" isBold="false"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{winAgami3F}]]></textFieldExpression>
 				</textField>
@@ -186,7 +130,7 @@ ORDER   BY wing_id,division_id]]>
 						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font size="8" isBold="true"/>
+						<font size="8" isBold="false"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{winAgami2F}]]></textFieldExpression>
 				</textField>
@@ -202,7 +146,7 @@ ORDER   BY wing_id,division_id]]>
 						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font size="8" isBold="true"/>
+						<font size="8" isBold="false"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{winAgamiTotal}]]></textFieldExpression>
 				</textField>
@@ -218,7 +162,7 @@ ORDER   BY wing_id,division_id]]>
 						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font size="8" isBold="true"/>
+						<font size="8" isBold="false"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{winAchvd6F}]]></textFieldExpression>
 				</textField>
@@ -234,7 +178,7 @@ ORDER   BY wing_id,division_id]]>
 						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font size="8" isBold="true"/>
+						<font size="8" isBold="false"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{winAchvd3F}]]></textFieldExpression>
 				</textField>
@@ -250,7 +194,7 @@ ORDER   BY wing_id,division_id]]>
 						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font size="8" isBold="true"/>
+						<font size="8" isBold="false"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{winAchvd2F}]]></textFieldExpression>
 				</textField>
@@ -266,7 +210,7 @@ ORDER   BY wing_id,division_id]]>
 						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font size="8" isBold="true"/>
+						<font size="8" isBold="false"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{winAchvdTotal}]]></textFieldExpression>
 				</textField>
@@ -283,7 +227,7 @@ ORDER   BY wing_id,division_id]]>
 						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font size="8" isBold="true"/>
+						<font size="8" isBold="false"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{winAgami3F}.compareTo(new BigDecimal(0)) > 0 
     ? $V{winAchvd3F}.multiply(new BigDecimal(100))
@@ -304,7 +248,7 @@ ORDER   BY wing_id,division_id]]>
 						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font size="8" isBold="true"/>
+						<font size="8" isBold="false"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{winAgamiTotal}.compareTo(new BigDecimal(0)) > 0 
     ? $V{winAchvdTotal}.multiply(new BigDecimal(100))
@@ -325,7 +269,7 @@ ORDER   BY wing_id,division_id]]>
 						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font size="8" isBold="true"/>
+						<font size="8" isBold="false"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{winAgami2F}.compareTo(new BigDecimal(0)) > 0 
     ? $V{winAchvd2F}.multiply(new BigDecimal(100))
@@ -346,7 +290,7 @@ ORDER   BY wing_id,division_id]]>
 						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font size="8" isBold="true"/>
+						<font size="8" isBold="false"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{winAgami6F}.compareTo(new BigDecimal(0)) > 0 
     ? $V{winAchvd6F}.multiply(new BigDecimal(100))
@@ -387,7 +331,7 @@ ORDER   BY wing_id,division_id]]>
 				<textElement verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Wing Id: "+$P{wingId}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Wing Name: "+$P{wingId}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="0" y="20" width="210" height="20" uuid="725289b6-437f-49cc-905d-8e069f5bd968">
@@ -396,7 +340,7 @@ ORDER   BY wing_id,division_id]]>
 				<textElement verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Division Id: "+$P{divisionId}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Division Name: "+$P{divisionId}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="0" y="40" width="210" height="20" uuid="889b9e4e-a7ac-431d-8cd7-240d8c8dd60f">
@@ -422,7 +366,7 @@ ORDER   BY wing_id,division_id]]>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font isBold="true"/>
 				</textElement>
-				<text><![CDATA[Nos Of Achieved Agami Outlet]]></text>
+				<text><![CDATA[Nos of Achieved Agami Outlet]]></text>
 			</staticText>
 			<staticText>
 				<reportElement mode="Opaque" x="490" y="15" width="60" height="30" backcolor="#D9D9D9" uuid="c8cc12f7-66cf-40b1-a356-a356da2d41bc">
@@ -450,7 +394,7 @@ ORDER   BY wing_id,division_id]]>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font isBold="true"/>
 				</textElement>
-				<text><![CDATA[Nos Of Agami Outlet]]></text>
+				<text><![CDATA[Nos of Agami Outlet]]></text>
 			</staticText>
 			<staticText>
 				<reportElement mode="Opaque" x="850" y="15" width="60" height="30" backcolor="#D9D9D9" uuid="f5488b91-6eae-4742-b4c5-2e59aeb993bb">
@@ -612,7 +556,7 @@ ORDER   BY wing_id,division_id]]>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font isBold="true"/>
 				</textElement>
-				<text><![CDATA[Percentage Of Achiever]]></text>
+				<text><![CDATA[Percentage of Achiever]]></text>
 			</staticText>
 			<staticText>
 				<reportElement mode="Opaque" x="210" y="15" width="60" height="30" backcolor="#D9D9D9" uuid="0ca98072-69df-4590-b075-65a2dd69f8fc">
@@ -626,7 +570,7 @@ ORDER   BY wing_id,division_id]]>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<text><![CDATA[Id]]></text>
+				<text><![CDATA[ID]]></text>
 			</staticText>
 			<staticText>
 				<reportElement mode="Opaque" x="50" y="15" width="60" height="30" backcolor="#D9D9D9" uuid="cb8a7996-8abf-4ef5-b4d3-90547830ef38">
@@ -639,7 +583,7 @@ ORDER   BY wing_id,division_id]]>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<text><![CDATA[Id]]></text>
+				<text><![CDATA[ID]]></text>
 			</staticText>
 			<staticText>
 				<reportElement mode="Opaque" x="670" y="15" width="60" height="30" backcolor="#D9D9D9" uuid="f4042e6c-716f-48c9-8dda-a9dde4701c7c">
@@ -702,7 +646,7 @@ ORDER   BY wing_id,division_id]]>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<text><![CDATA[Sl No]]></text>
+				<text><![CDATA[SL No]]></text>
 			</staticText>
 		</band>
 	</columnHeader>
@@ -1022,7 +966,7 @@ ORDER   BY wing_id,division_id]]>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Total"]]></textFieldExpression>
+				<textFieldExpression><![CDATA["National"]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement mode="Opaque" x="370" y="0" width="60" height="25" backcolor="#D9D9D9" uuid="2e247538-450d-4d4e-aba9-628deed56893">
@@ -1036,7 +980,7 @@ ORDER   BY wing_id,division_id]]>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="8" isBold="true"/>
+					<font size="8" isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{agami6F}]]></textFieldExpression>
 			</textField>
@@ -1052,7 +996,7 @@ ORDER   BY wing_id,division_id]]>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="8" isBold="true"/>
+					<font size="8" isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{agami3F}]]></textFieldExpression>
 			</textField>
@@ -1068,7 +1012,7 @@ ORDER   BY wing_id,division_id]]>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="8" isBold="true"/>
+					<font size="8" isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{agami2F}]]></textFieldExpression>
 			</textField>
@@ -1084,7 +1028,7 @@ ORDER   BY wing_id,division_id]]>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="8" isBold="true"/>
+					<font size="8" isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{agamiTotal}]]></textFieldExpression>
 			</textField>
@@ -1100,7 +1044,7 @@ ORDER   BY wing_id,division_id]]>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="8" isBold="true"/>
+					<font size="8" isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{achvd6F}]]></textFieldExpression>
 			</textField>
@@ -1116,7 +1060,7 @@ ORDER   BY wing_id,division_id]]>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="8" isBold="true"/>
+					<font size="8" isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{achvd3F}]]></textFieldExpression>
 			</textField>
@@ -1132,7 +1076,7 @@ ORDER   BY wing_id,division_id]]>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="8" isBold="true"/>
+					<font size="8" isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{achvd2F}]]></textFieldExpression>
 			</textField>
@@ -1148,7 +1092,7 @@ ORDER   BY wing_id,division_id]]>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="8" isBold="true"/>
+					<font size="8" isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{achvdTotal}]]></textFieldExpression>
 			</textField>
@@ -1165,7 +1109,7 @@ ORDER   BY wing_id,division_id]]>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="8" isBold="true"/>
+					<font size="8" isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{agami3F}.compareTo(new BigDecimal(0)) > 0 
     ? $V{achvd3F}.multiply(new BigDecimal(100))
@@ -1186,7 +1130,7 @@ ORDER   BY wing_id,division_id]]>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="8" isBold="true"/>
+					<font size="8" isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{agami2F}.compareTo(new BigDecimal(0)) > 0 
     ? $V{achvd2F}.multiply(new BigDecimal(100))
@@ -1207,7 +1151,7 @@ ORDER   BY wing_id,division_id]]>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="8" isBold="true"/>
+					<font size="8" isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{agamiTotal}.compareTo(new BigDecimal(0)) > 0 
     ? $V{achvdTotal}.multiply(new BigDecimal(100))
@@ -1228,7 +1172,7 @@ ORDER   BY wing_id,division_id]]>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="8" isBold="true"/>
+					<font size="8" isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{agami6F}.compareTo(new BigDecimal(0)) > 0 
     ? $V{achvd6F}.multiply(new BigDecimal(100))
