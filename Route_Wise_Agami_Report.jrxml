@@ -10,8 +10,18 @@
 	<property name="com.jaspersoft.studio.unit.rightMargin" value="pixel"/>
 	<property name="com.jaspersoft.studio.unit.columnWidth" value="pixel"/>
 	<property name="com.jaspersoft.studio.unit.columnSpacing" value="pixel"/>
-	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Test_AKT_SM_DB"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="TEST_SM"/>
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<style name="onlyAchMemo">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$F{nosofMemoTarget}.compareTo($F{onlyAchMemo}) <= 0]]></conditionExpression>
+			<style mode="Opaque" backcolor="#008000"/>
+		</conditionalStyle>
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$F{nosofMemoTarget}.compareTo($F{onlyAchMemo}) >= 0]]></conditionExpression>
+			<style mode="Opaque" backcolor="#FF0000"/>
+		</conditionalStyle>
+	</style>
 	<parameter name="wingId" class="java.lang.String"/>
 	<parameter name="divisionId" class="java.lang.String"/>
 	<parameter name="teritoryId" class="java.lang.String"/>
@@ -19,55 +29,7 @@
 	<parameter name="routeId" class="java.lang.String"/>
 	<parameter name="targetMonth" class="java.lang.String"/>
 	<queryString>
-		<![CDATA[SELECT  
-        vta.wing_id wingId,
-        vta.wing_name wingName,
-        vta.division_id divisionId,
-        vta.division_name divisionName,
-        vta.teritory_id teritoryId,
-        vta.teritory_name teritoryName,
-        vta.zone_id zoneId,
-        vta.zone_name zoneName,
-        vta.route_id routeId,
-        vta.route_name routeName,
-        srt.visit_frequency visitFrequency,
-        count(ac.consumer_id) nosofOutlet,
-        max(amis.per_memo_sales_target) perMemoTarget,
-        max(amis.memo_target) * count(ac.consumer_id) nosofMemoTarget,
-        NVL(sum(sale.totalSales),0) totalSales,
-        sum(amis.total_memo_count) totalAchMemo,
-        sum(amis.ach_memo_sales) onlyAchMemo
-FROM    (SELECT * FROM v_teritory_all 
-        WHERE teritory_id IN (SELECT DISTINCT TERRITORY_ID FROM agami_territory)
-        and   ($P{wingId} is null or wing_id = $P{wingId})
-        and   ($P{divisionId} is null or division_id = $P{divisionId} )
-        and   ($P{teritoryId} is null or teritory_id = $P{teritoryId} )
-        and   ($P{zoneId} is null or zone_id = $P{zoneId} )
-        and   ($P{routeId} is null or route_id = $P{routeId} )
-        ) vta
-JOIN    sales_rep_teritory srt  ON vta.route_id = srt.teritory_id
-JOIN    consumer_teritory ct ON srt.teritory_id = ct.teritory_id
-JOIN    consumer c ON ct.consumer_id = c.id
-JOIN    agami_consumer ac ON c.id = ac.consumer_id
-JOIN    agami_monthly_invoice_summary amis ON ac.id = amis.agami_consumer_id
-AND     amis.product_id=7
-AND     amis.target_month = $P{targetMonth}
-AND     ac.is_active = 1
-LEFT    JOIN (
-                    SELECT  ac.consumer_id,
-                    SUM(ii.quantity) totalSales
-            FROM    agami_consumer ac
-            JOIN    invoice_main partition(JAN_25) im ON ac.consumer_id = im.consumer_id
-            AND     ac.is_active = 1
-            JOIN    invoice_items partition(JAN_25) ii ON IM.inv_no = ii.inv_no
-            AND     ii.quantity > 0
-            AND     im.inv_type = 'I'
-		AND     ii.product_id=7
-            GROUP   BY ac.consumer_id) sale
-            ON ac.consumer_id = sale.consumer_id
-GROUP   BY vta.wing_id,vta.wing_name,vta.division_id,vta.division_name,vta.teritory_id,vta.teritory_name,vta.zone_id,
-        vta.zone_name,vta.route_id,vta.route_name,srt.visit_frequency
-ORDER   BY vta.wing_id,vta.division_id,vta.teritory_id,vta.zone_id,vta.route_id]]>
+		<![CDATA[]]>
 	</queryString>
 	<field name="wingId" class="java.math.BigDecimal"/>
 	<field name="wingName" class="java.lang.String"/>
@@ -222,7 +184,7 @@ ORDER   BY vta.wing_id,vta.division_id,vta.teritory_id,vta.zone_id,vta.route_id]
 						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font isBold="true"/>
+						<font isBold="false"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{winServFrequency}]]></textFieldExpression>
 				</textField>
@@ -238,7 +200,7 @@ ORDER   BY vta.wing_id,vta.division_id,vta.teritory_id,vta.zone_id,vta.route_id]
 						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font size="8" isBold="true"/>
+						<font size="8" isBold="false"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{winNoOfAgamiOlt}]]></textFieldExpression>
 				</textField>
@@ -254,7 +216,7 @@ ORDER   BY vta.wing_id,vta.division_id,vta.teritory_id,vta.zone_id,vta.route_id]
 						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font size="8" isBold="true"/>
+						<font size="8" isBold="false"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{winPerMemo}]]></textFieldExpression>
 				</textField>
@@ -270,7 +232,7 @@ ORDER   BY vta.wing_id,vta.division_id,vta.teritory_id,vta.zone_id,vta.route_id]
 						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font size="8" isBold="true"/>
+						<font size="8" isBold="false"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{winNoOfMemo}]]></textFieldExpression>
 				</textField>
@@ -285,7 +247,7 @@ ORDER   BY vta.wing_id,vta.division_id,vta.teritory_id,vta.zone_id,vta.route_id]
 						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font size="8" isBold="true"/>
+						<font size="8" isBold="false"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{winTotalSales}]]></textFieldExpression>
 				</textField>
@@ -300,7 +262,7 @@ ORDER   BY vta.wing_id,vta.division_id,vta.teritory_id,vta.zone_id,vta.route_id]
 						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font size="8" isBold="true"/>
+						<font size="8" isBold="false"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{winTotalMemo}]]></textFieldExpression>
 				</textField>
@@ -316,7 +278,7 @@ ORDER   BY vta.wing_id,vta.division_id,vta.teritory_id,vta.zone_id,vta.route_id]
 						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font size="8" isBold="true"/>
+						<font size="8" isBold="false"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{winNoOfAchvr}]]></textFieldExpression>
 				</textField>
@@ -354,7 +316,7 @@ ORDER   BY vta.wing_id,vta.division_id,vta.teritory_id,vta.zone_id,vta.route_id]
 						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font size="8" isBold="true"/>
+						<font size="8" isBold="false"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{divServFrequency}]]></textFieldExpression>
 				</textField>
@@ -370,7 +332,7 @@ ORDER   BY vta.wing_id,vta.division_id,vta.teritory_id,vta.zone_id,vta.route_id]
 						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font size="8" isBold="true"/>
+						<font size="8" isBold="false"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{divNoOfAgamiOlt}]]></textFieldExpression>
 				</textField>
@@ -386,7 +348,7 @@ ORDER   BY vta.wing_id,vta.division_id,vta.teritory_id,vta.zone_id,vta.route_id]
 						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font size="8" isBold="true"/>
+						<font size="8" isBold="false"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{divPerMemo}]]></textFieldExpression>
 				</textField>
@@ -402,7 +364,7 @@ ORDER   BY vta.wing_id,vta.division_id,vta.teritory_id,vta.zone_id,vta.route_id]
 						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font size="8" isBold="true"/>
+						<font size="8" isBold="false"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{divNoOfMemo}]]></textFieldExpression>
 				</textField>
@@ -418,7 +380,7 @@ ORDER   BY vta.wing_id,vta.division_id,vta.teritory_id,vta.zone_id,vta.route_id]
 						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font size="8" isBold="true"/>
+						<font size="8" isBold="false"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{divTotalSales}]]></textFieldExpression>
 				</textField>
@@ -434,7 +396,7 @@ ORDER   BY vta.wing_id,vta.division_id,vta.teritory_id,vta.zone_id,vta.route_id]
 						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font size="8" isBold="true"/>
+						<font size="8" isBold="false"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{divTotalMemo}]]></textFieldExpression>
 				</textField>
@@ -450,7 +412,7 @@ ORDER   BY vta.wing_id,vta.division_id,vta.teritory_id,vta.zone_id,vta.route_id]
 						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font size="8" isBold="true"/>
+						<font size="8" isBold="false"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{divNoOfAchvr}]]></textFieldExpression>
 				</textField>
@@ -488,7 +450,7 @@ ORDER   BY vta.wing_id,vta.division_id,vta.teritory_id,vta.zone_id,vta.route_id]
 						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font size="8" isBold="true"/>
+						<font size="8" isBold="false"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{terServFrequency}]]></textFieldExpression>
 				</textField>
@@ -504,7 +466,7 @@ ORDER   BY vta.wing_id,vta.division_id,vta.teritory_id,vta.zone_id,vta.route_id]
 						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font size="8" isBold="true"/>
+						<font size="8" isBold="false"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{terNoOfAgamiOlt}]]></textFieldExpression>
 				</textField>
@@ -520,7 +482,7 @@ ORDER   BY vta.wing_id,vta.division_id,vta.teritory_id,vta.zone_id,vta.route_id]
 						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font size="8" isBold="true"/>
+						<font size="8" isBold="false"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{terPerMemo}]]></textFieldExpression>
 				</textField>
@@ -536,7 +498,7 @@ ORDER   BY vta.wing_id,vta.division_id,vta.teritory_id,vta.zone_id,vta.route_id]
 						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font size="8" isBold="true"/>
+						<font size="8" isBold="false"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{terNoOfMemo}]]></textFieldExpression>
 				</textField>
@@ -552,7 +514,7 @@ ORDER   BY vta.wing_id,vta.division_id,vta.teritory_id,vta.zone_id,vta.route_id]
 						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font size="8" isBold="true"/>
+						<font size="8" isBold="false"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{terTotalSales}]]></textFieldExpression>
 				</textField>
@@ -568,7 +530,7 @@ ORDER   BY vta.wing_id,vta.division_id,vta.teritory_id,vta.zone_id,vta.route_id]
 						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font size="8" isBold="true"/>
+						<font size="8" isBold="false"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{terTotalMemo}]]></textFieldExpression>
 				</textField>
@@ -584,7 +546,7 @@ ORDER   BY vta.wing_id,vta.division_id,vta.teritory_id,vta.zone_id,vta.route_id]
 						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font size="8" isBold="true"/>
+						<font size="8" isBold="false"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{terNoOfAchvr}]]></textFieldExpression>
 				</textField>
@@ -622,7 +584,7 @@ ORDER   BY vta.wing_id,vta.division_id,vta.teritory_id,vta.zone_id,vta.route_id]
 						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font size="8" isBold="true"/>
+						<font size="8" isBold="false"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{zServFrequency}]]></textFieldExpression>
 				</textField>
@@ -638,7 +600,7 @@ ORDER   BY vta.wing_id,vta.division_id,vta.teritory_id,vta.zone_id,vta.route_id]
 						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font size="8" isBold="true"/>
+						<font size="8" isBold="false"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{zNoOfAgamiOlt}]]></textFieldExpression>
 				</textField>
@@ -654,7 +616,7 @@ ORDER   BY vta.wing_id,vta.division_id,vta.teritory_id,vta.zone_id,vta.route_id]
 						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font size="8" isBold="true"/>
+						<font size="8" isBold="false"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{zPerMemo}]]></textFieldExpression>
 				</textField>
@@ -670,7 +632,7 @@ ORDER   BY vta.wing_id,vta.division_id,vta.teritory_id,vta.zone_id,vta.route_id]
 						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font size="8" isBold="true"/>
+						<font size="8" isBold="false"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{zNoOfMemo}]]></textFieldExpression>
 				</textField>
@@ -686,7 +648,7 @@ ORDER   BY vta.wing_id,vta.division_id,vta.teritory_id,vta.zone_id,vta.route_id]
 						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font size="8" isBold="true"/>
+						<font size="8" isBold="false"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{zTotalSales}]]></textFieldExpression>
 				</textField>
@@ -702,7 +664,7 @@ ORDER   BY vta.wing_id,vta.division_id,vta.teritory_id,vta.zone_id,vta.route_id]
 						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font size="8" isBold="true"/>
+						<font size="8" isBold="false"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{zTotalMemo}]]></textFieldExpression>
 				</textField>
@@ -718,7 +680,7 @@ ORDER   BY vta.wing_id,vta.division_id,vta.teritory_id,vta.zone_id,vta.route_id]
 						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font size="8" isBold="true"/>
+						<font size="8" isBold="false"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{zNoOfAchvr}]]></textFieldExpression>
 				</textField>
@@ -755,7 +717,7 @@ ORDER   BY vta.wing_id,vta.division_id,vta.teritory_id,vta.zone_id,vta.route_id]
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Wing Id: "+$P{wingId}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Wing Name: "+$P{wingId}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="0" y="20" width="220" height="20" uuid="6cfbb070-50cc-4034-94f3-a8d6150efc3d">
@@ -764,7 +726,7 @@ ORDER   BY vta.wing_id,vta.division_id,vta.teritory_id,vta.zone_id,vta.route_id]
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Division Id: "+$P{divisionId}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Division Name: "+$P{divisionId}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="0" y="40" width="220" height="20" uuid="0338bcb4-e977-496e-b559-ecc8fce1a0c1">
@@ -773,7 +735,7 @@ ORDER   BY vta.wing_id,vta.division_id,vta.teritory_id,vta.zone_id,vta.route_id]
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Teritory Id: "+$P{teritoryId}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Territory Name: "+$P{teritoryId}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="0" y="60" width="220" height="20" uuid="5efe514e-c2a9-4ca5-8cbc-8071b1d38304">
@@ -782,7 +744,7 @@ ORDER   BY vta.wing_id,vta.division_id,vta.teritory_id,vta.zone_id,vta.route_id]
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Zone Id: "+$P{zoneId}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Zone Name: "+$P{zoneId}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="0" y="80" width="220" height="20" uuid="4afcad60-db56-42ab-bf2e-fc626f153cc8">
@@ -791,7 +753,7 @@ ORDER   BY vta.wing_id,vta.division_id,vta.teritory_id,vta.zone_id,vta.route_id]
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Route Id:"+$P{routeId}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Route Name: "+$P{routeId}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="0" y="100" width="220" height="20" uuid="cc1fb309-81dd-4584-ba9a-4b2c311f38b7">
@@ -832,7 +794,7 @@ ORDER   BY vta.wing_id,vta.division_id,vta.teritory_id,vta.zone_id,vta.route_id]
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<text><![CDATA[Id]]></text>
+				<text><![CDATA[ID]]></text>
 			</staticText>
 			<staticText>
 				<reportElement mode="Opaque" x="220" y="0" width="170" height="15" backcolor="#D9D9D9" uuid="f7ab9f9f-f490-4d4a-a01b-37d79d32b8b7">
@@ -876,7 +838,7 @@ ORDER   BY vta.wing_id,vta.division_id,vta.teritory_id,vta.zone_id,vta.route_id]
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<text><![CDATA[Id]]></text>
+				<text><![CDATA[ID]]></text>
 			</staticText>
 			<staticText>
 				<reportElement mode="Opaque" x="390" y="0" width="180" height="15" backcolor="#D9D9D9" uuid="4486f020-eaa6-4924-af43-ebd6d56db6ad">
@@ -933,7 +895,7 @@ ORDER   BY vta.wing_id,vta.division_id,vta.teritory_id,vta.zone_id,vta.route_id]
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font isBold="true"/>
 				</textElement>
-				<text><![CDATA[Sl No]]></text>
+				<text><![CDATA[SL No]]></text>
 			</staticText>
 			<staticText>
 				<reportElement mode="Opaque" x="630" y="15" width="120" height="30" backcolor="#D9D9D9" uuid="bafe3786-7fa9-480d-8591-51d1af470ebd">
@@ -988,7 +950,7 @@ ORDER   BY vta.wing_id,vta.division_id,vta.teritory_id,vta.zone_id,vta.route_id]
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<text><![CDATA[Id]]></text>
+				<text><![CDATA[ID]]></text>
 			</staticText>
 			<staticText>
 				<reportElement mode="Opaque" x="50" y="15" width="60" height="30" backcolor="#D9D9D9" uuid="4e9fe495-66d6-4f4b-9b51-64c466dfe997">
@@ -1001,7 +963,7 @@ ORDER   BY vta.wing_id,vta.division_id,vta.teritory_id,vta.zone_id,vta.route_id]
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<text><![CDATA[Id]]></text>
+				<text><![CDATA[ID]]></text>
 			</staticText>
 			<staticText>
 				<reportElement mode="Opaque" x="810" y="15" width="120" height="30" backcolor="#D9D9D9" uuid="0c9df043-8689-4f19-a0ed-561afe3b0604">
@@ -1028,7 +990,7 @@ ORDER   BY vta.wing_id,vta.division_id,vta.teritory_id,vta.zone_id,vta.route_id]
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<text><![CDATA[Id]]></text>
+				<text><![CDATA[ID]]></text>
 			</staticText>
 			<staticText>
 				<reportElement mode="Opaque" x="930" y="0" width="60" height="45" backcolor="#D9D9D9" uuid="a5f867e2-3776-4354-ba03-84e3271e398c">
@@ -1445,7 +1407,7 @@ ORDER   BY vta.wing_id,vta.division_id,vta.teritory_id,vta.zone_id,vta.route_id]
 				<textFieldExpression><![CDATA[$F{totalAchMemo}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="1310" y="0" width="60" height="25" uuid="2ed63f13-c329-4e2c-8442-6a24ee86dc68">
+				<reportElement style="onlyAchMemo" x="1310" y="0" width="60" height="25" uuid="2ed63f13-c329-4e2c-8442-6a24ee86dc68">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="8211e523-b3b3-41bd-a56b-eb6edf7700f9"/>
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
@@ -1477,7 +1439,7 @@ ORDER   BY vta.wing_id,vta.division_id,vta.teritory_id,vta.zone_id,vta.route_id]
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Total"]]></textFieldExpression>
+				<textFieldExpression><![CDATA["National"]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement mode="Opaque" x="930" y="0" width="60" height="25" backcolor="#D9D9D9" uuid="5e49021c-3598-429f-8bb3-e94ebf23d9e1">
@@ -1491,7 +1453,7 @@ ORDER   BY vta.wing_id,vta.division_id,vta.teritory_id,vta.zone_id,vta.route_id]
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="8" isBold="true"/>
+					<font size="8" isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{servFrequency}]]></textFieldExpression>
 			</textField>
@@ -1507,7 +1469,7 @@ ORDER   BY vta.wing_id,vta.division_id,vta.teritory_id,vta.zone_id,vta.route_id]
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="8" isBold="true"/>
+					<font size="8" isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{noOfAgamiOutlet}]]></textFieldExpression>
 			</textField>
@@ -1523,7 +1485,7 @@ ORDER   BY vta.wing_id,vta.division_id,vta.teritory_id,vta.zone_id,vta.route_id]
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="8" isBold="true"/>
+					<font size="8" isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{tarPerMemo}]]></textFieldExpression>
 			</textField>
@@ -1539,7 +1501,7 @@ ORDER   BY vta.wing_id,vta.division_id,vta.teritory_id,vta.zone_id,vta.route_id]
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="8" isBold="true"/>
+					<font size="8" isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{noOfMemo}]]></textFieldExpression>
 			</textField>
@@ -1554,7 +1516,7 @@ ORDER   BY vta.wing_id,vta.division_id,vta.teritory_id,vta.zone_id,vta.route_id]
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="8" isBold="true"/>
+					<font size="8" isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{totalSales}]]></textFieldExpression>
 			</textField>
@@ -1569,7 +1531,7 @@ ORDER   BY vta.wing_id,vta.division_id,vta.teritory_id,vta.zone_id,vta.route_id]
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="8" isBold="true"/>
+					<font size="8" isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{totalMemo}]]></textFieldExpression>
 			</textField>
@@ -1584,7 +1546,7 @@ ORDER   BY vta.wing_id,vta.division_id,vta.teritory_id,vta.zone_id,vta.route_id]
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="8" isBold="true"/>
+					<font size="8" isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{noOfAchvr}]]></textFieldExpression>
 			</textField>
