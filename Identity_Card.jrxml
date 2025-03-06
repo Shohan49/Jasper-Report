@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.20.0.final using JasperReports Library version 6.20.0-2bc7ab61c56f459e8176eb05c7705e145cd400ad  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Identity_Card" pageWidth="400" pageHeight="459" columnWidth="360" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="338b1de4-f722-44b1-80c1-707169953d2a">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+	<parameter name="idCardNo" class="java.lang.Integer"/>
+	<parameter name="issueDate" class="java.lang.String"/>
+	<parameter name="expiryDate" class="java.lang.String"/>
+	<parameter name="companyName" class="java.lang.String"/>
+	<parameter name="idImage" class="java.lang.String"/>
+	<parameter name="vesselName" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="30" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="360" height="30" uuid="e7016dd7-35e4-4efe-ab62-9759c6122939"/>
+				<box>
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="3.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="3.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="3.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="3.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[IDENTITY CARD]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="359" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="40" width="360" height="30" uuid="774e17e2-61d6-4c7a-88ab-0f4dc8406daf">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Justified">
+					<font size="11" isBold="false"/>
+				</textElement>
+				<text><![CDATA[According to clause-15 of the Protocol on lnland Water Transit & Trade (PIWTT) Signed Between Bangladesh  & India.]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="87" y="72" width="200" height="30" uuid="7c67b9ce-e604-407e-ab3e-50c48d4a8a5f"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Card No: "+$P{idCardNo}]]></textFieldExpression>
+			</textField>
+			<image hAlign="Center" vAlign="Middle">
+				<reportElement x="141" y="102" width="100" height="100" uuid="b5492471-eaa3-4b1f-9322-7fbc8734ccba">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				</reportElement>
+				<imageExpression><![CDATA[net.sf.jasperreports.engine.util.JRImageLoader.getInstance(new SimpleJasperReportsContext()).loadAwtImageFromBytes(Base64.getDecoder().decode($P{idImage}))]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="0" y="231" width="280" height="20" uuid="58e57325-5cba-4c3c-9da3-372bdf93695a">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Left">
+					<font size="11" isBold="false"/>
+				</textElement>
+				<text><![CDATA[and he is a citizen of Bangladesh.]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="0" y="251" width="280" height="20" uuid="b7f1bce6-0a25-4fde-8964-698110b79a21">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Date of Issue: "+$P{issueDate}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="271" width="280" height="20" uuid="d237604a-181f-42fd-84a0-9dfb76fe6644">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Date of Expiry: "+$P{expiryDate}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="339" width="110" height="20" uuid="54d2aee6-3250-4f00-ba9a-2ea26b5de44a">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[ Verified]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="242" y="329" width="118" height="30" uuid="d4fe84fa-3c1b-4989-bd6d-d919d584bde9"/>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Signature of Issuing Authority]]></text>
+			</staticText>
+			<componentElement>
+				<reportElement x="280" y="231" width="80" height="60" uuid="45c23440-8712-4792-af06-2143909c083e">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<jr:QRCode xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+					<jr:codeExpression><![CDATA[$P{idCardNo}]]></jr:codeExpression>
+				</jr:QRCode>
+			</componentElement>
+			<textField>
+				<reportElement x="0" y="211" width="360" height="20" uuid="ea8510ef-4d1b-4492-9566-7ce86ab18933">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textFieldExpression><![CDATA["This is to certify that the bearer of this card is an employee of "+$P{companyName}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="291" width="280" height="20" uuid="4f0c4bef-9a00-4f40-8b29-67df019be081">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Vessel Name: "+$P{vesselName}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+</jasperReport>
