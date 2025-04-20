@@ -18,6 +18,8 @@
 	<parameter name="Classification_Report" class="java.util.List"/>
 	<parameter name="Buying_Report" class="java.util.List"/>
 	<parameter name="aktLogo" class="java.lang.String"/>
+	<parameter name="fromDate" class="java.lang.String"/>
+	<parameter name="toDate" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
@@ -25,7 +27,7 @@
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="79" splitType="Stretch">
+		<band height="75" splitType="Stretch">
 			<staticText>
 				<reportElement x="511" y="20" width="469" height="20" uuid="d57eec61-f1e5-4981-9e6c-2ef28f0fd4ab">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
@@ -88,7 +90,7 @@
 		</band>
 	</title>
 	<pageHeader>
-		<band height="20" splitType="Stretch">
+		<band height="60" splitType="Stretch">
 			<textField>
 				<reportElement x="0" y="0" width="179" height="20" uuid="c836814b-076b-4284-bcdf-d76201d38f50">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
@@ -101,7 +103,7 @@
 				<textFieldExpression><![CDATA["Season : "+$P{seasonId}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="795" y="0" width="185" height="20" uuid="fc4aa8e4-7bc9-495a-bdc7-40986a564784">
+				<reportElement x="795" y="40" width="185" height="20" uuid="fc4aa8e4-7bc9-495a-bdc7-40986a564784">
 					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					<property name="com.jaspersoft.studio.unit.rightIndent" value="px"/>
@@ -117,6 +119,28 @@
 					<paragraph rightIndent="0"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Execution Time : " +new  SimpleDateFormat("dd-MM-yyyy, hh:mm:ss a").format(new java.util.Date())]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="20" width="179" height="20" uuid="9e278bf2-65be-4c3f-a7ea-5cdaf9bed48e">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.firstLineIndent" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="7" isBold="false"/>
+					<paragraph firstLineIndent="20"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Classification From Date : "+$P{fromDate}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="40" width="179" height="20" uuid="d95059c8-fa19-4f87-a95d-aa0ea59217f1">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.firstLineIndent" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="7" isBold="false"/>
+					<paragraph firstLineIndent="20"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Classification To Date : "+$P{toDate}]]></textFieldExpression>
 			</textField>
 		</band>
 	</pageHeader>
