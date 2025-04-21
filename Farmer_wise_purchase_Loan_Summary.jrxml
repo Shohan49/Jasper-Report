@@ -4,45 +4,13 @@
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Leaf_Test_DB"/>
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 	<parameter name="areaId" class="java.lang.String"/>
-	<parameter name="fromDate" class="java.lang.String"/>
 	<parameter name="seasonId" class="java.lang.String"/>
 	<parameter name="zoneId" class="java.lang.String"/>
 	<parameter name="aktLogo" class="java.lang.String"/>
 	<parameter name="subAreaId" class="java.lang.String"/>
 	<parameter name="villId" class="java.lang.String"/>
-	<parameter name="toDate" class="java.lang.String"/>
 	<queryString>
-		<![CDATA[select  vta.zone_id          zoneId,
-        vta.zone_name        zoneName,
-        vta.sub_area_id      subAreaId,
-        vta.sub_area_name     subAreaName,
-        vta.vill_id villId,
-        vta.vill_name        village,
-        pm.purchase_no       vouNo,
-        f.farmer_reg_number  regNo,
-        f.id farmerId,
-        f.farmer_name        farmerName,
-        f.farmer_father_name fatherName,
-        cast(count(Pd.bale_id) as integer) nosofBale,
-        sum(pd.weight) buyerWeight,
-        coalesce(sum(brw.weight) - sum(bs.sacks_weight + bs.extra_weight),0) buyingReWeight,
-        coalesce(sum(brw.weight) - sum(bs.sacks_weight + bs.extra_weight),0) - sum(pd.weight) difference
-from purchase_main pm
-         join purchase_details pd on pm.id = pd.purchase_main_id
-         join bale b on pd.bale_id = b.id
-         join farmer_contact fc on (fc.id = pm.farmer_contact_id and fc.season_id = 3)
-         join farmer f on pm.farmer_id = f.id
-         join v_territory_all vta on f.territory_id = vta.vill_id
-         left join bale_weight bw on pd.bale_id=bw.bale_id and bw.weight_recipient='PURCHASE'
-         left join bale_weight brw on b.id=brw.bale_id and brw.weight_recipient='RE_WEIGHT'
-         left join bale_sacks bs on pd.bale_id=bs.bale_id and bs.sack_type_selector='BUYER'
-where case when $P{areaId} is not null then vta.area_id=$P{areaId} else true end
-  and   case when $P{zoneId} is not null then vta.zone_id=$P{zoneId} else true end
-  and   case when $P{subAreaId} is not null then vta.sub_area_id=$P{subAreaId} else true end
-  and   case when $P{villId} is not null then vta.vill_id=$P{villId} else true end
-  AND     to_date(to_char(pm.purchase_date,'yyyy-MM-dd'),'yyyy-MM-dd') between $P{fromDate} and $P{toDate}
-group by vta.zone_id, vta.sub_area_id, vta.zone_name, vta.sub_area_name,vta.vill_id, vta.vill_name, pm.purchase_no, f.farmer_reg_number, f.id,f.farmer_name, f.farmer_father_name
-order by vta.zone_id, vta.sub_area_id, vta.vill_id, f.id]]>
+		<![CDATA[]]>
 	</queryString>
 	<field name="regNo" class="java.lang.String"/>
 	<field name="farmerName" class="java.lang.String"/>
