@@ -25,6 +25,8 @@
 	<parameter name="InlandMaster" class="java.lang.String"/>
 	<parameter name="appliNo" class="java.lang.String"/>
 	<parameter name="emptyFleet" class="java.lang.String"/>
+	<parameter name="routeNum" class="java.lang.String"/>
+	<parameter name="banglaDate" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
@@ -103,15 +105,16 @@
 	<pageHeader>
 		<band height="130" splitType="Stretch">
 			<textField>
-				<reportElement x="414" y="15" width="158" height="20" uuid="e781b50b-6efa-45ff-8bea-eb8fceef6e5f">
+				<reportElement x="454" y="15" width="118" height="15" uuid="e781b50b-6efa-45ff-8bea-eb8fceef6e5f">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font fontName="DejaVu Sans" size="10"/>
 					<paragraph leftIndent="0"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Date: "+$P{Date}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$P{Date}+" English"]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="0" y="15" width="414" height="20" uuid="69616eeb-cd7e-46e8-9989-ba1d964e20f7">
@@ -167,6 +170,36 @@
 				</textElement>
 				<textFieldExpression><![CDATA["Sub: Voyage Permission of " + $P{vesselName} + " for carriage of Transit goods under the protocol on Inland Water Transit & Trade between Bangladesh & India. "]]></textFieldExpression>
 			</textField>
+			<staticText>
+				<reportElement x="454" y="30" width="100" height="0" uuid="22b2db63-dbb2-4dee-8679-ba64861ad1d8">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.5" lineStyle="Solid"/>
+				</box>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="414" y="15" width="40" height="30" uuid="a4876f55-46ea-4086-b968-0c4710e2e999">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Date :- ]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="454" y="30" width="118" height="15" uuid="5e8603af-4652-4e44-887c-f688ab830f2c">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="10"/>
+					<paragraph leftIndent="0"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{banglaDate}+" Bangla"]]></textFieldExpression>
+			</textField>
 		</band>
 	</pageHeader>
 	<columnHeader>
@@ -192,7 +225,7 @@
 					<font fontName="DejaVu Sans" size="10"/>
 					<paragraph leftIndent="72"/>
 				</textElement>
-				<textFieldExpression><![CDATA["(2) IWAI Permission no."+$P{iwaiPermissionNo} +" Dated:"+$P{sutroTwoDate}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[""]]></textFieldExpression>
 			</textField>
 		</band>
 	</columnHeader>
@@ -207,7 +240,7 @@
 					<font fontName="DejaVu Sans" size="10" isItalic="false"/>
 					<paragraph leftIndent="50"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Voyage permission is hereby accorded in favour of your +$P{emptyFleet}+ named  " + $P{vesselName} + " under the guidance of " + $P{InlandMaster} + ". Permitted to proceed for " + $P{destination}+ " from " + $P{portofSailing}+ "  Via "+$P{nextPort}+ " through protocol under the particulars & conditions as follows: -"]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Voyage permission is hereby accorded in favour of your "+$P{emptyFleet}+" named " + $P{vesselName} + " under the guidance of " + $P{InlandMaster} + ". Permitted to proceed for "+$P{nextPort} + " from " + $P{portofSailing}+ " empty and return loaded through protocol " +$P{routeNum}+ " under the particulars & conditions as follows: -"]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="50" y="66" width="130" height="15" uuid="4540c7f2-41fc-40c0-8a4d-99da7bd97788">
@@ -300,19 +333,19 @@
 		</band>
 	</detail>
 	<summary>
-		<band height="501" splitType="Stretch">
+		<band height="522" splitType="Stretch">
 			<staticText>
-				<reportElement x="330" y="93" width="242" height="15" uuid="013b9457-03d8-4f8b-9de0-49358e6265fc">
+				<reportElement x="330" y="110" width="242" height="15" uuid="013b9457-03d8-4f8b-9de0-49358e6265fc">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="DejaVu Sans" size="10"/>
 				</textElement>
-				<text><![CDATA[Competent Authority on behalf of the Govt ]]></text>
+				<text><![CDATA[Competent Authority on behalf of the ]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="330" y="123" width="242" height="15" uuid="4718444b-5b90-4197-b9a7-1e08cb0a57d6">
+				<reportElement x="330" y="155" width="242" height="15" uuid="4718444b-5b90-4197-b9a7-1e08cb0a57d6">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
@@ -322,7 +355,7 @@
 				<text><![CDATA[Phone: 9513170, Fax: 9511302]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="330" y="138" width="242" height="15" uuid="851d7495-8dd6-47e4-ba4f-f6ac89092a0b">
+				<reportElement x="330" y="170" width="242" height="15" uuid="851d7495-8dd6-47e4-ba4f-f6ac89092a0b">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
@@ -332,7 +365,7 @@
 				<text><![CDATA[Email- protocolbiwta@gmail.com ]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="51" y="164" width="521" height="20" uuid="2fac96e6-8358-4714-b7dc-d6ced5201461">
+				<reportElement x="51" y="185" width="521" height="20" uuid="2fac96e6-8358-4714-b7dc-d6ced5201461">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
 				<textElement verticalAlignment="Middle">
@@ -341,17 +374,17 @@
 				<text><![CDATA[Copy for Information and Necessary action to (Not on seniority basis)]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="330" y="108" width="242" height="15" uuid="c06bff73-d706-4ce4-8301-ec6823316f92">
+				<reportElement x="330" y="125" width="242" height="15" uuid="c06bff73-d706-4ce4-8301-ec6823316f92">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="DejaVu Sans" size="10"/>
 				</textElement>
-				<text><![CDATA[between Bangladesh for the PIWT&T]]></text>
+				<text><![CDATA[Govt. of  Bangladesh for the PIWT&T]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="330" y="63" width="242" height="15" uuid="6bbfb4dc-6da6-4c5c-8765-43558510a5db">
+				<reportElement x="330" y="65" width="242" height="15" uuid="6bbfb4dc-6da6-4c5c-8765-43558510a5db">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
@@ -360,14 +393,14 @@
 				<textFieldExpression><![CDATA[$P{directorName}]]></textFieldExpression>
 			</textField>
 			<textField textAdjust="StretchHeight">
-				<reportElement x="51" y="184" width="521" height="317" uuid="8a616c1a-0699-40a6-9a69-81209e6e255e"/>
+				<reportElement x="51" y="205" width="521" height="317" uuid="8a616c1a-0699-40a6-9a69-81209e6e255e"/>
 				<textElement markup="html">
 					<font fontName="DejaVu Sans"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{orderOfAuthority}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="330" y="78" width="242" height="15" uuid="5980387e-b3e7-4edd-ab1f-b1522a51d081">
+				<reportElement x="330" y="80" width="242" height="15" uuid="5980387e-b3e7-4edd-ab1f-b1522a51d081">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
@@ -376,9 +409,40 @@
 				<textFieldExpression><![CDATA[$P{directorDesignation}]]></textFieldExpression>
 			</textField>
 			<image hAlign="Center">
-				<reportElement x="330" y="20" width="242" height="43" uuid="0e169048-e72c-419f-9ea5-8ee9415f1968"/>
+				<reportElement x="330" y="1" width="242" height="43" uuid="0e169048-e72c-419f-9ea5-8ee9415f1968"/>
 				<imageExpression><![CDATA[net.sf.jasperreports.engine.util.JRImageLoader.getInstance(new SimpleJasperReportsContext()).loadAwtImageFromBytes(Base64.getDecoder().decode($P{directorSignature}))]]></imageExpression>
 			</image>
+			<staticText>
+				<reportElement x="330" y="140" width="242" height="15" uuid="b244530f-8f35-47f7-ba66-5363f56e44ed">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="10"/>
+				</textElement>
+				<text><![CDATA[between Bangladesh & India]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="330" y="95" width="242" height="15" uuid="35b208f3-19d3-47f7-88f3-56b8bf06da43">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="10"/>
+				</textElement>
+				<text><![CDATA[&]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="330" y="45" width="242" height="20" uuid="3af7d0cc-e2fc-4dd2-a15f-a3e4c3e8d315">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="10"/>
+					<paragraph leftIndent="0"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Date: "+$P{Date}]]></textFieldExpression>
+			</textField>
 		</band>
 	</summary>
 </jasperReport>
