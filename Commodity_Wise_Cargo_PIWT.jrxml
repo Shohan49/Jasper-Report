@@ -6,6 +6,7 @@
 	<parameter name="fromYear" class="java.math.BigDecimal"/>
 	<parameter name="toYear" class="java.math.BigDecimal"/>
 	<parameter name="logo" class="java.lang.String"/>
+	<parameter name="companyName" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
@@ -73,53 +74,25 @@
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="144" splitType="Stretch">
+		<band height="131" splitType="Stretch">
 			<image>
-				<reportElement x="0" y="0" width="640" height="80" uuid="c0e9892e-9409-4988-bb34-698d1dbff7f1">
+				<reportElement x="72" y="0" width="79" height="80" uuid="c0e9892e-9409-4988-bb34-698d1dbff7f1">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
 				<imageExpression><![CDATA[net.sf.jasperreports.engine.util.JRImageLoader.getInstance(new SimpleJasperReportsContext()).loadAwtImageFromBytes(Base64.getDecoder().decode($P{logo}))]]></imageExpression>
 			</image>
 			<textField>
-				<reportElement x="0" y="74" width="640" height="15" uuid="83a6ffdd-c0f9-4c96-8e4d-9d3d393ff0e4"/>
-				<box>
-					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="SolaimanLipi" size="8" isBold="false"/>
-				</textElement>
-				<textFieldExpression><![CDATA["BITWA BHABAN, 141-143 Motijheel C/A, Dhaka-1000, Bangladesh."]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="0" y="59" width="640" height="15" uuid="ef5ed11a-7753-4c6c-a7e5-46d7fe973559">
-					<property name="com.jaspersoft.studio.unit.height" value="px"/>
-				</reportElement>
-				<box>
-					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="SolaimanLipi" size="8" isBold="false"/>
-				</textElement>
-				<textFieldExpression><![CDATA[" বিআইডব্লিউটিএ ভবন, ১৪১-১৪৩ মতিঝিল বাণিজ্যিক এলাকা, পোস্ট বক্স নং-৭৬, ঢাকা-১০০০, বাংলাদেশ।"]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="0" y="0" width="640" height="24" uuid="c5ee560f-d726-4681-bb85-cb0a8eefbe6e">
+				<reportElement x="0" y="106" width="640" height="25" uuid="781a4a0e-8cc4-4dde-920a-c251e5805d81">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="SolaimanLipi" size="18" isBold="true"/>
+					<font fontName="SolaimanLipi" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA["বাংলাদেশ অভ্যন্তরীণ নৌপরিবহন কর্তৃপক্ষ"]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Commodity wise  Cargo Trade under PIWT&T Since "+$P{fromYear}+" to "+$P{toYear}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="0" y="24" width="640" height="20" uuid="2d79f6d8-661b-4d51-8d0d-9c0db3893d1b">
+				<reportElement x="0" y="24" width="640" height="20" uuid="2b344115-553f-4b59-8f32-d54dfb703e67">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
@@ -128,7 +101,16 @@
 				<textFieldExpression><![CDATA["BANGLADESH INLAND WATER TRANSPORT AUTHORITY"]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="0" y="44" width="640" height="15" uuid="1dedcf72-c3ed-4868-947a-f634014b1f2b"/>
+				<reportElement x="0" y="0" width="640" height="24" uuid="7e814c6f-e4a1-4260-b811-30ce2e8be4e3">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SolaimanLipi" size="18" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["বাংলাদেশ অভ্যন্তরীণ নৌপরিবহন কর্তৃপক্ষ"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="44" width="640" height="15" uuid="99d433b1-5228-4b07-b4a3-f38039f7264c"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -141,13 +123,32 @@
 				<textFieldExpression><![CDATA[" Website: http://www.biwta.gov.bd  Facebook Page: https://www.facebook.com/biwtc"]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="0" y="106" width="640" height="25" uuid="781a4a0e-8cc4-4dde-920a-c251e5805d81">
+				<reportElement x="0" y="74" width="640" height="15" uuid="b78a8201-575d-4a03-b543-08be2e853f8b"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SolaimanLipi" size="8" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["BITWA BHABAN, 141-143 Motijheel C/A, Dhaka-1000, Bangladesh."]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="59" width="640" height="15" uuid="d829a9a9-08b5-4ad6-90f4-744dfcedbc99">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font isBold="true"/>
+					<font fontName="SolaimanLipi" size="8" isBold="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Commodity wise  Cargo Trade under PIWT&T Since "+$P{fromYear}+" to "+$P{toYear}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[" বিআইডব্লিউটিএ ভবন, ১৪১-১৪৩ মতিঝিল বাণিজ্যিক এলাকা, পোস্ট বক্স নং-৭৬, ঢাকা-১০০০, বাংলাদেশ।"]]></textFieldExpression>
 			</textField>
 		</band>
 	</title>
@@ -164,7 +165,7 @@
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font isBold="true"/>
+					<font fontName="SolaimanLipi" isBold="true"/>
 				</textElement>
 				<text><![CDATA[SL No]]></text>
 			</staticText>
@@ -179,7 +180,7 @@
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font isBold="true"/>
+					<font fontName="SolaimanLipi" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Particulars of 
 Performance ]]></text>
@@ -195,7 +196,7 @@ Performance ]]></text>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font isBold="true"/>
+					<font fontName="SolaimanLipi" isBold="true"/>
 				</textElement>
 				<text><![CDATA[2023-24 ]]></text>
 			</staticText>
@@ -210,7 +211,7 @@ Performance ]]></text>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font isBold="true"/>
+					<font fontName="SolaimanLipi" isBold="true"/>
 				</textElement>
 				<text><![CDATA[2024-25]]></text>
 			</staticText>
@@ -225,7 +226,7 @@ Performance ]]></text>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font isBold="true"/>
+					<font fontName="SolaimanLipi" isBold="true"/>
 				</textElement>
 				<text><![CDATA[2025-26 ]]></text>
 			</staticText>
@@ -240,7 +241,7 @@ Performance ]]></text>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font isBold="true"/>
+					<font fontName="SolaimanLipi" isBold="true"/>
 				</textElement>
 				<text><![CDATA[2026-27]]></text>
 			</staticText>
@@ -261,7 +262,7 @@ Performance ]]></text>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="solaiman lipi"/>
+					<font fontName="SolaimanLipi"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{inctotalQry072324}]]></textFieldExpression>
 			</textField>
@@ -277,7 +278,7 @@ Performance ]]></text>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="8" isBold="false"/>
+					<font fontName="SolaimanLipi" size="8" isBold="false"/>
 				</textElement>
 				<text><![CDATA[Quantity of Inter-Country 
 Cargo Carried (in m. ton) 
@@ -297,9 +298,9 @@ Vessels ]]></text>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="8" isBold="false"/>
+					<font fontName="SolaimanLipi" size="8" isBold="false"/>
 				</textElement>
-				<text><![CDATA[Quantum of Transit of 
+				<text><![CDATA[Quantity of Transit of 
 cargo carried (in m. ton) 
 (i) By Indian Vessels 
 (ii) By Bangladeshi 
@@ -317,7 +318,7 @@ Vessels ]]></text>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="solaiman lipi"/>
+					<font fontName="SolaimanLipi"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{incindQry072324}]]></textFieldExpression>
 			</textField>
@@ -333,7 +334,7 @@ Vessels ]]></text>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="solaiman lipi"/>
+					<font fontName="SolaimanLipi"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{incbdQry072324}]]></textFieldExpression>
 			</textField>
@@ -349,7 +350,7 @@ Vessels ]]></text>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="solaiman lipi"/>
+					<font fontName="SolaimanLipi"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{tindQry072324}]]></textFieldExpression>
 			</textField>
@@ -365,7 +366,7 @@ Vessels ]]></text>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="solaiman lipi"/>
+					<font fontName="SolaimanLipi"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{tbdQry072324}]]></textFieldExpression>
 			</textField>
@@ -382,7 +383,7 @@ Vessels ]]></text>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="solaiman lipi"/>
+					<font fontName="SolaimanLipi"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{ttotalQry072324}]]></textFieldExpression>
 			</textField>
@@ -398,7 +399,7 @@ Vessels ]]></text>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font isBold="true"/>
+					<font fontName="SolaimanLipi" isBold="true"/>
 				</textElement>
 				<text><![CDATA[A.]]></text>
 			</staticText>
@@ -414,7 +415,7 @@ Vessels ]]></text>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font isBold="true"/>
+					<font fontName="SolaimanLipi" isBold="true"/>
 				</textElement>
 				<text><![CDATA[B.]]></text>
 			</staticText>
@@ -430,9 +431,9 @@ Vessels ]]></text>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="8" isBold="false"/>
+					<font fontName="SolaimanLipi" size="8" isBold="false"/>
 				</textElement>
-				<text><![CDATA[Quantum of Trans Shipment of 
+				<text><![CDATA[Quantity of Trans Shipment of 
 cargo carried (in m. ton) 
 (i) By Indian Vessels 
 (ii) By Bangladeshi 
@@ -450,7 +451,7 @@ Vessels ]]></text>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font isBold="true"/>
+					<font fontName="SolaimanLipi" isBold="true"/>
 				</textElement>
 				<text><![CDATA[C.]]></text>
 			</staticText>
@@ -466,9 +467,9 @@ Vessels ]]></text>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="8" isBold="false"/>
+					<font fontName="SolaimanLipi" size="8" isBold="false"/>
 				</textElement>
-				<text><![CDATA[Quantum of Import of 
+				<text><![CDATA[Quantity of Import of 
 cargo carried (in m. ton) 
 (i) By Indian Vessels 
 (ii) By Bangladeshi 
@@ -486,7 +487,7 @@ Vessels ]]></text>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font isBold="true"/>
+					<font fontName="SolaimanLipi" isBold="true"/>
 				</textElement>
 				<text><![CDATA[D.]]></text>
 			</staticText>
@@ -502,9 +503,9 @@ Vessels ]]></text>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="8" isBold="false"/>
+					<font fontName="SolaimanLipi" size="8" isBold="false"/>
 				</textElement>
-				<text><![CDATA[Quantum of Export cargo 
+				<text><![CDATA[Quantity of Export cargo 
 carried (in m. ton) 
 (i) By Indian Vessels 
 (ii) By Bangladeshi 
@@ -522,7 +523,7 @@ Vessels]]></text>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font isBold="true"/>
+					<font fontName="SolaimanLipi" isBold="true"/>
 				</textElement>
 				<text><![CDATA[E.]]></text>
 			</staticText>
@@ -538,7 +539,7 @@ Vessels]]></text>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="solaiman lipi"/>
+					<font fontName="SolaimanLipi"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{tsmbdQry072324}]]></textFieldExpression>
 			</textField>
@@ -554,7 +555,7 @@ Vessels]]></text>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="solaiman lipi"/>
+					<font fontName="SolaimanLipi"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{tsmindQry072324}]]></textFieldExpression>
 			</textField>
@@ -571,7 +572,7 @@ Vessels]]></text>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="solaiman lipi"/>
+					<font fontName="SolaimanLipi"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{tsmtotalQry072324}]]></textFieldExpression>
 			</textField>
@@ -587,7 +588,7 @@ Vessels]]></text>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="solaiman lipi"/>
+					<font fontName="SolaimanLipi"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{bdImport072324}]]></textFieldExpression>
 			</textField>
@@ -603,7 +604,7 @@ Vessels]]></text>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="solaiman lipi"/>
+					<font fontName="SolaimanLipi"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{indImport072324}]]></textFieldExpression>
 			</textField>
@@ -620,7 +621,7 @@ Vessels]]></text>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="solaiman lipi"/>
+					<font fontName="SolaimanLipi"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{importTotal072324}]]></textFieldExpression>
 			</textField>
@@ -636,7 +637,7 @@ Vessels]]></text>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="solaiman lipi"/>
+					<font fontName="SolaimanLipi"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{bdExport072324}]]></textFieldExpression>
 			</textField>
@@ -652,7 +653,7 @@ Vessels]]></text>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="solaiman lipi"/>
+					<font fontName="SolaimanLipi"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{indExport072324}]]></textFieldExpression>
 			</textField>
@@ -669,7 +670,7 @@ Vessels]]></text>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="solaiman lipi"/>
+					<font fontName="SolaimanLipi"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{exportTotal072324}]]></textFieldExpression>
 			</textField>
@@ -685,7 +686,7 @@ Vessels]]></text>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="solaiman lipi"/>
+					<font fontName="SolaimanLipi"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{bdExport072425}]]></textFieldExpression>
 			</textField>
@@ -701,7 +702,7 @@ Vessels]]></text>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="solaiman lipi"/>
+					<font fontName="SolaimanLipi"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{tbdQry072425}]]></textFieldExpression>
 			</textField>
@@ -717,7 +718,7 @@ Vessels]]></text>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="solaiman lipi"/>
+					<font fontName="SolaimanLipi"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{tsmindQry072425}]]></textFieldExpression>
 			</textField>
@@ -733,7 +734,7 @@ Vessels]]></text>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="solaiman lipi"/>
+					<font fontName="SolaimanLipi"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{bdImport072425}]]></textFieldExpression>
 			</textField>
@@ -749,7 +750,7 @@ Vessels]]></text>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="solaiman lipi"/>
+					<font fontName="SolaimanLipi"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{tindQry072425}]]></textFieldExpression>
 			</textField>
@@ -766,7 +767,7 @@ Vessels]]></text>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="solaiman lipi"/>
+					<font fontName="SolaimanLipi"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{ttotalQry072425}]]></textFieldExpression>
 			</textField>
@@ -783,7 +784,7 @@ Vessels]]></text>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="solaiman lipi"/>
+					<font fontName="SolaimanLipi"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{tsmtotalQry072425}]]></textFieldExpression>
 			</textField>
@@ -799,7 +800,7 @@ Vessels]]></text>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="solaiman lipi"/>
+					<font fontName="SolaimanLipi"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{indImport072425}]]></textFieldExpression>
 			</textField>
@@ -815,7 +816,7 @@ Vessels]]></text>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="solaiman lipi"/>
+					<font fontName="SolaimanLipi"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{incindQry072425}]]></textFieldExpression>
 			</textField>
@@ -831,7 +832,7 @@ Vessels]]></text>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="solaiman lipi"/>
+					<font fontName="SolaimanLipi"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{tsmbdQry072425}]]></textFieldExpression>
 			</textField>
@@ -848,7 +849,7 @@ Vessels]]></text>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="solaiman lipi"/>
+					<font fontName="SolaimanLipi"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{exportTotal072425}]]></textFieldExpression>
 			</textField>
@@ -865,7 +866,7 @@ Vessels]]></text>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="solaiman lipi"/>
+					<font fontName="SolaimanLipi"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{importTotal072425}]]></textFieldExpression>
 			</textField>
@@ -881,7 +882,7 @@ Vessels]]></text>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="solaiman lipi"/>
+					<font fontName="SolaimanLipi"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{indExport072425}]]></textFieldExpression>
 			</textField>
@@ -897,7 +898,7 @@ Vessels]]></text>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="solaiman lipi"/>
+					<font fontName="SolaimanLipi"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{incbdQry072425}]]></textFieldExpression>
 			</textField>
@@ -914,7 +915,7 @@ Vessels]]></text>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="solaiman lipi"/>
+					<font fontName="SolaimanLipi"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{inctotalQry072425}]]></textFieldExpression>
 			</textField>
@@ -930,7 +931,7 @@ Vessels]]></text>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="solaiman lipi"/>
+					<font fontName="SolaimanLipi"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{indExport072526}]]></textFieldExpression>
 			</textField>
@@ -947,7 +948,7 @@ Vessels]]></text>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="solaiman lipi"/>
+					<font fontName="SolaimanLipi"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{exportTotal072526}]]></textFieldExpression>
 			</textField>
@@ -964,7 +965,7 @@ Vessels]]></text>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="solaiman lipi"/>
+					<font fontName="SolaimanLipi"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{tsmtotalQry072526}]]></textFieldExpression>
 			</textField>
@@ -980,7 +981,7 @@ Vessels]]></text>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="solaiman lipi"/>
+					<font fontName="SolaimanLipi"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{indImport072526}]]></textFieldExpression>
 			</textField>
@@ -996,7 +997,7 @@ Vessels]]></text>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="solaiman lipi"/>
+					<font fontName="SolaimanLipi"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{tbdQry072526}]]></textFieldExpression>
 			</textField>
@@ -1012,7 +1013,7 @@ Vessels]]></text>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="solaiman lipi"/>
+					<font fontName="SolaimanLipi"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{tsmindQry072526}]]></textFieldExpression>
 			</textField>
@@ -1028,7 +1029,7 @@ Vessels]]></text>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="solaiman lipi"/>
+					<font fontName="SolaimanLipi"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{tindQry072526}]]></textFieldExpression>
 			</textField>
@@ -1044,7 +1045,7 @@ Vessels]]></text>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="solaiman lipi"/>
+					<font fontName="SolaimanLipi"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{bdExport072526}]]></textFieldExpression>
 			</textField>
@@ -1061,7 +1062,7 @@ Vessels]]></text>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="solaiman lipi"/>
+					<font fontName="SolaimanLipi"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{ttotalQry072526}]]></textFieldExpression>
 			</textField>
@@ -1078,7 +1079,7 @@ Vessels]]></text>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="solaiman lipi"/>
+					<font fontName="SolaimanLipi"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{inctotalQry072526}]]></textFieldExpression>
 			</textField>
@@ -1094,7 +1095,7 @@ Vessels]]></text>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="solaiman lipi"/>
+					<font fontName="SolaimanLipi"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{incindQry072526}]]></textFieldExpression>
 			</textField>
@@ -1111,7 +1112,7 @@ Vessels]]></text>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="solaiman lipi"/>
+					<font fontName="SolaimanLipi"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{importTotal072526}]]></textFieldExpression>
 			</textField>
@@ -1127,7 +1128,7 @@ Vessels]]></text>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="solaiman lipi"/>
+					<font fontName="SolaimanLipi"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{incbdQry072526}]]></textFieldExpression>
 			</textField>
@@ -1143,7 +1144,7 @@ Vessels]]></text>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="solaiman lipi"/>
+					<font fontName="SolaimanLipi"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{tsmbdQry072526}]]></textFieldExpression>
 			</textField>
@@ -1159,7 +1160,7 @@ Vessels]]></text>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="solaiman lipi"/>
+					<font fontName="SolaimanLipi"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{bdImport072526}]]></textFieldExpression>
 			</textField>
@@ -1175,7 +1176,7 @@ Vessels]]></text>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="solaiman lipi"/>
+					<font fontName="SolaimanLipi"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{indExport072627}]]></textFieldExpression>
 			</textField>
@@ -1192,7 +1193,7 @@ Vessels]]></text>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="solaiman lipi"/>
+					<font fontName="SolaimanLipi"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{exportTotal072627}]]></textFieldExpression>
 			</textField>
@@ -1209,7 +1210,7 @@ Vessels]]></text>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="solaiman lipi"/>
+					<font fontName="SolaimanLipi"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{tsmtotalQry072627}]]></textFieldExpression>
 			</textField>
@@ -1225,7 +1226,7 @@ Vessels]]></text>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="solaiman lipi"/>
+					<font fontName="SolaimanLipi"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{indImport072627}]]></textFieldExpression>
 			</textField>
@@ -1241,7 +1242,7 @@ Vessels]]></text>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="solaiman lipi"/>
+					<font fontName="SolaimanLipi"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{tbdQry072627}]]></textFieldExpression>
 			</textField>
@@ -1257,7 +1258,7 @@ Vessels]]></text>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="solaiman lipi"/>
+					<font fontName="SolaimanLipi"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{tsmindQry072627}]]></textFieldExpression>
 			</textField>
@@ -1273,7 +1274,7 @@ Vessels]]></text>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="solaiman lipi"/>
+					<font fontName="SolaimanLipi"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{tindQry072627}]]></textFieldExpression>
 			</textField>
@@ -1289,7 +1290,7 @@ Vessels]]></text>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="solaiman lipi"/>
+					<font fontName="SolaimanLipi"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{bdExport072627}]]></textFieldExpression>
 			</textField>
@@ -1306,7 +1307,7 @@ Vessels]]></text>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="solaiman lipi"/>
+					<font fontName="SolaimanLipi"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{ttotalQry072627}]]></textFieldExpression>
 			</textField>
@@ -1323,7 +1324,7 @@ Vessels]]></text>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="solaiman lipi"/>
+					<font fontName="SolaimanLipi"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{inctotalQry072627}]]></textFieldExpression>
 			</textField>
@@ -1339,7 +1340,7 @@ Vessels]]></text>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="solaiman lipi"/>
+					<font fontName="SolaimanLipi"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{incindQry072627}]]></textFieldExpression>
 			</textField>
@@ -1356,7 +1357,7 @@ Vessels]]></text>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="solaiman lipi"/>
+					<font fontName="SolaimanLipi"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{importTotal072627}]]></textFieldExpression>
 			</textField>
@@ -1372,7 +1373,7 @@ Vessels]]></text>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="solaiman lipi"/>
+					<font fontName="SolaimanLipi"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{incbdQry072627}]]></textFieldExpression>
 			</textField>
@@ -1388,7 +1389,7 @@ Vessels]]></text>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="solaiman lipi"/>
+					<font fontName="SolaimanLipi"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{tsmbdQry072627}]]></textFieldExpression>
 			</textField>
@@ -1404,7 +1405,7 @@ Vessels]]></text>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="solaiman lipi"/>
+					<font fontName="SolaimanLipi"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{bdImport072627}]]></textFieldExpression>
 			</textField>
