@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.20.0.final using JasperReports Library version 6.20.0-2bc7ab61c56f459e8176eb05c7705e145cd400ad  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Master_Report_DXO" pageWidth="3360" pageHeight="1012" orientation="Landscape" columnWidth="3320" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="5dbb0a83-c304-4bd7-9929-9b67580c500b">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+	<property name="com.jaspersoft.studio.unit." value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageHeight" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.topMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.bottomMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.leftMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.rightMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnSpacing" value="pixel"/>
+	<import value="net.sf.jasperreports.engine.data.JRBeanCollectionDataSource"/>
+	<parameter name="DX_Daily_Report" class="java.util.List"/>
+	<parameter name="Product_Category_Wise_Surveyed_Outlets" class="java.util.List"/>
+	<parameter name="subreport1" class="java.lang.String"/>
+	<parameter name="subreport2" class="java.lang.String"/>
+	<parameter name="targetDate" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="30" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="3320" height="30" uuid="ad4805fa-7c77-4c7c-91c7-b060dbeef9f7"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[DX Daily Report]]></text>
+			</staticText>
+		</band>
+	</title>
+	<detail>
+		<band height="590" splitType="Stretch">
+			<subreport>
+				<reportElement x="0" y="0" width="3320" height="200" uuid="a4539a15-140f-4e55-be2f-79e8f4dcad87"/>
+				<subreportParameter name="targetDate">
+					<subreportParameterExpression><![CDATA[$P{targetDate}]]></subreportParameterExpression>
+				</subreportParameter>
+				<dataSourceExpression><![CDATA[new JRBeanCollectionDataSource($P{DX_Daily_Report})]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$P{subreport1}]]></subreportExpression>
+			</subreport>
+			<subreport>
+				<reportElement x="0" y="390" width="3320" height="200" uuid="b0d9e956-5b33-409e-87b6-0371a001a4a1"/>
+				<subreportParameter name="targetDate">
+					<subreportParameterExpression><![CDATA[$P{targetDate}]]></subreportParameterExpression>
+				</subreportParameter>
+				<dataSourceExpression><![CDATA[new JRBeanCollectionDataSource($P{Product_Category_Wise_Surveyed_Outlets})]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$P{subreport2}]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+</jasperReport>
