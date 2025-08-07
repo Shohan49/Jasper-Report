@@ -1,37 +1,141 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.20.0.final using JasperReports Library version 6.20.0-2bc7ab61c56f459e8176eb05c7705e145cd400ad  -->
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Air_Compressor" pageWidth="1111" pageHeight="612" orientation="Landscape" columnWidth="752" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="71f2051a-142e-4fff-8fe9-a6c67f6115d0">
-	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="PRODUCTION_IOT_DB"/>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Air_Compressor" pageWidth="1550" pageHeight="612" orientation="Landscape" columnWidth="1510" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="71f2051a-142e-4fff-8fe9-a6c67f6115d0">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
-	<property name="com.jaspersoft.studio.unit." value="pixel"/>
-	<property name="com.jaspersoft.studio.unit.pageHeight" value="pixel"/>
-	<property name="com.jaspersoft.studio.unit.pageWidth" value="pixel"/>
-	<property name="com.jaspersoft.studio.unit.topMargin" value="pixel"/>
-	<property name="com.jaspersoft.studio.unit.bottomMargin" value="pixel"/>
-	<property name="com.jaspersoft.studio.unit.leftMargin" value="pixel"/>
-	<property name="com.jaspersoft.studio.unit.rightMargin" value="pixel"/>
-	<property name="com.jaspersoft.studio.unit.columnWidth" value="pixel"/>
-	<property name="com.jaspersoft.studio.unit.columnSpacing" value="pixel"/>
 	<parameter name="targetDate" class="java.lang.String"/>
 	<queryString>
-		<![CDATA[]]>
+		<![CDATA[SELECT id,
+       equipmentName,
+       airConsumption,
+       ISNULL(FORMAT(max_wsfr_time, 'dd-MMM-yy hh:mm:ss tt'), 'N/A')  AS maxAirFlowTime,
+       ISNULL(max_wsfr, 0)                                            AS airMaxFlowRate,
+       ISNULL(FORMAT(min_wsfr_time, 'dd-MMM-yy hh:mm:ss tt'), 'N/A')  AS minAirFlowTime,
+       ISNULL(min_wsfr, 0)                                            AS airMinFlowRate,
+       ISNULL(FORMAT(max_temp_time, 'dd-MMM-yy hh:mm:ss tt'), 'N/A')  AS maxTemperatureTime,
+       ISNULL(max_temp, 0)                                            AS maxTemperature,
+       ISNULL(FORMAT(min_temp_time, 'dd-MMM-yy hh:mm:ss tt'), 'N/A')  AS minTemperatureTime,
+       ISNULL(min_temp, 0)                                            AS minTemperature,
+
+       ISNULL(FORMAT(max_press_time, 'dd-MMM-yy hh:mm:ss tt'), 'N/A') AS maxPressureTime,
+       ISNULL(max_press, 0)                                           AS maxPressure,
+       ISNULL(FORMAT(min_press_time, 'dd-MMM-yy hh:mm:ss tt'), 'N/A') AS minPressureTime,
+       ISNULL(min_press, 0)                                           AS minPressure
+FROM (SELECT d.id,
+             d.name                                                                     AS equipmentName,
+             ISNULL(MAX(dr.compressor_consumption) - MIN(dr.compressor_consumption), 0) AS airConsumption,
+             wsfrMax.max_wsfr_time,
+             wsfrMax.max_wsfr,
+             wsfrMin.min_wsfr_time,
+             wsfrMin.min_wsfr,
+             tempMax.max_temp_time,
+             tempMax.max_temp,
+             tempMin.min_temp_time,
+             tempMin.min_temp,
+             pressMax.max_press_time,
+             pressMax.max_press,
+             pressMin.min_press_time,
+             pressMin.min_press
+
+      FROM device_type dt
+               LEFT JOIN
+           device d ON dt.id = d.device_type_id
+               AND dt.parent_id = 102
+               AND d.unit_id = :unitId
+               AND d.device_type_id = 1005
+               AND d.is_active = 1
+               LEFT JOIN
+           device_reading dr ON d.id = dr.device_id
+               AND CONVERT(DATE, dr.date_time) = $P{targetDate}
+               LEFT JOIN (SELECT device_id,
+                                 max_wsfr_time,
+                                 max_wsfr
+                          FROM (SELECT dr.id,
+                                       dr.device_id,
+                                       dr.date_time                                                                        AS max_wsfr_time,
+                                       dr.compressor_flow_rate                                                             AS max_wsfr,
+                                       ROW_NUMBER() OVER (PARTITION BY dr.device_id ORDER BY dr.compressor_flow_rate DESC) AS rank_id
+                                FROM device_reading dr
+                                WHERE CONVERT(DATE, dr.date_time) = $P{targetDate}) AS ranked
+                          WHERE rank_id = 1) AS wsfrMax ON d.id = wsfrMax.device_id
+               LEFT JOIN (SELECT device_id,
+                                 min_wsfr_time,
+                                 min_wsfr
+                          FROM (SELECT dr.id,
+                                       dr.device_id,
+                                       dr.date_time                                                                              AS min_wsfr_time,
+                                       dr.compressor_flow_rate                                                                   AS min_wsfr,
+                                       ROW_NUMBER() OVER (PARTITION BY dr.device_id ORDER BY dr.compressor_flow_rate ASC, dr.id) AS rank_id
+                                FROM device_reading dr
+                                WHERE CONVERT(DATE, dr.date_time) = $P{targetDate}) AS ranked
+                          WHERE rank_id = 1) AS wsfrMin ON d.id = wsfrMin.device_id
+               LEFT JOIN (SELECT device_id,
+                                 max_temp_time,
+                                 max_temp
+                          FROM (SELECT dr.id,
+                                       dr.device_id,
+                                       dr.date_time                                                                               AS max_temp_time,
+                                       dr.compressor_dis_temp                                                                     AS max_temp,
+                                       ROW_NUMBER() OVER (PARTITION BY dr.device_id ORDER BY dr.compressor_dis_temp DESC , dr.id) AS rank_id
+                                FROM device_reading dr
+                                WHERE CONVERT(DATE, dr.date_time) = $P{targetDate}) AS ranked
+                          WHERE rank_id = 1) AS tempMax ON d.id = tempMax.device_id
+               LEFT JOIN (SELECT device_id,
+                                 min_temp_time,
+                                 min_temp
+                          FROM (SELECT dr.id,
+                                       dr.device_id,
+                                       dr.date_time                                                                          AS min_temp_time,
+                                       dr.compressor_dis_temp                                                                AS min_temp,
+                                       ROW_NUMBER() OVER (PARTITION BY dr.device_id ORDER BY dr.compressor_dis_temp , dr.id) AS rank_id
+                                FROM device_reading dr
+                                WHERE CONVERT(DATE, dr.date_time) = $P{targetDate}) AS ranked
+                          WHERE rank_id = 1) AS tempMin ON d.id = tempMin.device_id
+               LEFT JOIN (SELECT device_id,
+                                 max_press_time,
+                                 max_press
+                          FROM (SELECT dr.id,
+                                       dr.device_id,
+                                       dr.date_time                                                                                   AS max_press_time,
+                                       dr.compressor_dis_pressure                                                                     AS max_press,
+                                       ROW_NUMBER() OVER (PARTITION BY dr.device_id ORDER BY dr.compressor_dis_pressure DESC , dr.id) AS rank_id
+                                FROM device_reading dr
+                                WHERE CONVERT(DATE, dr.date_time) = $P{targetDate}) AS ranked
+                          WHERE rank_id = 1) AS pressMax ON d.id = pressMax.device_id
+               LEFT JOIN (SELECT device_id,
+                                 min_press_time,
+                                 min_press
+                          FROM (SELECT dr.id,
+                                       dr.device_id,
+                                       dr.date_time                                                                              AS min_press_time,
+                                       dr.compressor_dis_pressure                                                                AS min_press,
+                                       ROW_NUMBER() OVER (PARTITION BY dr.device_id ORDER BY dr.compressor_dis_pressure , dr.id) AS rank_id
+                                FROM device_reading dr
+                                WHERE CONVERT(DATE, dr.date_time) = $P{targetDate}) AS ranked
+                          WHERE rank_id = 1) AS pressMin ON d.id = pressMin.device_id
+      GROUP BY d.id, d.name, wsfrMax.max_wsfr_time, wsfrMax.max_wsfr, wsfrMin.min_wsfr_time, wsfrMin.min_wsfr,
+               tempMax.max_temp_time, tempMax.max_temp, tempMin.min_temp_time, tempMin.min_temp,
+               pressMax.max_press_time, pressMax.max_press, pressMin.min_press_time,
+               pressMin.min_press) AS consumptionData
+WHERE id IS NOT NULL
+ORDER BY id
+;]]>
 	</queryString>
 	<field name="equipmentName" class="java.lang.String"/>
 	<field name="maxPressureTime" class="java.lang.String"/>
 	<field name="maxPressure" class="java.lang.String"/>
-	<field name="minPressureTime" class="java.lang.String"/>
-	<field name="minPressure" class="java.lang.String"/>
-	<field name="maxTempTime" class="java.lang.String"/>
-	<field name="maxTemp" class="java.lang.String"/>
-	<field name="minTempTime" class="java.lang.String"/>
-	<field name="minTemp" class="java.lang.String"/>
+	<field name="maxTemperatureTime" class="java.lang.String"/>
+	<field name="maxTemperature" class="java.lang.String"/>
+	<field name="airConsumption" class="java.lang.String"/>
+	<field name="maxAirFlowTime" class="java.lang.String"/>
+	<field name="airMaxFlowRate" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
 	<title>
 		<band height="30" splitType="Stretch">
 			<staticText>
-				<reportElement x="0" y="0" width="290" height="30" uuid="9f9c14b4-a0c1-4ab3-a431-9522ec2e7637">
+				<reportElement x="0" y="0" width="1099" height="30" uuid="9f9c14b4-a0c1-4ab3-a431-9522ec2e7637">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
 				</reportElement>
@@ -42,7 +146,7 @@
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font size="10" isBold="true"/>
+					<font size="18" isBold="true"/>
 					<paragraph leftIndent="5"/>
 				</textElement>
 				<text><![CDATA[Air Compressor]]></text>
@@ -52,20 +156,7 @@
 	<columnHeader>
 		<band height="30" splitType="Stretch">
 			<staticText>
-				<reportElement mode="Opaque" x="730" y="0" width="120" height="30" backcolor="#FFFFFF" uuid="4687087e-d165-4caa-b676-2fc090aa9a21"/>
-				<box>
-					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font isBold="true"/>
-				</textElement>
-				<text><![CDATA[Max Temperature Time]]></text>
-			</staticText>
-			<staticText>
-				<reportElement mode="Opaque" x="40" y="0" width="150" height="30" backcolor="#FFFFFF" uuid="75714fe4-d9b1-4995-98ef-bc3b95d2af7f">
+				<reportElement mode="Opaque" x="1320" y="0" width="190" height="30" backcolor="#DBD7D7" uuid="4687087e-d165-4caa-b676-2fc090aa9a21">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<box>
@@ -75,12 +166,27 @@
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font isBold="true"/>
+					<font size="13" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Time]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="40" y="0" width="180" height="30" backcolor="#DBD7D7" uuid="75714fe4-d9b1-4995-98ef-bc3b95d2af7f">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="13" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Equipment Name]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="410" y="0" width="100" height="30" backcolor="#FFFFFF" uuid="38e6a0d8-00d8-4a89-9af3-671311978c02">
+				<reportElement mode="Opaque" x="920" y="0" width="200" height="30" backcolor="#DBD7D7" uuid="96ec84b0-74d6-48e6-ab09-71d993e49855">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<box>
@@ -90,12 +196,12 @@
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font isBold="true"/>
+					<font size="13" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Min Pressure]]></text>
+				<text><![CDATA[Time]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="290" y="0" width="120" height="30" backcolor="#FFFFFF" uuid="96ec84b0-74d6-48e6-ab09-71d993e49855">
+				<reportElement mode="Opaque" x="0" y="0" width="40" height="30" backcolor="#DBD7D7" uuid="82344237-0571-4b97-9b62-4761d4f2eb17">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<box>
@@ -105,27 +211,12 @@
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font isBold="true"/>
-				</textElement>
-				<text><![CDATA[Max Pressure Time]]></text>
-			</staticText>
-			<staticText>
-				<reportElement mode="Opaque" x="0" y="0" width="40" height="30" backcolor="#FFFFFF" uuid="82344237-0571-4b97-9b62-4761d4f2eb17">
-					<property name="com.jaspersoft.studio.unit.width" value="px"/>
-				</reportElement>
-				<box>
-					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font isBold="true"/>
+					<font size="14" isBold="true"/>
 				</textElement>
 				<text><![CDATA[SL No]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="630" y="0" width="100" height="30" backcolor="#FFFFFF" uuid="4df57ffb-babc-4750-84f0-8f92551e7248">
+				<reportElement mode="Opaque" x="1120" y="0" width="200" height="30" backcolor="#DBD7D7" uuid="4df57ffb-babc-4750-84f0-8f92551e7248">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<box>
@@ -135,12 +226,12 @@
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font isBold="true"/>
+					<font size="13" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Max Temperature ]]></text>
+				<text><![CDATA[Max Temperature (°C)]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="190" y="0" width="100" height="30" backcolor="#FFFFFF" uuid="308cac87-394b-48df-acb6-51e00afbc3d2">
+				<reportElement mode="Opaque" x="760" y="0" width="160" height="30" backcolor="#DBD7D7" uuid="308cac87-394b-48df-acb6-51e00afbc3d2">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<box>
@@ -150,25 +241,12 @@
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font isBold="true"/>
+					<font size="13" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Max Pressure]]></text>
+				<text><![CDATA[Max Pressure (MPa)]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="510" y="0" width="120" height="30" backcolor="#FFFFFF" uuid="25bfe320-5290-4963-ad7e-34a5a8f75c19"/>
-				<box>
-					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font isBold="true"/>
-				</textElement>
-				<text><![CDATA[Min Pressure Time]]></text>
-			</staticText>
-			<staticText>
-				<reportElement mode="Opaque" x="850" y="0" width="100" height="30" backcolor="#FFFFFF" uuid="7c395911-0f9a-499c-a2d7-1048fa2726fa">
+				<reportElement mode="Opaque" x="220" y="0" width="170" height="30" backcolor="#DBD7D7" uuid="111d968b-d975-4980-b760-bd67ebbb8933">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<box>
@@ -178,12 +256,14 @@
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font isBold="true"/>
+					<font size="13" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Min Temperature ]]></text>
+				<text><![CDATA[Air Consumption (m³)]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="950" y="0" width="120" height="30" backcolor="#FFFFFF" uuid="baca9830-98f8-4910-8696-b01d7dbb3c26"/>
+				<reportElement mode="Opaque" x="590" y="0" width="170" height="30" backcolor="#DBD7D7" uuid="4ea4c048-4ac4-4fcc-8332-fda8564bee3a">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -191,17 +271,34 @@
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font isBold="true"/>
+					<font size="13" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Min Temperature Time]]></text>
+				<text><![CDATA[Time]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="390" y="0" width="200" height="30" backcolor="#DBD7D7" uuid="011b84c5-8763-4433-bf3b-89e4c57c6c49">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="13" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Max Air Flow Rate (m³/hr)]]></text>
 			</staticText>
 		</band>
 	</columnHeader>
 	<detail>
 		<band height="20" splitType="Stretch">
 			<textField isBlankWhenNull="true">
-				<reportElement x="290" y="0" width="120" height="20" uuid="496cfb25-4c1f-45a8-9fe8-0f623f388f87">
+				<reportElement x="920" y="0" width="200" height="20" uuid="496cfb25-4c1f-45a8-9fe8-0f623f388f87">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
 				</reportElement>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -209,7 +306,10 @@
 					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="13"/>
+					<paragraph leftIndent="3"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{maxPressureTime}]]></textFieldExpression>
 			</textField>
 			<textField>
@@ -222,38 +322,15 @@
 					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="13"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$V{REPORT_COUNT}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="730" y="0" width="120" height="20" uuid="b67f5cf2-c8ec-4141-ac59-7a8856ebbac3">
+				<reportElement x="1320" y="0" width="190" height="20" uuid="b67f5cf2-c8ec-4141-ac59-7a8856ebbac3">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
-				</reportElement>
-				<box>
-					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$F{maxTempTime}]]></textFieldExpression>
-			</textField>
-			<textField isBlankWhenNull="true">
-				<reportElement x="510" y="0" width="120" height="20" uuid="3c9217e4-5e92-46a1-9794-096ee1b9f7ed">
-					<property name="com.jaspersoft.studio.unit.height" value="px"/>
-				</reportElement>
-				<box>
-					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$F{minPressureTime}]]></textFieldExpression>
-			</textField>
-			<textField isBlankWhenNull="true">
-				<reportElement x="630" y="0" width="100" height="20" uuid="55b17fc2-1dd7-4426-be4d-887b17c67beb">
-					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<box>
@@ -262,13 +339,15 @@
 					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$F{maxTemp}]]></textFieldExpression>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="13"/>
+					<paragraph leftIndent="3"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{maxTemperatureTime}]]></textFieldExpression>
 			</textField>
-			<textField isBlankWhenNull="true">
-				<reportElement mode="Opaque" x="40" y="0" width="150" height="20" backcolor="#FFFFFF" uuid="9ff02693-4df5-444f-9ecc-2846aab65f1e">
+			<textField pattern="0.00" isBlankWhenNull="true">
+				<reportElement x="1120" y="0" width="200" height="20" uuid="55b17fc2-1dd7-4426-be4d-887b17c67beb">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
-					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -276,13 +355,29 @@
 					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{maxTemperature}]]></textFieldExpression>
+			</textField>
+			<textField pattern="0.00" isBlankWhenNull="true">
+				<reportElement mode="Opaque" x="40" y="0" width="180" height="20" backcolor="#FFFFFF" uuid="9ff02693-4df5-444f-9ecc-2846aab65f1e">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="13"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{equipmentName}]]></textFieldExpression>
 			</textField>
-			<textField isBlankWhenNull="true">
-				<reportElement x="410" y="0" width="100" height="20" uuid="56a3cc54-081b-4b54-a59b-867cb6f8a03a">
+			<textField pattern="0.00" isBlankWhenNull="true">
+				<reportElement x="760" y="0" width="160" height="20" uuid="2dcf1baa-a85c-43dd-8d66-e93438b2c23a">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
-					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -290,27 +385,16 @@
 					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$F{minPressure}]]></textFieldExpression>
-			</textField>
-			<textField isBlankWhenNull="true">
-				<reportElement x="190" y="0" width="100" height="20" uuid="2dcf1baa-a85c-43dd-8d66-e93438b2c23a">
-					<property name="com.jaspersoft.studio.unit.height" value="px"/>
-					<property name="com.jaspersoft.studio.unit.width" value="px"/>
-				</reportElement>
-				<box>
-					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="13"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{maxPressure}]]></textFieldExpression>
 			</textField>
-			<textField isBlankWhenNull="true">
-				<reportElement x="850" y="0" width="100" height="20" uuid="c3cf79a6-a848-44ec-a705-21112263ef5a">
+			<textField pattern="0.00" isBlankWhenNull="true">
+				<reportElement x="220" y="0" width="170" height="20" uuid="8a6d65f4-2349-47a3-8acb-2ea9fefbdf22">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
 				</reportElement>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -318,12 +402,17 @@
 					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$F{minTemp}]]></textFieldExpression>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="13"/>
+					<paragraph leftIndent="3"/>
+				</textElement>
+				<textFieldExpression><![CDATA[Double.valueOf($F{airConsumption})]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="950" y="0" width="120" height="20" uuid="e71ec6f0-3565-4f64-b4ca-75aae1848ae6">
+				<reportElement x="590" y="0" width="170" height="20" uuid="f4bf1239-2992-4a95-aeae-e29b52ec6162">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
 				</reportElement>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -331,8 +420,28 @@
 					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$F{minTempTime}]]></textFieldExpression>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="13"/>
+					<paragraph leftIndent="3"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{maxAirFlowTime}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="390" y="0" width="200" height="20" uuid="c094a0a8-f9f9-41a9-a13b-5dba07b921bc">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="13"/>
+					<paragraph leftIndent="3"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{airMaxFlowRate}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
