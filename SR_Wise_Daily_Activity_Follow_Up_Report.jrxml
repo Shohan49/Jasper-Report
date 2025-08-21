@@ -1,8 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.20.0.final using JasperReports Library version 6.20.0-2bc7ab61c56f459e8176eb05c7705e145cd400ad  -->
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SR_Wise_Daily_Activity_Follow_Up_Report" pageWidth="850" pageHeight="812" orientation="Landscape" columnWidth="810" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="fc62d95c-0b89-41b2-8b09-30c5311e7d88">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SR_Wise_Daily_Activity_Follow_Up_Report" pageWidth="1155" pageHeight="812" orientation="Landscape" columnWidth="1115" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="fc62d95c-0b89-41b2-8b09-30c5311e7d88">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="TEST_SM"/>
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<style name="Style1">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$F{srProductReceived}.subtract($F{salesClose}).compareTo(java.math.BigDecimal.ZERO) > 0]]></conditionExpression>
+			<style mode="Opaque" backcolor="#CC4343"/>
+		</conditionalStyle>
+	</style>
+	<style name="Style2">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$F{salesUnit}.subtract(($F{srSalesActivity}.add($F{tsoSalesActivity}))).compareTo(java.math.BigDecimal.ZERO) > 0]]></conditionExpression>
+			<style mode="Opaque" backcolor="#F05656"/>
+		</conditionalStyle>
+	</style>
 	<parameter name="targetDate" class="java.time.LocalDate"/>
 	<queryString>
 		<![CDATA[]]>
@@ -188,6 +200,38 @@
 					</textElement>
 					<textFieldExpression><![CDATA[$V{salesUnit_1}]]></textFieldExpression>
 				</textField>
+				<textField>
+					<reportElement mode="Opaque" x="815" y="0" width="150" height="20" backcolor="#68A042" uuid="e1d16b71-3f21-48fa-b4d2-510fa72a1114">
+						<property name="com.jaspersoft.studio.unit.height" value="px"/>
+						<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					</reportElement>
+					<box>
+						<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{srProductReceived_1}.subtract($V{salesClose_1})]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement mode="Opaque" x="965" y="0" width="150" height="20" backcolor="#68A042" uuid="c8982f82-b012-47fe-8ac2-fbdfa0f05d4d">
+						<property name="com.jaspersoft.studio.unit.height" value="px"/>
+						<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					</reportElement>
+					<box>
+						<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{salesUnit_2}.subtract($V{srSalesActivity_2}.add($V{tsoSalesActivity_2}))]]></textFieldExpression>
+				</textField>
 			</band>
 		</groupFooter>
 	</group>
@@ -306,13 +350,45 @@
 					</textElement>
 					<textFieldExpression><![CDATA[$V{tsoProductReceived_2}]]></textFieldExpression>
 				</textField>
+				<textField>
+					<reportElement mode="Opaque" x="815" y="0" width="150" height="20" backcolor="#91C36F" uuid="6c25cb33-43b1-4b81-9eec-441d4b8e0a8f">
+						<property name="com.jaspersoft.studio.unit.height" value="px"/>
+						<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					</reportElement>
+					<box>
+						<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{srProductReceived_2}.subtract($V{salesClose_2})]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement mode="Opaque" x="965" y="0" width="150" height="20" backcolor="#91C36F" uuid="a35f1ea9-1898-49b1-ad99-cb69f9e17711">
+						<property name="com.jaspersoft.studio.unit.height" value="px"/>
+						<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					</reportElement>
+					<box>
+						<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{salesUnit_2}.subtract($V{srSalesActivity_2}.add($V{tsoSalesActivity_2}))]]></textFieldExpression>
+				</textField>
 			</band>
 		</groupFooter>
 	</group>
 	<title>
 		<band height="40" splitType="Stretch">
 			<staticText>
-				<reportElement x="0" y="0" width="810" height="40" uuid="1e249dc1-3a94-4f0c-8fff-6059a8707280"/>
+				<reportElement x="0" y="0" width="1115" height="40" uuid="1e249dc1-3a94-4f0c-8fff-6059a8707280"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="14" isBold="true"/>
 				</textElement>
@@ -323,7 +399,7 @@
 	<pageHeader>
 		<band height="20" splitType="Stretch">
 			<textField>
-				<reportElement x="510" y="0" width="300" height="20" uuid="3ee4b5a0-4833-4d60-afb5-4db283a9c58c">
+				<reportElement x="815" y="0" width="300" height="20" uuid="3ee4b5a0-4833-4d60-afb5-4db283a9c58c">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
@@ -510,6 +586,37 @@
 				</textElement>
 				<text><![CDATA[TSO]]></text>
 			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="815" y="0" width="150" height="30" backcolor="#D9D9D9" uuid="3aa3b906-cb89-4fd0-ada2-c9b257b856a8">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[Gap between SR product 
+receive & sales close]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="965" y="0" width="150" height="30" backcolor="#D9D9D9" uuid="7a903221-729a-48d5-bf22-b136fbd3c8c3">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[Sales activity not done]]></text>
+			</staticText>
 		</band>
 	</columnHeader>
 	<detail>
@@ -658,6 +765,38 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$V{REPORT_COUNT}]]></textFieldExpression>
 			</textField>
+			<textField>
+				<reportElement style="Style1" x="815" y="0" width="150" height="20" uuid="3aabfdd9-401c-40e8-a9d1-19b7047a7eba">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{srProductReceived}.subtract($F{salesClose})]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Style2" x="965" y="0" width="150" height="20" uuid="b5889dc4-116a-4601-b3b5-9437c181733c">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{salesUnit}.subtract(($F{srSalesActivity}.add($F{tsoSalesActivity})))]]></textFieldExpression>
+			</textField>
 		</band>
 	</detail>
 	<summary>
@@ -772,6 +911,38 @@
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{salesUnit}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement mode="Opaque" x="815" y="0" width="150" height="20" backcolor="#D9D9D9" uuid="c0e3d3a3-cb4e-41d0-9882-3b90b5353260">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{srProductReceived}.subtract($V{salesClose})]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement mode="Opaque" x="965" y="0" width="150" height="20" backcolor="#D9D9D9" uuid="cf23dc55-9da3-40a7-be19-c46327baac73">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{salesUnit}.subtract($V{srSalesActivity}.add($V{tsoSalesActivity}))]]></textFieldExpression>
 			</textField>
 		</band>
 	</summary>
