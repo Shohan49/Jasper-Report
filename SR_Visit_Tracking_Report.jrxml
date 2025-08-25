@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.20.0.final using JasperReports Library version 6.20.0-2bc7ab61c56f459e8176eb05c7705e145cd400ad  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SR_Visit_Tracking_Report" pageWidth="5300" pageHeight="1812" orientation="Landscape" columnWidth="5260" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="09c7bc63-01cc-44e3-8b54-8776f4b79291">
-	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="TEST_SM"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="PRODUCTION_SM_DB"/>
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 	<property name="com.jaspersoft.studio.unit." value="pixel"/>
 	<property name="com.jaspersoft.studio.unit.pageHeight" value="pixel"/>
@@ -12,8 +12,17 @@
 	<property name="com.jaspersoft.studio.unit.rightMargin" value="pixel"/>
 	<property name="com.jaspersoft.studio.unit.columnWidth" value="pixel"/>
 	<property name="com.jaspersoft.studio.unit.columnSpacing" value="pixel"/>
+	<style name="inputPercent">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$F{outletAch} != null 
+&& $P{inputPercent} != null 
+&& $F{outletAch}.compareTo($P{inputPercent}) < 0]]></conditionExpression>
+			<style mode="Opaque" backcolor="#F8CBAD"/>
+		</conditionalStyle>
+	</style>
 	<parameter name="teritoryId" class="java.lang.String"/>
 	<parameter name="targetDate" class="java.lang.String"/>
+	<parameter name="inputPercent" class="java.math.BigDecimal"/>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
@@ -1198,9 +1207,9 @@ $V{bdMemo_1}.doubleValue() : 0]]></textFieldExpression>
 		</band>
 	</title>
 	<pageHeader>
-		<band height="40" splitType="Stretch">
+		<band height="60" splitType="Stretch">
 			<textField>
-				<reportElement x="4920" y="20" width="340" height="20" uuid="1118ef50-eab9-4337-95e8-62d074976d43">
+				<reportElement x="4920" y="40" width="340" height="20" uuid="1118ef50-eab9-4337-95e8-62d074976d43">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
@@ -1219,6 +1228,13 @@ $V{bdMemo_1}.doubleValue() : 0]]></textFieldExpression>
 				</reportElement>
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA["Territory Name: "+$P{teritoryId}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="40" width="260" height="20" uuid="34383c64-e131-4f44-ad04-3d1ed91a19e3">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA["Analysis on " +$P{inputPercent}+"%"+" Less Outlet Visited Route"]]></textFieldExpression>
 			</textField>
 		</band>
 	</pageHeader>
@@ -2621,7 +2637,7 @@ By TSO]]></text>
 				<textFieldExpression><![CDATA[$F{routeId}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="140" y="0" width="120" height="20" uuid="8cb38bcc-e0db-4aeb-bad8-c92f24cbe83f">
+				<reportElement style="inputPercent" x="140" y="0" width="120" height="20" uuid="8cb38bcc-e0db-4aeb-bad8-c92f24cbe83f">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
 				<box>
@@ -2660,7 +2676,7 @@ By TSO]]></text>
 				<textFieldExpression><![CDATA[$F{consumerCount}]]></textFieldExpression>
 			</textField>
 			<textField pattern="0.00 &apos;%&apos;">
-				<reportElement x="420" y="0" width="80" height="20" uuid="0c55ae56-c097-4f3b-935c-8a2074823e05">
+				<reportElement style="inputPercent" x="420" y="0" width="80" height="20" uuid="0c55ae56-c097-4f3b-935c-8a2074823e05">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
 				<box>
