@@ -1,7 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.20.0.final using JasperReports Library version 6.20.0-2bc7ab61c56f459e8176eb05c7705e145cd400ad  -->
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Epic_Energy_Monitoring" pageWidth="1480" pageHeight="2000" orientation="Landscape" columnWidth="1440" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="c457d218-3512-4252-986a-4390f2984fec">
-	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="PRODUCTION_IOT_DB"/>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Epic_Energy_Monitoring" pageWidth="1480" pageHeight="1684" orientation="Landscape" columnWidth="1440" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="c457d218-3512-4252-986a-4390f2984fec">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+	<property name="com.jaspersoft.studio.unit." value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageHeight" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.topMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.bottomMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.leftMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.rightMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnSpacing" value="pixel"/>
 	<import value="net.sf.jasperreports.engine.data.JRBeanCollectionDataSource"/>
 	<parameter name="targetDate" class="java.lang.String"/>
 	<parameter name="Electricity_Consumption_1" class="java.util.List"/>
@@ -29,30 +38,30 @@
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="80">
-			<image>
-				<reportElement x="456" y="0" width="80" height="80" uuid="424c1f95-ff0a-4d81-97e7-d6ab1d0ccd2a">
+		<band height="100">
+			<image hAlign="Center" vAlign="Middle">
+				<reportElement x="0" y="0" width="100" height="100" uuid="424c1f95-ff0a-4d81-97e7-d6ab1d0ccd2a">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
 				<imageExpression><![CDATA[net.sf.jasperreports.engine.util.JRImageLoader.getInstance(new SimpleJasperReportsContext()).loadAwtImageFromBytes(Base64.getDecoder().decode($P{epicLogo}))]]></imageExpression>
 			</image>
 			<textField>
-				<reportElement x="536" y="40" width="870" height="40" uuid="1a423ffd-aaee-4226-a9e0-0155d7b899d9">
+				<reportElement x="100" y="50" width="870" height="40" uuid="1a423ffd-aaee-4226-a9e0-0155d7b899d9">
 					<property name="com.jaspersoft.studio.unit.y" value="px"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
-				<textElement verticalAlignment="Middle">
+				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font size="26" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Daily Energy Monitoring Report"]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="536" y="0" width="870" height="40" uuid="1392f0f2-d56f-4ce3-b594-6f65a8cf44da">
+				<reportElement x="100" y="10" width="870" height="40" uuid="1392f0f2-d56f-4ce3-b594-6f65a8cf44da">
 					<property name="com.jaspersoft.studio.unit.y" value="px"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
-				<textElement verticalAlignment="Middle">
+				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font size="26" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{companyName}]]></textFieldExpression>
@@ -82,7 +91,7 @@
 		</band>
 	</pageHeader>
 	<detail>
-		<band height="1783">
+		<band height="1220">
 			<subreport>
 				<reportElement x="0" y="1013" width="1390" height="120" uuid="b0ada4a9-17ea-43d1-8754-cab679d8fac9">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
@@ -92,16 +101,6 @@
 				</subreportParameter>
 				<dataSourceExpression><![CDATA[new JRBeanCollectionDataSource($P{Water_Consumption_Latest})]]></dataSourceExpression>
 				<subreportExpression><![CDATA[$P{subReport5}]]></subreportExpression>
-			</subreport>
-			<subreport>
-				<reportElement x="0" y="1283" width="1390" height="80" uuid="b3482ba4-689d-4ad3-a882-95b86e1bf7f0">
-					<property name="com.jaspersoft.studio.unit.height" value="px"/>
-				</reportElement>
-				<subreportParameter name="targetDate">
-					<subreportParameterExpression><![CDATA[$P{targetDate}]]></subreportParameterExpression>
-				</subreportParameter>
-				<dataSourceExpression><![CDATA[new JRBeanCollectionDataSource($P{Steam_Consumption})]]></dataSourceExpression>
-				<subreportExpression><![CDATA[$P{subReport3}]]></subreportExpression>
 			</subreport>
 			<subreport>
 				<reportElement x="0" y="0" width="1390" height="150" uuid="dfe54298-52e2-4848-8c5e-1e2803157fa1">
@@ -114,7 +113,7 @@
 				<subreportExpression><![CDATA[$P{subReport1}]]></subreportExpression>
 			</subreport>
 			<subreport>
-				<reportElement x="0" y="187" width="1390" height="207" uuid="2c94f4a2-4a4a-4249-a6d9-b1f7665d761a">
+				<reportElement x="0" y="178" width="1390" height="207" uuid="2c94f4a2-4a4a-4249-a6d9-b1f7665d761a">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
 				<subreportParameter name="targetDate">
@@ -124,7 +123,7 @@
 				<subreportExpression><![CDATA[$P{subReport2}]]></subreportExpression>
 			</subreport>
 			<subreport>
-				<reportElement x="0" y="1173" width="1440" height="80" uuid="448b4755-bdb1-47c9-bc2f-95d41fbc8aa8">
+				<reportElement x="0" y="1140" width="1440" height="80" uuid="448b4755-bdb1-47c9-bc2f-95d41fbc8aa8">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
 				<subreportParameter name="targetDate">
@@ -132,38 +131,6 @@
 				</subreportParameter>
 				<dataSourceExpression><![CDATA[new JRBeanCollectionDataSource($P{Air_Compressor})]]></dataSourceExpression>
 				<subreportExpression><![CDATA[$P{subReport4}]]></subreportExpression>
-			</subreport>
-			<subreport>
-				<reportElement x="0" y="1466" width="1390" height="56" uuid="5c12fd01-c498-4b77-bb23-fb50b9612bfe">
-					<property name="com.jaspersoft.studio.unit.height" value="px"/>
-				</reportElement>
-				<subreportParameter name="targetDate">
-					<subreportParameterExpression><![CDATA[$P{targetDate}]]></subreportParameterExpression>
-				</subreportParameter>
-				<dataSourceExpression><![CDATA[new JRBeanCollectionDataSource($P{ETP})]]></dataSourceExpression>
-				<subreportExpression><![CDATA[$P{subReport6}]]></subreportExpression>
-			</subreport>
-			<subreport>
-				<reportElement x="0" y="1585" width="1390" height="57" uuid="d4056a26-17c0-4311-8b11-e65f6849840c">
-					<property name="com.jaspersoft.studio.unit.width" value="px"/>
-					<property name="com.jaspersoft.studio.unit.x" value="px"/>
-					<property name="com.jaspersoft.studio.unit.height" value="px"/>
-				</reportElement>
-				<subreportParameter name="targetDate">
-					<subreportParameterExpression><![CDATA[$P{targetDate}]]></subreportParameterExpression>
-				</subreportParameter>
-				<dataSourceExpression><![CDATA[new JRBeanCollectionDataSource($P{Building_Managment_System})]]></dataSourceExpression>
-				<subreportExpression><![CDATA[$P{subReport7}]]></subreportExpression>
-			</subreport>
-			<subreport>
-				<reportElement x="0" y="1689" width="1390" height="94" uuid="868b4caf-3f94-4073-adee-7a878e0918a1">
-					<property name="com.jaspersoft.studio.unit.width" value="px"/>
-				</reportElement>
-				<subreportParameter name="targetDate">
-					<subreportParameterExpression><![CDATA[$P{targetDate}]]></subreportParameterExpression>
-				</subreportParameter>
-				<dataSourceExpression><![CDATA[new JRBeanCollectionDataSource($P{Diesel_Consumption})]]></dataSourceExpression>
-				<subreportExpression><![CDATA[$P{subReport8}]]></subreportExpression>
 			</subreport>
 		</band>
 	</detail>
