@@ -1,16 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.20.0.final using JasperReports Library version 6.20.0-2bc7ab61c56f459e8176eb05c7705e145cd400ad  -->
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Depot_Wise_ACI_Stock_Summary_Report" pageWidth="10800" pageHeight="912" orientation="Landscape" columnWidth="10760" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="65fbcded-8527-4ff4-a847-1876ab273444">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Depot_Wise_ACI_Stock_Summary_Report" pageWidth="10900" pageHeight="912" orientation="Landscape" columnWidth="10860" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="65fbcded-8527-4ff4-a847-1876ab273444">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Leaf_Test_DB"/>
-	<property name="com.jaspersoft.studio.unit." value="pixel"/>
-	<property name="com.jaspersoft.studio.unit.pageHeight" value="pixel"/>
-	<property name="com.jaspersoft.studio.unit.pageWidth" value="pixel"/>
-	<property name="com.jaspersoft.studio.unit.topMargin" value="pixel"/>
-	<property name="com.jaspersoft.studio.unit.bottomMargin" value="pixel"/>
-	<property name="com.jaspersoft.studio.unit.leftMargin" value="pixel"/>
-	<property name="com.jaspersoft.studio.unit.rightMargin" value="pixel"/>
-	<property name="com.jaspersoft.studio.unit.columnWidth" value="pixel"/>
-	<property name="com.jaspersoft.studio.unit.columnSpacing" value="pixel"/>
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 	<parameter name="fromDate" class="java.lang.String"/>
 	<parameter name="toDate" class="java.lang.String"/>
@@ -18,245 +9,7 @@
 	<parameter name="areaId" class="java.lang.String"/>
 	<parameter name="aktLogo" class="java.lang.String"/>
 	<queryString>
-		<![CDATA[select
-    fa.zone_id zoneId,
-    fa.zone_name zoneName,
-    fa.sub_area_id areaId,
-    fa.sub_area_name areaName,
-    count(distinct fa.farmer_id) farmerCount,
-    sum(land_acreage) acre,
-
-    count(distinct case when li.id=1 then fa.farmer_id end) cashFarmer,
-    sum(case when li.id=1 then fld.quantity else 0 end) cashQty,
-    sum(case when li.id=1 then fa.land_acreage else 0 end) cashAcre,
-
-
-    count(distinct case when li.id=2 then fa.farmer_id end) cashLoanDueFarmer,
-    sum(case when li.id=2 then fld.quantity else 0 end) cashLoanDueQty,
-    sum(case when li.id=2 then fa.land_acreage else 0 end) cashLoanDueAcre,
-
-
-    count(distinct case when li.id=4 then fa.farmer_id end) twoSidePipeFarmer,
-    sum(case when li.id=4 then fld.quantity else 0 end) twoSidePipeQty,
-    sum(case when li.id=4 then fa.land_acreage else 0 end) twoSidePipeAcre,
-
-
-    count(distinct case when li.id=5 then fa.farmer_id end) threeMainPipeFarmer,
-    sum(case when li.id=5 then fld.quantity else 0 end) threeMainPipeQty,
-    sum(case when li.id=5 then fa.land_acreage else 0 end) threeMainPipeAcre,
-
-
-    count(distinct case when li.id=6 then fa.farmer_id end) threeSidePipeFarmer,
-    sum(case when li.id=6 then fld.quantity else 0 end) threeSidePipeQty,
-    sum(case when li.id=6 then fa.land_acreage else 0 end) threeSidePipeAcre,
-
-
-    count(distinct case when li.id=7 then fa.farmer_id end) fiveSidePipeFarmer,
-    sum(case when li.id=7 then fld.quantity else 0 end) fiveSidePipeQty,
-    sum(case when li.id=7 then fa.land_acreage else 0 end) fiveSidePipeAcre,
-
-
-    count(distinct case when li.id=8 then fa.farmer_id end) sixMainPipeFarmer,
-    sum(case when li.id=8 then fld.quantity else 0 end) sixMainPipeQty,
-    sum(case when li.id=8 then fa.land_acreage else 0 end) sixMainPipeAcre,
-
-
-    count(distinct case when li.id=9 then fa.farmer_id end) sixSidePipeFarmer,
-    sum(case when li.id=9 then fld.quantity else 0 end) sixSidePipeQty,
-    sum(case when li.id=9 then fa.land_acreage else 0 end) sixSidePipeAcre,
-
-
-    count(distinct case when li.id=10 then fa.farmer_id end) actaraFarmer,
-    sum(case when li.id=10 then fld.quantity else 0 end) actaraQty,
-    sum(case when li.id=10 then fa.land_acreage else 0 end) actaraAcre,
-
-
-    count(distinct case when li.id=11 then fa.farmer_id end) amisterTopFarmer,
-    sum(case when li.id=11 then fld.quantity else 0 end) amisterTopQty,
-    sum(case when li.id=11 then fa.land_acreage else 0 end) amisterTopAcre,
-
-
-    count(distinct case when li.id=12 then fa.farmer_id end) bandFarmer,
-    sum(case when li.id=12 then fld.quantity else 0 end) bandQty,
-    sum(case when li.id=12 then fa.land_acreage else 0 end) bandAcre,
-
-
-    count(distinct case when li.id=13 then fa.farmer_id end) bandtFarmer,
-    sum(case when li.id=13 then fld.quantity else 0 end) bandtQty,
-    sum(case when li.id=13 then fa.land_acreage else 0 end) bandtAcre,
-
-
-    count(distinct case when li.id=14 then fa.farmer_id end) centertFarmer,
-    sum(case when li.id=14 then fld.quantity else 0 end) centertQty,
-    sum(case when li.id=14 then fa.land_acreage else 0 end) centertAcre,
-
-
-    count(distinct case when li.id=15 then fa.farmer_id end) coromilFarmer,
-    sum(case when li.id=15 then fld.quantity else 0 end) coromilQty,
-    sum(case when li.id=15 then fa.land_acreage else 0 end) coromilAcre,
-
-
-    count(distinct case when li.id=16 then fa.farmer_id end) dapFarmer,
-    sum(case when li.id=16 then fld.quantity else 0 end) dapQty,
-    sum(case when li.id=16 then fa.land_acreage else 0 end) dapAcre,
-
-
-    count(distinct case when li.id=17 then fa.farmer_id end) dapCashFarmer,
-    sum(case when li.id=17 then fld.quantity else 0 end) dapCashQty,
-    sum(case when li.id=17 then fa.land_acreage else 0 end) dapCashAcre,
-
-
-    count(distinct case when li.id=18 then fa.farmer_id end) filterNetFarmer,
-    sum(case when li.id=18 then fld.quantity else 0 end) filterNetQty,
-    sum(case when li.id=18 then fa.land_acreage else 0 end) filterNetAcre,
-
-
-    count(distinct case when li.id=19 then fa.farmer_id end) gpSheetFarmer,
-    sum(case when li.id=19 then fld.quantity else 0 end) gpSheetQty,
-    sum(case when li.id=19 then fa.land_acreage else 0 end) gpSheetAcre,
-
-
-    count(distinct case when li.id=20 then fa.farmer_id end) handGlovesFarmer,
-    sum(case when li.id=20 then fld.quantity else 0 end) handGlovesQty,
-    sum(case when li.id=20 then fa.land_acreage else 0 end) handGlovesAcre,
-
-
-    count(distinct case when li.id=21 then fa.farmer_id end) hygrocurometerFarmer,
-    sum(case when li.id=21 then fld.quantity else 0 end) hygrocurometerQty,
-    sum(case when li.id=21 then fa.land_acreage else 0 end) hygrocurometerAcre,
-
-    count(distinct case when li.id=22 then fa.farmer_id end) juteTwineFarmer,
-    sum(case when li.id=22 then fld.quantity else 0 end) juteTwineQty,
-    sum(case when li.id=22 then fa.land_acreage else 0 end) juteTwineAcre,
-
-
-    count(distinct case when li.id=23 then fa.farmer_id end) mancozebFarmer,
-    sum(case when li.id=23 then fld.quantity else 0 end) mancozebQty,
-    sum(case when li.id=23 then fa.land_acreage else 0 end) mancozebAcre,
-
-
-    count(distinct case when li.id=24 then fa.farmer_id end) pheromoneTrapFarmer,
-    sum(case when li.id=24 then fld.quantity else 0 end) pheromoneTrapQty,
-    sum(case when li.id=24 then fa.land_acreage else 0 end) pheromoneTrapAcre,
-
-
-    count(distinct case when li.id=25 then fa.farmer_id end) polytheneFarmer,
-    sum(case when li.id=25 then fld.quantity else 0 end) polytheneQty,
-    sum(case when li.id=25 then fa.land_acreage else 0 end) polytheneAcre,
-
-
-    count(distinct case when li.id=26 then fa.farmer_id end) ppeFarmer,
-    sum(case when li.id=26 then fld.quantity else 0 end) ppeQty,
-    sum(case when li.id=26 then fa.land_acreage else 0 end) ppeAcre,
-
-
-    count(distinct case when li.id=27 then fa.farmer_id end) proclaimFarmer,
-    sum(case when li.id=27 then fld.quantity else 0 end) proclaimQty,
-    sum(case when li.id=27 then fa.land_acreage else 0 end) proclaimAcre,
-
-    count(distinct case when li.id=28 then fa.farmer_id end) quickPotashFarmer,
-    sum(case when li.id=28 then fld.quantity else 0 end) quickPotashQty,
-    sum(case when li.id=28 then fa.land_acreage else 0 end) quickPotashAcre,
-
-
-    count(distinct case when li.id=29 then fa.farmer_id end) redomilFarmer,
-    sum(case when li.id=29 then fld.quantity else 0 end) redomilQty,
-    sum(case when li.id=29 then fa.land_acreage else 0 end) redomilAcre,
-
-
-    count(distinct case when li.id=30 then fa.farmer_id end) seedBurleyFarmer,
-    sum(case when li.id=30 then fld.quantity else 0 end) seedBurleyQty,
-    sum(case when li.id=30 then fa.land_acreage else 0 end) seedBurleyAcre,
-
-
-    count(distinct case when li.id=31 then fa.farmer_id end) seedCanSowingFarmer,
-    sum(case when li.id=31 then fld.quantity else 0 end) seedCanSowingQty,
-    sum(case when li.id=31 then fa.land_acreage else 0 end) seedCanSowingAcre,
-
-
-    count(distinct case when li.id=32 then fa.farmer_id end) seedPvhFarmer,
-    sum(case when li.id=32 then fld.quantity else 0 end) seedPvhQty,
-    sum(case when li.id=32 then fa.land_acreage else 0 end) seedPvhAcre,
-
-
-    count(distinct case when li.id=33 then fa.farmer_id end) seedbedCashFarmer,
-    sum(case when li.id=33 then fld.quantity else 0 end) seedbedCashQty,
-    sum(case when li.id=33 then fa.land_acreage else 0 end) seedbedCashAcre,
-
-    count(distinct case when li.id=34 then fa.farmer_id end) sidetFarmer,
-    sum(case when li.id=34 then fld.quantity else 0 end) sidetQty,
-    sum(case when li.id=34 then fa.land_acreage else 0 end) sidetAcre,
-
-
-    count(distinct case when li.id=35 then fa.farmer_id end) sop25Farmer,
-    sum(case when li.id=35 then fld.quantity else 0 end) sop25Qty,
-    sum(case when li.id=35 then fa.land_acreage else 0 end) sop25Acre,
-
-
-
-    count(distinct case when li.id=37 then fa.farmer_id end) suckerPluckerFarmer,
-    sum(case when li.id=37 then fld.quantity else 0 end) suckerPluckerQty,
-    sum(case when li.id=37 then fa.land_acreage else 0 end) suckerPluckerAcre,
-
-
-    count(distinct case when li.id=38 then fa.farmer_id end) suckericideFarmer,
-    sum(case when li.id=38 then fld.quantity else 0 end) suckericideQty,
-    sum(case when li.id=38 then fa.land_acreage else 0 end) suckericideAcre,
-
-
-    count(distinct case when li.id=39 then fa.farmer_id end) tarpaulinFarmer,
-    sum(case when li.id=39 then fld.quantity else 0 end) tarpaulinQty,
-    sum(case when li.id=39 then fa.land_acreage else 0 end) tarpaulinAcre,
-
-
-    count(distinct case when li.id=40 then fa.farmer_id end) thiovitFarmer,
-    sum(case when li.id=40 then fld.quantity else 0 end) thiovitQty,
-    sum(case when li.id=40 then fa.land_acreage else 0 end) thiovitAcre,
-
-
-    count(distinct case when li.id=41 then fa.farmer_id end) trichodermaFarmer,
-    sum(case when li.id=41 then fld.quantity else 0 end) trichodermaQty,
-    sum(case when li.id=41 then fa.land_acreage else 0 end) trichodermaAcre,
-
-
-    count(distinct case when li.id=42 then fa.farmer_id end) tspFarmer,
-    sum(case when li.id=42 then fld.quantity else 0 end) tspQty,
-    sum(case when li.id=42 then fa.land_acreage else 0 end) tspAcre,
-
-
-    count(distinct case when li.id=43 then fa.farmer_id end) tspCashFarmer,
-    sum(case when li.id=43 then fld.quantity else 0 end) tspCashQty,
-    sum(case when li.id=43 then fa.land_acreage else 0 end) tspCashAcre,
-
-
-    count(distinct case when li.id=44 then fa.farmer_id end) ureaFarmer,
-    sum(case when li.id=44 then fld.quantity else 0 end) ureaQty,
-    sum(case when li.id=44 then fa.land_acreage else 0 end) ureaAcre,
-
-
-    count(distinct case when li.id=45 then fa.farmer_id end) ureaCashFarmer,
-    sum(case when li.id=45 then fld.quantity else 0 end) ureaCashQty,
-    sum(case when li.id=45 then fa.land_acreage else 0 end) ureaCashAcre
-from    (select *
-         from farmer_agreement
-         where season_name = (select fiscal_year
-                              from season
-                              where id = (select cast(attribute_value as numeric)
-                                          from global_setting
-                                          where attribute_name = 'REGISTRATION_SEASON'))
-        ) fa
-            join    farmer f on fa.farmer_id=f.id
-    AND     (case when $P{areaId} is not null then fa.area_id = $P{areaId} else true end)
-    AND     (case when $P{zoneId} is not null then fa.zone_id = $P{zoneId} else true end)
-    and     f.is_active='true'
-            join    farmer_loan_requests flr on fa.id=flr.farmer_agreement_id
-    and     flr.approval_status='APPROVED'
-            join    farmer_loan_main flm on flr.id = flm.farmer_loan_request_id
-    and     flm.loan_date between $P{fromDate} and $P{toDate}
-            join    farmer_loan_details fld on flm.id = fld.loan_main_id
-            join    loan_items li on fld.loan_item_id = li.id
-group by fa.zone_id, fa.zone_name, fa.sub_area_id, fa.sub_area_name
-order by fa.zone_id, fa.sub_area_id]]>
+		<![CDATA[]]>
 	</queryString>
 	<field name="zoneId" class="java.math.BigInteger"/>
 	<field name="zoneName" class="java.lang.String"/>
@@ -2901,6 +2654,20 @@ order by fa.zone_id, fa.sub_area_id]]>
 					<textElement textAlignment="Center" verticalAlignment="Middle"/>
 					<textFieldExpression><![CDATA[$V{thiovitFarmer_1}]]></textFieldExpression>
 				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement mode="Opaque" x="10760" y="0" width="100" height="20" backcolor="#B3D8A8" uuid="c8739543-2188-4c61-a08d-b130f756d94d">
+						<property name="com.jaspersoft.studio.unit.height" value="px"/>
+						<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					</reportElement>
+					<box>
+						<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[""]]></textFieldExpression>
+				</textField>
 			</band>
 		</groupFooter>
 	</group>
@@ -2973,7 +2740,7 @@ order by fa.zone_id, fa.sub_area_id]]>
 	<pageHeader>
 		<band height="80" splitType="Stretch">
 			<textField>
-				<reportElement x="10520" y="60" width="240" height="20" uuid="abb06b55-ed24-4472-8896-9bb56006a4b8">
+				<reportElement x="10520" y="60" width="340" height="20" uuid="abb06b55-ed24-4472-8896-9bb56006a4b8">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
@@ -5814,6 +5581,22 @@ order by fa.zone_id, fa.sub_area_id]]>
 				</textElement>
 				<text><![CDATA[UREA (Cash) (TK)]]></text>
 			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="10760" y="0" width="100" height="45" backcolor="#D9D9D9" uuid="30902b86-4867-4d6f-8c25-35bb7b5fa88b">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Remarks]]></text>
+			</staticText>
 		</band>
 	</columnHeader>
 	<detail>
@@ -7560,6 +7343,20 @@ order by fa.zone_id, fa.sub_area_id]]>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{ureaCashFarmer}]]></textFieldExpression>
 			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="10760" y="0" width="100" height="20" uuid="2b4de0ec-f463-4e6b-8f1c-bd41d92613ba">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[""]]></textFieldExpression>
+			</textField>
 		</band>
 	</detail>
 	<summary>
@@ -9281,6 +9078,20 @@ order by fa.zone_id, fa.sub_area_id]]>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$V{polytheneFarmer}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement mode="Opaque" x="10760" y="0" width="100" height="20" backcolor="#D9D9D9" uuid="d7cdb50b-5eef-4efb-b7c2-4dab66c4e4f2">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[""]]></textFieldExpression>
 			</textField>
 		</band>
 	</summary>
