@@ -14,7 +14,76 @@
 	<property name="com.jaspersoft.studio.unit.columnSpacing" value="pixel"/>
 	<parameter name="targetDate" class="java.lang.String"/>
 	<queryString>
-		<![CDATA[]]>
+		<![CDATA[select  id,
+        name equipmentName,
+        max_capacity,
+        NVL(total_energy,0) totalEnergy,
+        NVL(fuelConsumption,0) fuelConsumption,
+        NVL(max_power_factor,0) maxKw,
+        NVL(to_char(max_pf_time),'N/A') maxTime,
+        NVL(min_power_factor,0) minPowerFactor,
+        NVL(to_char(min_pf_time),'N/A') minTime
+from
+        (
+        select  d.id,
+                d.name,
+                d.max_capacity,
+                (max(dhr.ACTIVEENERGYDELIVERED)-min(dhr.ACTIVEENERGYDELIVERED)) total_energy,
+                (max(dr.diesel_consumption)-min(dr.diesel_consumption)) fuelConsumption,
+                dmax.max_power_factor,
+                dmax.max_pf_time,
+                dm.min_power_factor,
+                dm.min_pf_time
+                
+        from    device_type dt 
+        left    join device d on (dt.id=d.device_type_id
+        and     dt.parent_id=101
+        and     d.unit_id=101
+        and     d.input_type=0
+        and     d.is_active=1)
+        left    join emeter_health_reading dhr on (d.id=dhr.device_id and to_char(dhr.date_time,'yyyy-mm-dd')=$P{targetDate})
+        left    join device_reading dr on (d.id=dr.device_id and to_char(dr.date_time,'yyyy-mm-dd')=$P{targetDate})
+        left    join(SELECT
+        device_id,
+        min_pf_time,
+        min_power_factor
+FROM
+(
+SELECT
+        id,
+        device_id,
+        date_time min_pf_time,
+        least(POWERFACTORA,POWERFACTORB,POWERFACTORC) min_power_factor,
+        ROW_NUMBER() OVER(PARTITION BY device_id ORDER BY least(POWERFACTORA,POWERFACTORB,POWERFACTORC), id) rank_id
+FROM    emeter_health_reading
+where   to_char(date_time,'yyyy-mm-dd')=$P{targetDate}
+)
+WHERE   rank_id = 1
+ORDER   BY device_id)dm
+        on d.id=dm.device_id
+left    join
+(SELECT
+        device_id,
+        max_pf_time,
+        max_power_factor
+FROM
+(
+SELECT
+        id,
+        device_id,
+        date_time max_pf_time,
+        GREATEST(high_value) max_power_factor,
+        ROW_NUMBER() OVER(PARTITION BY device_id ORDER BY GREATEST(high_value) desc) rank_id
+FROM    emeter_health_reading
+where   to_char(date_time,'yyyy-mm-dd')=$P{targetDate}
+)
+WHERE   rank_id = 1
+ORDER   BY device_id)dmax
+ON d.id=dmax.device_id
+group   by d.id,d.name,d.max_capacity,dmax.max_power_factor,dmax.max_pf_time,dm.min_power_factor,dm.min_pf_time
+        )
+where id is not null
+order by id]]>
 	</queryString>
 	<field name="equipmentName" class="java.lang.String"/>
 	<field name="totalEnergy" class="java.lang.Double"/>
@@ -45,8 +114,8 @@
 					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="SansSerif" size="18" isBold="true"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="18" isBold="true"/>
 					<paragraph leftIndent="5"/>
 				</textElement>
 				<text><![CDATA[Electricity Generation]]></text>
@@ -56,7 +125,7 @@
 	<columnHeader>
 		<band height="30" splitType="Stretch">
 			<staticText>
-				<reportElement mode="Opaque" x="0" y="0" width="40" height="30" forecolor="#FFFFFF" backcolor="#664356" uuid="5621574c-f45a-4f90-90cc-6930f44d93be">
+				<reportElement mode="Opaque" x="0" y="0" width="40" height="30" backcolor="#DBD7D7" uuid="5621574c-f45a-4f90-90cc-6930f44d93be">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<box>
@@ -66,12 +135,12 @@
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="SansSerif" size="14" isBold="true"/>
+					<font size="14" isBold="true"/>
 				</textElement>
 				<text><![CDATA[SL No]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="40" y="0" width="180" height="30" forecolor="#FFFFFF" backcolor="#664356" uuid="c741fd3a-0319-4989-9e50-d08dc30200dc"/>
+				<reportElement mode="Opaque" x="40" y="0" width="180" height="30" backcolor="#DBD7D7" uuid="c741fd3a-0319-4989-9e50-d08dc30200dc"/>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -79,12 +148,12 @@
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="SansSerif" size="14" isBold="true"/>
+					<font size="14" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Equipment Name]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="220" y="0" width="130" height="30" forecolor="#FFFFFF" backcolor="#664356" uuid="755afd66-de7b-4e5f-bec9-1fdebe551110">
+				<reportElement mode="Opaque" x="220" y="0" width="130" height="30" backcolor="#DBD7D7" uuid="755afd66-de7b-4e5f-bec9-1fdebe551110">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<box>
@@ -94,12 +163,12 @@
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="SansSerif" size="14" isBold="true"/>
+					<font size="14" isBold="true"/>
 				</textElement>
-				<text><![CDATA[MWh]]></text>
+				<text><![CDATA[mWh]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="350" y="0" width="200" height="30" forecolor="#FFFFFF" backcolor="#664356" uuid="56f87d69-a28e-4e71-aea3-89a7d2b7dc50">
+				<reportElement mode="Opaque" x="350" y="0" width="200" height="30" backcolor="#DBD7D7" uuid="56f87d69-a28e-4e71-aea3-89a7d2b7dc50">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<box>
@@ -109,12 +178,12 @@
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="SansSerif" size="14" isBold="true"/>
+					<font size="14" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Fuel Consumption (L/m3)]]></text>
+				<text><![CDATA[Fuel Consumption (m³)]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="550" y="0" width="200" height="30" forecolor="#FFFFFF" backcolor="#664356" uuid="8203bbcd-8e20-4057-be94-b8b4b6eeca4b"/>
+				<reportElement mode="Opaque" x="550" y="0" width="200" height="30" backcolor="#DBD7D7" uuid="8203bbcd-8e20-4057-be94-b8b4b6eeca4b"/>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -122,12 +191,12 @@
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="SansSerif" size="14" isBold="true"/>
+					<font size="14" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Max kW]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="750" y="0" width="170" height="30" forecolor="#FFFFFF" backcolor="#664356" uuid="7ccf4acc-9e72-48a3-9e5b-c1a0d8e9c471">
+				<reportElement mode="Opaque" x="750" y="0" width="170" height="30" backcolor="#DBD7D7" uuid="7ccf4acc-9e72-48a3-9e5b-c1a0d8e9c471">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<box>
@@ -137,12 +206,12 @@
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="SansSerif" size="14" isBold="true"/>
+					<font size="14" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Time]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="920" y="0" width="200" height="30" forecolor="#FFFFFF" backcolor="#664356" uuid="8755671b-1925-4d7c-b44e-753913e62334">
+				<reportElement mode="Opaque" x="920" y="0" width="200" height="30" backcolor="#DBD7D7" uuid="8755671b-1925-4d7c-b44e-753913e62334">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<box>
@@ -152,12 +221,12 @@
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="SansSerif" size="14" isBold="true"/>
+					<font size="14" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Min power factor]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="1120" y="0" width="170" height="30" forecolor="#FFFFFF" backcolor="#664356" uuid="883b6c94-79ea-46ac-ba61-14590525f598">
+				<reportElement mode="Opaque" x="1120" y="0" width="170" height="30" backcolor="#DBD7D7" uuid="883b6c94-79ea-46ac-ba61-14590525f598">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<box>
@@ -167,7 +236,7 @@
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="SansSerif" size="14" isBold="true"/>
+					<font size="14" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Time]]></text>
 			</staticText>
@@ -186,7 +255,7 @@
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="SansSerif" size="13"/>
+					<font size="14"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{REPORT_COUNT}]]></textFieldExpression>
 			</textField>
@@ -201,8 +270,8 @@
 					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
-				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font fontName="SansSerif" size="13"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="14"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{equipmentName}]]></textFieldExpression>
 			</textField>
@@ -217,7 +286,7 @@
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="SansSerif" size="13"/>
+					<font size="14"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{totalEnergy}]]></textFieldExpression>
 			</textField>
@@ -233,7 +302,7 @@
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="SansSerif" size="13"/>
+					<font size="14"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{fuelConsumption}]]></textFieldExpression>
 			</textField>
@@ -248,15 +317,14 @@
 					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font fontName="SansSerif" size="13"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="14"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{maxKw}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement x="750" y="0" width="170" height="20" uuid="6fc54741-ee33-4133-82ea-37db5f3c60f7">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
-					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
 				</reportElement>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -265,8 +333,7 @@
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="SansSerif" size="13"/>
-					<paragraph leftIndent="3"/>
+					<font size="14"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{maxTime}]]></textFieldExpression>
 			</textField>
@@ -281,15 +348,14 @@
 					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font fontName="SansSerif" size="13"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="14"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{minPowerFactor}.doubleValue() < 0 ? "" : $F{minPowerFactor}.toString()]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{minPowerFactor}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement x="1120" y="0" width="170" height="20" uuid="0fdeb46b-63c1-4cea-bf1f-945a14bac653">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
-					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
 				</reportElement>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -298,8 +364,7 @@
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="SansSerif" size="13"/>
-					<paragraph leftIndent="3"/>
+					<font size="14"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{minTime}]]></textFieldExpression>
 			</textField>
@@ -317,8 +382,8 @@
 					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font fontName="SansSerif" size="13"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="14"/>
 				</textElement>
 				<textFieldExpression><![CDATA[" "]]></textFieldExpression>
 			</textField>
@@ -333,7 +398,7 @@
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="SansSerif" size="13"/>
+					<font size="14"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{totalEnergy}]]></textFieldExpression>
 			</textField>
@@ -348,7 +413,7 @@
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="SansSerif" size="13"/>
+					<font size="14"/>
 				</textElement>
 			</textField>
 			<textField pattern="0.00" isBlankWhenNull="true">
@@ -362,8 +427,8 @@
 					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font fontName="SansSerif" size="13"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="14"/>
 				</textElement>
 				<textFieldExpression><![CDATA[" "]]></textFieldExpression>
 			</textField>
@@ -378,7 +443,7 @@
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="SansSerif" size="13"/>
+					<font size="14"/>
 				</textElement>
 			</textField>
 			<textField pattern="0.00" isBlankWhenNull="true">
@@ -393,7 +458,7 @@
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="SansSerif" size="13"/>
+					<font size="14"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{fuelConsumption}]]></textFieldExpression>
 			</textField>
@@ -408,7 +473,7 @@
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="SansSerif" size="13" isBold="true"/>
+					<font size="14" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Total]]></text>
 			</staticText>
