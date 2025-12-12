@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.20.0.final using JasperReports Library version 6.20.0-2bc7ab61c56f459e8176eb05c7705e145cd400ad  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Bepza_Stickers" pageWidth="460" pageHeight="165" columnWidth="420" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="c0e483ed-8e27-4540-a412-8499d2b0f0a1">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+	<parameter name="bepza" class="java.lang.String"/>
+	<parameter name="base64ImageLogo" class="java.lang.String"/>
+	<parameter name="base64Barcode" class="java.lang.String"/>
+	<parameter name="licensePlateNumber" class="java.lang.String"/>
+	<parameter name="enterprise" class="java.lang.String"/>
+	<parameter name="vehicleType" class="java.lang.String"/>
+	<parameter name="address" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="120" splitType="Stretch">
+			<textField>
+				<reportElement x="110" y="5" width="230" height="30" uuid="94caf391-5df3-47c3-ade0-870d978b6611">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{bepza}]]></textFieldExpression>
+			</textField>
+			<image hAlign="Center">
+				<reportElement x="8" y="6" width="100" height="100" uuid="efb0f126-f8fe-4321-ad05-e5033eeb3bee">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<imageExpression><![CDATA[net.sf.jasperreports.engine.util.JRImageLoader.getInstance(new SimpleJasperReportsContext()).loadAwtImageFromBytes(Base64.getDecoder().decode($P{base64ImageLogo}))]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement x="110" y="55" width="230" height="20" uuid="2b7c339e-3890-4146-82b3-8e8bca18be5b">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SolaimanLipi" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{licensePlateNumber}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="110" y="75" width="230" height="20" uuid="1d66aae3-65fa-4bad-99ec-07f35fa11b45">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA["Enterprise: "+$P{enterprise}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="172" y="95" width="105" height="20" uuid="a330fef9-dd5b-4fee-a364-54af309bddbf">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA["Type: "+$P{vehicleType}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="0" width="420" height="120" uuid="b066d06a-bb11-4c80-85ba-0161dfd96ebf"/>
+				<box>
+					<pen lineWidth="2.0" lineColor="#000000"/>
+					<topPen lineWidth="2.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="2.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="2.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="2.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<image hAlign="Center" vAlign="Middle">
+				<reportElement x="340" y="6" width="75" height="84" uuid="720cf4a7-a583-4771-82d7-6f4a320d2144">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<imageExpression><![CDATA[net.sf.jasperreports.engine.util.JRImageLoader.getInstance(new SimpleJasperReportsContext()).loadAwtImageFromBytes(Base64.getDecoder().decode($P{base64Barcode}))]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement x="110" y="35" width="230" height="20" uuid="39ca283a-cfd5-4f1d-b670-a046044d812d">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SolaimanLipi" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{address}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+</jasperReport>
