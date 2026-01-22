@@ -23,13 +23,15 @@
 	<field name="granterRegNo" class="java.lang.String"/>
 	<field name="farmerImage" class="java.lang.String"/>
 	<field name="signature" class="java.lang.String"/>
+	<field name="subArea" class="java.lang.String"/>
+	<field name="zone" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
 	<detail>
 		<band height="592">
 			<image hAlign="Center">
-				<reportElement x="539" y="11" width="121" height="100" uuid="68ab2bef-3b05-4bbc-85ff-c254eed06f5d">
+				<reportElement x="539" y="7" width="121" height="100" uuid="68ab2bef-3b05-4bbc-85ff-c254eed06f5d">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="com.jaspersoft.studio.unit.y" value="px"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
@@ -37,7 +39,7 @@
 				<imageExpression><![CDATA[net.sf.jasperreports.engine.util.JRImageLoader.getInstance(new SimpleJasperReportsContext()).loadAwtImageFromBytes(Base64.getDecoder().decode($F{farmerImage}))]]></imageExpression>
 			</image>
 			<textField>
-				<reportElement x="250" y="50" width="220" height="25" uuid="44e8ef76-8501-40ce-bf5d-5d7c352cc2e5">
+				<reportElement x="250" y="46" width="220" height="25" uuid="44e8ef76-8501-40ce-bf5d-5d7c352cc2e5">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
 				<box>
@@ -52,7 +54,7 @@
 				<textFieldExpression><![CDATA[" রেজি নংঃ "+$F{regNo}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="250" y="75" width="220" height="25" uuid="136aeb67-3cf5-41f7-a03d-11256d702c5f">
+				<reportElement x="250" y="71" width="220" height="25" uuid="136aeb67-3cf5-41f7-a03d-11256d702c5f">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<box>
@@ -67,9 +69,10 @@
 				<textFieldExpression><![CDATA[" জমির একরঃ "+$F{landAcre}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="337" y="119" width="323" height="20" uuid="2014c8de-86c7-4248-bb55-cb4861106614">
-					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				<reportElement x="22" y="155" width="315" height="20" uuid="2014c8de-86c7-4248-bb55-cb4861106614">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="com.jaspersoft.studio.unit.firstLineIndent" value="px"/>
 				</reportElement>
 				<box>
 					<pen lineWidth="1.0" lineStyle="Dotted"/>
@@ -80,13 +83,15 @@
 				</box>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font fontName="SolaimanLipi" size="12.9" isBold="false"/>
+					<paragraph firstLineIndent="10"/>
 				</textElement>
 				<textFieldExpression><![CDATA[" গ্রামঃ "+$F{villageName}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="337" y="139" width="323" height="20" uuid="cd01136c-fbed-4739-b62b-f4d1b5a3932c">
-					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				<reportElement x="22" y="195" width="315" height="20" uuid="cd01136c-fbed-4739-b62b-f4d1b5a3932c">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="com.jaspersoft.studio.unit.firstLineIndent" value="px"/>
 				</reportElement>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -96,11 +101,12 @@
 				</box>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font fontName="SolaimanLipi" size="12.9" isBold="false"/>
+					<paragraph firstLineIndent="10"/>
 				</textElement>
 				<textFieldExpression><![CDATA[" ইউনিয়নঃ "+$F{unionName}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="337" y="199" width="323" height="20" uuid="9742b18d-8746-4c01-ac6d-60d28d293099">
+				<reportElement x="337" y="236" width="323" height="20" uuid="9742b18d-8746-4c01-ac6d-60d28d293099">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
@@ -116,9 +122,9 @@
 				<textFieldExpression><![CDATA[" একাউন্ট নম্বরঃ "+$F{bankAccountNo}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="22" y="219" width="315" height="20" uuid="440b544e-4acb-4cb8-a7f6-d1c9c8b03632">
-					<property name="com.jaspersoft.studio.unit.firstLineIndent" value="px"/>
+				<reportElement x="337" y="195" width="323" height="20" uuid="440b544e-4acb-4cb8-a7f6-d1c9c8b03632">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -128,12 +134,12 @@
 				</box>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font fontName="SolaimanLipi" size="12.9" isBold="false"/>
-					<paragraph firstLineIndent="10"/>
+					<paragraph firstLineIndent="0"/>
 				</textElement>
 				<textFieldExpression><![CDATA[" ব্যাংকের নামঃ "+$F{bankName}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="22" y="179" width="315" height="20" uuid="e55c9ff1-6097-4609-8f13-5d4a3a0419de">
+				<reportElement x="22" y="215" width="315" height="20" uuid="e55c9ff1-6097-4609-8f13-5d4a3a0419de">
 					<property name="com.jaspersoft.studio.unit.firstLineIndent" value="px"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
@@ -150,7 +156,7 @@
 				<textFieldExpression><![CDATA[" থানাঃ "+$F{thanaName}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="22" y="159" width="315" height="20" uuid="68420be2-7d09-4c20-921a-92e7fe1a0172">
+				<reportElement x="22" y="175" width="315" height="20" uuid="68420be2-7d09-4c20-921a-92e7fe1a0172">
 					<property name="com.jaspersoft.studio.unit.firstLineIndent" value="px"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
@@ -167,7 +173,7 @@
 				<textFieldExpression><![CDATA[" পোষ্ট অফিসঃ "+$F{postOfficeName}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="22" y="139" width="315" height="20" uuid="97978c48-7d17-45af-be7e-408207137605">
+				<reportElement x="22" y="135" width="315" height="20" uuid="97978c48-7d17-45af-be7e-408207137605">
 					<property name="com.jaspersoft.studio.unit.firstLineIndent" value="px"/>
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
@@ -185,7 +191,7 @@
 				<textFieldExpression><![CDATA[" পিতার নামঃ "+$F{fatherName}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="337" y="219" width="323" height="20" uuid="3290199f-f5fb-4c5c-9e19-dbab623180ba"/>
+				<reportElement x="337" y="215" width="323" height="20" uuid="3290199f-f5fb-4c5c-9e19-dbab623180ba"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -198,7 +204,7 @@
 				<textFieldExpression><![CDATA[" ব্যাংকের শাখাঃ "+$F{bankBranchName}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="22" y="119" width="315" height="20" uuid="b86a1ca3-5c8f-4d7c-88d3-72f8df3b413b">
+				<reportElement x="22" y="115" width="315" height="20" uuid="b86a1ca3-5c8f-4d7c-88d3-72f8df3b413b">
 					<property name="com.jaspersoft.studio.unit.firstLineIndent" value="px"/>
 				</reportElement>
 				<box>
@@ -215,7 +221,7 @@
 				<textFieldExpression><![CDATA[" চাষীর নামঃ "+$F{name}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="337" y="179" width="323" height="20" uuid="a09d53fe-2736-42d7-a80d-42c0e465d917">
+				<reportElement x="337" y="175" width="323" height="20" uuid="a09d53fe-2736-42d7-a80d-42c0e465d917">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
@@ -231,23 +237,9 @@
 				<textFieldExpression><![CDATA[" মোবাইল নংঃ "+$F{mobileNo}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="337" y="159" width="323" height="20" uuid="5fc1cd75-07e3-49f5-af4c-d678c33efe7c">
-					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				<reportElement x="22" y="235" width="315" height="20" uuid="5fc1cd75-07e3-49f5-af4c-d678c33efe7c">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
-				</reportElement>
-				<box>
-					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font fontName="SolaimanLipi" size="12.9" isBold="false"/>
-				</textElement>
-				<textFieldExpression><![CDATA[" জেলাঃ "+$F{districtName}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="22" y="199" width="315" height="20" uuid="de13b649-1d6f-4f22-935b-a0051a5c37bc">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="com.jaspersoft.studio.unit.firstLineIndent" value="px"/>
 				</reportElement>
 				<box>
@@ -260,13 +252,62 @@
 					<font fontName="SolaimanLipi" size="12.9" isBold="false"/>
 					<paragraph firstLineIndent="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[" এন.এইডি/জন্ম সনদ নম্বরঃ "+$F{nidNo}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[" জেলাঃ "+$F{districtName}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="337" y="155" width="323" height="20" uuid="de13b649-1d6f-4f22-935b-a0051a5c37bc">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="com.jaspersoft.studio.unit.firstLineIndent" value="px"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="SolaimanLipi" size="12.9" isBold="false"/>
+					<paragraph firstLineIndent="0"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" এনআইডি/জন্ম সনদ নম্বরঃ "+$F{nidNo}]]></textFieldExpression>
 			</textField>
 			<break>
 				<reportElement x="0" y="591" width="555" height="1" uuid="c39daed3-1a38-4659-bd0a-cff9974d7cb3">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 			</break>
+			<textField>
+				<reportElement x="337" y="115" width="323" height="20" uuid="9706a520-841d-4f47-bbea-c092540274cd">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="SolaimanLipi" size="12.9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" সাব এরিয়াঃ "+$F{subArea}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="337" y="135" width="323" height="20" uuid="c58b0494-f6b1-4669-ba4b-a616445e5474">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="SolaimanLipi" size="12.9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" জোনঃ "+$F{zone}]]></textFieldExpression>
+			</textField>
 		</band>
 		<band height="777">
 			<textField>
