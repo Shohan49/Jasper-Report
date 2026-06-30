@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.20.0.final using JasperReports Library version 6.20.0-2bc7ab61c56f459e8176eb05c7705e145cd400ad  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Kushtia_GLT_Production_Report" pageWidth="792" pageHeight="450" orientation="Landscape" columnWidth="752" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="43786bbb-97b7-4177-a47d-f0b286496c63">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+	<property name="com.jaspersoft.studio.unit." value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageHeight" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.topMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.bottomMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.leftMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.rightMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnSpacing" value="pixel"/>
+	<parameter name="GLT_Sub_Report_1" class="java.util.List"/>
+	<parameter name="Carton_Sub_Report_2" class="java.util.List"/>
+	<parameter name="Pack_Case_Sub_Report_3" class="java.util.List"/>
+	<parameter name="fromDate" class="java.lang.String"/>
+	<parameter name="toDate" class="java.lang.String"/>
+	<parameter name="subReport1" class="java.lang.String"/>
+	<parameter name="subReport2" class="java.lang.String"/>
+	<parameter name="subReport3" class="java.lang.String"/>
+	<parameter name="packingGrade" class="java.lang.String"/>
+	<parameter name="gltId" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="70" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="750" height="30" uuid="096baecc-5bb3-4cc0-b440-a2274d81669a"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Abul Khair Leaf Tobacco Company Ltd.
+]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="0" y="30" width="752" height="30" uuid="3e35c97d-0259-44e2-8b8b-794910c6046a"/>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{gltId}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<detail>
+		<band height="260" splitType="Stretch">
+			<subreport>
+				<reportElement x="0" y="60" width="750" height="200" uuid="e4bd824b-a600-4bdf-895c-c518fe9dd134"/>
+				<subreportParameter name="GLT_Sub_Report_1">
+					<subreportParameterExpression><![CDATA[$P{GLT_Sub_Report_1}]]></subreportParameterExpression>
+				</subreportParameter>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource(
+    (java.util.Collection)$P{GLT_Sub_Report_1}
+)]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$P{subReport1}]]></subreportExpression>
+			</subreport>
+			<textField>
+				<reportElement x="29" y="0" width="250" height="20" uuid="d09568f3-a2fc-4b52-af57-57f611145e14">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA["From Date: "+$P{fromDate}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="29" y="40" width="250" height="20" uuid="2d9e884f-78ff-4e24-b485-32a5136ddf31">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA["GLT Name: "+$P{gltId}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="29" y="20" width="250" height="20" uuid="6bb205c6-404e-44d4-8523-aa4ef248872d">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA["To Date: "+$P{toDate}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="480" y="40" width="270" height="20" uuid="982b79a5-de8c-4479-b3a9-cee60a742f64">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA["Execution Time : " +new  SimpleDateFormat("dd-MMM-yyyy, hh:mm:ss a").format(new java.util.Date())]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<summary>
+		<band height="149" splitType="Stretch">
+			<subreport>
+				<reportElement x="1" y="1" width="750" height="49" uuid="8c004986-8f3b-4296-af5b-53cec058012e"/>
+				<subreportParameter name="GLT_Sub_Report_1">
+					<subreportParameterExpression><![CDATA[$P{GLT_Sub_Report_1}]]></subreportParameterExpression>
+				</subreportParameter>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource(
+    (java.util.Collection)$P{Carton_Sub_Report_2}
+)]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$P{subReport2}]]></subreportExpression>
+			</subreport>
+			<subreport>
+				<reportElement x="0" y="50" width="750" height="99" uuid="40558b30-fbec-42d7-ac8b-b52159387c3a"/>
+				<subreportParameter name="GLT_Sub_Report_1">
+					<subreportParameterExpression><![CDATA[$P{GLT_Sub_Report_1}]]></subreportParameterExpression>
+				</subreportParameter>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource(
+    (java.util.Collection)$P{Pack_Case_Sub_Report_3}
+)]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$P{subReport3}]]></subreportExpression>
+			</subreport>
+		</band>
+	</summary>
+</jasperReport>
