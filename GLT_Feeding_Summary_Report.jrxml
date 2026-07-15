@@ -73,7 +73,7 @@
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font isBold="true"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$V{netWeight_1}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$V{netWeight_1} + $V{rejectedWeight_1}]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="true">
 					<reportElement mode="Opaque" x="290" y="0" width="125" height="20" backcolor="#CBF1FF" uuid="16011f4a-c69e-4f30-ae98-a3dca09d7fb8">
@@ -155,7 +155,7 @@
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font isBold="true"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$V{netWeight_1}.doubleValue() - $V{gltReceivedWeight_1}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[($V{netWeight_1} + $V{rejectedWeight_1}.doubleValue()) - $V{gltReceivedWeight_1}]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="true">
 					<reportElement mode="Opaque" x="415" y="0" width="125" height="20" backcolor="#CBF1FF" uuid="47f90278-285d-4125-96a1-3a13217372e9">
@@ -206,7 +206,7 @@
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font isBold="true"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$V{netWeight_1} - $V{rejectedWeight_1}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$V{netWeight_1}]]></textFieldExpression>
 				</textField>
 				<textField pattern="0.00" isBlankWhenNull="true">
 					<reportElement mode="Opaque" x="930" y="0" width="125" height="20" backcolor="#CBF1FF" uuid="03ae1ed2-9979-450c-9d5a-3eaa064f289a">
@@ -437,7 +437,7 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font isBold="true"/>
 				</textElement>
-				<text><![CDATA[Net Weight (kg)]]></text>
+				<text><![CDATA[Net Feeding Weight (kg)]]></text>
 			</staticText>
 			<staticText>
 				<reportElement mode="Opaque" x="415" y="0" width="125" height="30" backcolor="#A3D1C6" uuid="150c9624-b5a3-4361-86f0-19e33b7398d8">
@@ -546,7 +546,7 @@
 					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$F{feedingWeight}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{feedingWeight} + $F{rejectedWeight}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement x="1180" y="0" width="125" height="20" uuid="7e48f110-0cb8-4b33-bf34-d774cfa28625">
@@ -574,7 +574,9 @@
 					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$F{feedingWeight}.doubleValue() - $F{gltReceivedWeight}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{feedingWeight}
++ $F{rejectedWeight}.doubleValue()
+- $F{gltReceivedWeight}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement x="165" y="0" width="125" height="20" uuid="c09ce70d-6643-458e-95c2-60fd8ffd4364">
@@ -634,7 +636,7 @@
 					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$F{feedingWeight} - $F{rejectedWeight}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{feedingWeight}]]></textFieldExpression>
 			</textField>
 			<textField pattern="0.00" isBlankWhenNull="true">
 				<reportElement x="930" y="0" width="125" height="20" uuid="c5e91133-fcff-4f5f-8123-93550d77b657">
@@ -686,7 +688,7 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$V{netWeight}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$V{netWeight} + $V{rejectedWeight}]]></textFieldExpression>
 			</textField>
 			<textField pattern="0.00" isBlankWhenNull="true">
 				<reportElement mode="Opaque" x="665" y="0" width="140" height="20" backcolor="#F8CBAD" uuid="35590784-6e70-4714-9da5-a280d94b5269">
@@ -751,7 +753,11 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$V{netWeight}.doubleValue() - $V{gltReceivedWeight}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[(
+    $V{netWeight}
+    + $V{rejectedWeight}.doubleValue()
+    - $V{gltReceivedWeight}
+)]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement mode="Opaque" x="415" y="0" width="125" height="20" backcolor="#F8CBAD" uuid="67fac49d-72a3-402f-b2dd-cfb52833985b">
@@ -819,7 +825,7 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$V{netWeight} - $V{rejectedWeight}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$V{netWeight}]]></textFieldExpression>
 			</textField>
 		</band>
 	</summary>
