@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.20.0.final using JasperReports Library version 6.20.0-2bc7ab61c56f459e8176eb05c7705e145cd400ad  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Hand_Grading_Short_Summary_Issue_and_Output" pageWidth="1230" pageHeight="900" orientation="Landscape" columnWidth="1190" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="39360ee5-0118-4865-b294-38dcb58af660">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+	<property name="com.jaspersoft.studio.unit." value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageHeight" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.topMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.bottomMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.leftMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.rightMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnSpacing" value="pixel"/>
+	<parameter name="seasonId" class="java.lang.String"/>
+	<parameter name="areaId" class="java.lang.String"/>
+	<parameter name="varietyId" class="java.lang.String"/>
+	<parameter name="buyingCenterId" class="java.lang.String"/>
+	<parameter name="Hand_Grading_Report_Short_Summary" class="java.util.List"/>
+	<parameter name="Hand_Grading_Report_Short_Summary1" class="java.util.List"/>
+	<parameter name="subReport" class="java.lang.String"/>
+	<parameter name="subReport1" class="java.lang.String"/>
+	<parameter name="fromDate" class="java.lang.String"/>
+	<parameter name="toDate" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="95" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="1190" height="95" uuid="cc4bb836-1bdb-4978-b511-ff43068162d4">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="com.jaspersoft.studio.unit.firstLineIndent" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="16" isBold="true"/>
+					<paragraph firstLineIndent="0"/>
+				</textElement>
+				<text><![CDATA[Abul Khair Leaf Tobacco Co. Ltd
+D.T Road, Pahartoli, Chittagong, Bangladesh
+Phone: 88-031-714541-4]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="80" splitType="Stretch">
+			<textField>
+				<reportElement x="400" y="20" width="210" height="20" uuid="d151fbf1-4620-4cf3-a123-87837ed1ebe2"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA["Season: "+$P{seasonId}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="630" y="20" width="270" height="20" uuid="86d008d7-d43a-4aca-a29d-35d520030ccb"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA["Buying Center: "+$P{buyingCenterId}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="0" width="1190" height="20" uuid="b9233fc1-f05b-4f46-8daf-13e6bdcd7124"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Hand Grading Short Summary Report"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="400" y="40" width="210" height="20" uuid="74336bc7-95c1-4a1b-8073-740a246ce1d4"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA["Area: "+$P{areaId}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="630" y="40" width="270" height="20" uuid="579c6fed-bac0-484b-8eef-41425845c759"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA["From Date: "+$P{fromDate}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="630" y="60" width="270" height="20" uuid="9c4e11f4-62f5-48f8-ad7d-a0073d97598b"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA["To Date: "+$P{toDate}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="900" y="60" width="290" height="20" uuid="83d1a247-6498-4eb2-8b75-f4bfafff9821">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA["Execution Time : " +new  SimpleDateFormat("dd-MMM-yyyy, hh:mm:ss a").format(new java.util.Date())]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="400" y="60" width="210" height="20" uuid="9dc7e125-03a2-41c2-a8f1-08a52490e908"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA["Variety: "+$P{varietyId}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<detail>
+		<band height="200" splitType="Stretch">
+			<subreport>
+				<reportElement x="0" y="0" width="590" height="200" uuid="241e1cdb-244c-4ee5-adc3-b5bd02df1b76">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{Hand_Grading_Report_Short_Summary})]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$P{subReport}]]></subreportExpression>
+			</subreport>
+			<subreport>
+				<reportElement x="600" y="0" width="590" height="200" uuid="0348eed3-2ef8-4a18-99a7-eea823e58eff">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{Hand_Grading_Report_Short_Summary1})]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$P{subReport1}]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+</jasperReport>
