@@ -63,6 +63,7 @@
 	<field name="depot_18" class="java.math.BigDecimal"/>
 	<field name="depot_19" class="java.math.BigDecimal"/>
 	<field name="depot_20" class="java.math.BigDecimal"/>
+	<field name="total" class="java.math.BigDecimal"/>
 	<variable name="depot_1" class="java.math.BigDecimal" calculation="Sum">
 		<variableExpression><![CDATA[$F{depot_1}]]></variableExpression>
 	</variable>
@@ -122,6 +123,9 @@
 	</variable>
 	<variable name="depot_20" class="java.math.BigDecimal" calculation="Sum">
 		<variableExpression><![CDATA[$F{depot_20}]]></variableExpression>
+	</variable>
+	<variable name="total" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{total}]]></variableExpression>
 	</variable>
 	<background>
 		<band splitType="Stretch"/>
@@ -920,12 +924,7 @@ Phone: 88-031-714541-4]]></text>
 					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$F{depot_1}
-    .add($F{depot_2})
-    .add($F{depot_3})
-    .add($F{depot_4})
-    .add($F{depot_5})
-    .add($F{depot_6})]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{total}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
@@ -1257,7 +1256,7 @@ Phone: 88-031-714541-4]]></text>
 					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$V{depot_20}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$V{total}]]></textFieldExpression>
 			</textField>
 		</band>
 	</summary>
