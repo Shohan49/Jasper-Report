@@ -1,0 +1,2099 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.18.1.final using JasperReports Library version 6.18.1-9d75d1969e774d4f179fb3be8401e98a0e6d1611  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="consumer_contact_daily_report_all_brand" pageWidth="3750" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="8d35e38d-4207-4109-bf5c-49dc0d187cc9">
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="PRODUCTION_AKT_TMA"/>
+	<parameter name="targetDate" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[select
+            ROW_NUMBER() over (order by division.id) as serial,
+            wing.id as wingId,
+            wing.teritory_name as wingName,
+            division.id as divisionId,
+            division.teritory_name as divisionName,
+            ter.id AS territoryID,
+            ter.TERITORY_NAME territoryName,
+            sum(nvl(targetValue.teamCount, 0)) as teamCount,
+            sum(nvl(targetValue.tmsAttendanceCount, 0)) as tmsAttendanceCount,
+            sum(nvl(targetValue.tmrAttendanceCount, 0)) as tmrAttendanceCount,
+            sum(nvl(targetValue.baAttendanceCount, 0)) as baAttendanceCount,
+            --sum(nvl(targetValue.targetContact, 0)) as targetContact,
+            --sum(nvl(targetValue.targetFreeSample, 0)) as targetFreeSample,
+            sum(nvl(targetValue.targetPacksales, 0)) as packSalesTarget,
+            sum(nvl(targetValue.targetVaoSales, 0)) as vaoSalesTarget,
+            sum(nvl(actualSales.rallyVerveSales, 0)) as rallyVerveSales,
+            sum(nvl(actualSales.rallyIceSales, 0)) as rallyIceSales,
+            sum(nvl(actualSales.rallyBoltSales, 0)) as rallyBoltSales,
+            sum(nvl(actualSales.mariseSales, 0)) as mariseSale,
+            sum(nvl(actualSales.smtbSales, 0)) as smtbSales,
+            sum(nvl(actualSales.smabSales, 0)) as smabSales,
+            sum(nvl(actualSales.smbbSales, 0)) as smbbSales,
+            sum(nvl(actualSales.rallyVaoSales, 0)) as rallyVaoSales,
+            sum(nvl(actualSales.mariseVaoSales, 0)) as mariseVaoSales,
+            sum(nvl(actualSales.sunmoonVaoSales, 0)) as sunmoonVaoSales,
+            sum(nvl(actualSales.vaoSalesPerson, 0)) as vaoSalesPerson,
+            sum(nvl(actualSales.vaoSales, 0)) as vaoSales,
+            sum(nvl(actualSales.packetSalesPerson, 0)) as packetSalesPerson,
+            sum(nvl(actualSales.packetSalesQty, 0)) as packetSalesQty,
+            sum(nvl(actualSales.visitedOutlet, 0)) as visitedOutlet,
+            sum(ri_Bundle) riBundle,
+            (CASE WHEN sum(raTotalBundle) != 0 then (sum(ri_bundle)/sum(raTotalBundle)*100) ELSE 0 END) riContribution,
+           sum(rbBundle) rbBundle,
+           (CASE WHEN sum(raTotalBundle) != 0 then (sum(rbBundle)/sum(raTotalBundle)*100) ELSE 0 END)  rbContribution,
+           sum(RallyTargetBundle) rallyTargetBundle,
+           sum(raTotalBundle) raTotalBundle,
+           sum(smaBundle) smaBundle,
+           (CASE WHEN sum(smTotalBundle) != 0 then (sum(smaBundle)/sum(smTotalBundle)*100) ELSE 0 END) smaContribution,
+           sum(smtBundle) smtBundle,
+           (CASE WHEN sum(smTotalBundle) != 0 then (sum(smtBundle)/sum(smTotalBundle)*100) ELSE 0 END)  smtContribution,
+           sum(smbBundle) smbBundle,
+           (CASE WHEN sum(smTotalBundle) != 0 then (sum(smbBundle)/sum(smTotalBundle)*100) ELSE 0 END)  smbContribution,
+           sum(SunmoonTargetBundle) sunmoonTargetBundle,
+           sum(smTotalBundle) smTotalBundle,
+           sum(RallyTargetBundle+SunmoonTargetBundle) grandTotalBundleTarget, 
+           sum(grandTotalBundle) grandTotalBundle
+            from (select distinct ter.id as territoryId,
+                count (distinct teamWiseData.team_id) as teamCount,
+                sum(teamWiseData.tmsAttendanceCount) as tmsAttendanceCount,
+                sum(teamWiseData.tmrAttendanceCount) as tmrAttendanceCount,
+                sum(teamWiseData.baAttendanceCount) as baAttendanceCount,
+                sum(teamWiseData.targetContact) as targetContact,
+                sum(teamWiseData.targetFreeSample) as targetFreeSample,
+                sum(teamWiseData.targetPacksales) as targetPacksales,
+                sum(teamWiseData.targetVaoSales) as targetVaoSales,
+                sum(teamWiseData.RallyTargetBundle) as RallyTargetBundle,
+                sum(teamWiseData.SunmoonTargetBundle) as SunmoonTargetBundle
+            from (select distinct brTeam.team_id,
+                                sum(case when role.role = 'TMS' then 1 else 0 end) tmsAttendanceCount,
+                                sum(case when role.role = 'TMR' then 1 else 0 end) tmrAttendanceCount,
+                                sum(case when role.role = 'BA' then 1 else 0 end) baAttendanceCount,
+                                sum(case when role.role = 'TMR' or role.role = 'BA' then 1 else 0 end) * teamtarget.contact_limit as targetContact,
+                                sum(case when role.role = 'TMR' or role.role = 'BA' then 1 else 0 end) * teamtarget.contact_limit  * 3 as targetFreeSample,
+                                sum(case when role.role = 'TMR' or role.role = 'BA' then 1 else 0 end) * teamtarget.packet_sales_target as targetPacksales,
+                                sum(case when role.role = 'TMR' or role.role = 'BA' then 1 else 0 end) * teamtarget.vao_sales_quantity as targetVaoSales,
+                                sum(case when role.role = 'TMR' or role.role = 'BA' then 1 else 0 end) * teamtarget.rally_bundle_target as RallyTargetBundle,
+  								sum(case when role.role = 'TMR' or role.role = 'BA' then 1 else 0 end) * teamtarget.sunmoon_bundle_target as SunmoonTargetBundle
+                            from appsm.bruser_attendance brUserAttendance
+                                inner join appsm.bruser on (bruserattendance.br_user_user_id = bruser.user_id and to_char(bruserattendance.attendance_date_time, 'dd-mm-yyyy') = $P{targetDate})
+                                inner join appsm.bruser_roles userRoles on (bruser.user_id = userRoles.bruser_user_id)
+                                inner join appsm.role role on (userRoles.roles_id = role.id)
+                                inner join appsm.br_user_team brUserTeam on (bruser.user_id = bruserteam.br_user_id and to_date($P{targetDate}, 'dd-mm-yyyy') > brUserTeam.ed and to_date($P{targetDate}, 'dd-mm-yyyy') <= bruserteam.td)
+                                inner join appsm.brteam brTeam on (brUserteam.br_team_id = brteam.team_id)
+                                inner join (
+                                select 
+                                    distinct targetList.br_team_id as br_team_id,
+                                    sum(targetList.contact_limit) as contact_limit,
+                                    sum(targetList.packet_sales_target) as packet_sales_target,
+                                    sum(targetList.vao_sales_quantity) as vao_sales_quantity,
+                                    sum(targetList.rally_bundle_target) AS rally_bundle_target,
+                                    sum(targetList.sunmoon_bundle_target) AS sunmoon_bundle_target
+                                from  (select 
+                                        ab.br_team_id, 
+                                        max(ab.contact_limit) contact_limit, 
+                                        max(distinct ab.contact_module) contact_module, 
+                                        max(distinct ab.combined_contact_module) combined_contact_module,  
+                                        max(case when ab.product_id in (1, 2, 11, 12, 13, 14) then bbst.BUNDLE_SALES_TARGET else 0 end ) as rally_bundle_target,
+       									max(case when ab.product_id in (15, 16, 17, 18, 19, 20) then bbst.BUNDLE_SALES_TARGET else 0 end)  as sunmoon_bundle_target,
+                                        bpst.packet_sales_target,
+                                        bvst.vao_sales_quantity
+                                    from appsm.assign_brand ab 
+                                    left join appsm.br_packet_sales_target bpst 
+                                    on(ab.contact_module = bpst.contact_module and nvl(ab.combined_contact_module, 0) = nvl(bpst.combined_contact_module, 0) and to_date($P{targetDate}, 'dd-mm-yyyy') > bpst.ed and  to_date($P{targetDate}, 'dd-mm-yyyy') <= bpst.td)
+                                    left join appsm.br_vao_sales_target bvst 
+                                    on(ab.contact_module = bvst.contact_module and nvl(ab.combined_contact_module, 0) = nvl(bvst.combined_contact_module, 0) and to_date($P{targetDate}, 'dd-mm-yyyy') > bvst.ed  and to_date($P{targetDate}, 'dd-mm-yyyy') <= bvst.td)
+                                    LEFT JOIN appsm.BR_BUNDLE_SALES_TARGET bbst on(ab.contact_module = bbst.contact_module and nvl(ab.combined_contact_module, 0) = nvl(bbst.combined_contact_module, 0) and to_date($P{targetDate}, 'dd-mm-yy') >  bbst.ed and to_date($P{targetDate}, 'dd-mm-yy') <= bbst.td)
+                                    where to_char(ab.target_date, 'dd-mm-yyyy') = $P{targetDate}
+                                    group by ab.contact_module, ab.combined_contact_module, ab.br_team_id, bpst.packet_sales_target, bvst.vao_sales_quantity) targetList
+                                group by targetList.br_team_id) teamTarget on (teamtarget.br_team_id = brteam.team_id)
+                            group by brTeam.team_id, teamtarget.contact_limit, teamtarget.packet_sales_target, teamtarget.vao_sales_quantity, teamtarget.rally_bundle_target, teamtarget.sunmoon_bundle_target) teamWiseData 
+            inner join appsm.brteam brTeam on (teamWiseData.team_id = brteam.team_id)
+            inner join appsm.teritory ter on (brteam.teritory_id = ter.id)
+            group by ter.id ) targetValue left join
+            (select 
+                vter.teritory_id as territory_id,
+                
+                -----------<Packet sales count pre person>-----------
+                sum(case when bract.packet_sales_brand is not null and bract.sales_pack_qty > 0 and  bract.packet_sales_brand in (1,2) then 1 else 0 end ) rallyVerveSales,
+                sum(case when bract.packet_sales_brand is not null and bract.sales_pack_qty > 0 and  bract.packet_sales_brand in (11,12) then 1 else 0 end ) rallyIceSales,
+                sum(case when bract.packet_sales_brand is not null and bract.sales_pack_qty > 0 and  bract.packet_sales_brand in (13,14) then 1 else 0 end ) rallyBoltSales,
+                sum(case when bract.packet_sales_brand is not null and bract.sales_pack_qty > 0 and  bract.packet_sales_brand in (4,5) then 1 else 0 end ) mariseSales,
+                sum(case when bract.packet_sales_brand is not null and bract.sales_pack_qty > 0 and  bract.packet_sales_brand in (18,19) then 1 else 0 end ) smtbSales,
+                sum(case when bract.packet_sales_brand is not null and bract.sales_pack_qty > 0 and  bract.packet_sales_brand in (16,17) then 1 else 0 end ) smabSales,
+                sum(case when bract.packet_sales_brand is not null and bract.sales_pack_qty > 0 and  bract.packet_sales_brand in (20,21) then 1 else 0 end ) smbbSales,
+            
+            
+                -----------<Vao sales count pre person>-----------
+                sum(case when bract.vao_sales_brand is not null and bract.vao_sales_pack > 0 and bract.vao_sales_brand in (1,2,11,12,13,14) then 1 else 0 end ) rallyVaoSales,
+                sum(case when bract.vao_sales_brand is not null and bract.vao_sales_pack > 0 and bract.vao_sales_brand in (4,5) then 1 else 0 end ) mariseVaoSales,
+                sum(case when bract.vao_sales_brand is not null and bract.vao_sales_pack > 0 and bract.vao_sales_brand in (16,17,18,19,20,21) then 1 else 0 end ) sunmoonVaoSales,
+            
+                ----------<Total vao sales person>--------
+                sum(case when bract.vao_sales_brand is not null and bract.vao_sales_pack > 0 then 1 else 0 end) as vaoSalesPerson,
+                
+                ----------<Total vao sales pack>------------
+                sum(bract.vao_sales_pack) as vaoSales,
+                
+                ----------<Total pack sales person>--------
+                sum(case when bract.packet_sales_brand is not null and bract.sales_pack_qty > 0 then 1 else 0 end) as packetSalesPerson,
+                
+                ----------<Total sales pack>--------
+                sum(case when bract.packet_sales_brand is not null and bract.sales_pack_qty > 0 then bract.sales_pack_qty else 0 end) as packetSalesQty,
+                
+                ----------<Total outlet visit>--------
+                count(distinct bract.outlet_id) as visitedOutlet,
+                sum(CASE WHEN bract.BUNDLE_PRODUCT_ID IN (11,12) THEN 1 ELSE 0 END) ri_Bundle,
+           sum(CASE WHEN bract.BUNDLE_PRODUCT_ID IN (13,14) THEN 1 ELSE 0 END) rbBundle,
+           sum(CASE WHEN bract.BUNDLE_PRODUCT_ID IN (11,12,13,14) THEN 1 ELSE 0 END) raTotalBundle,
+           sum(CASE WHEN bract.BUNDLE_PRODUCT_ID IN (16,17) THEN 1 ELSE 0 END) smaBundle,
+           sum(CASE WHEN bract.BUNDLE_PRODUCT_ID IN(18,19) THEN 1 ELSE 0 END) smtBundle,
+           sum(CASE WHEN bract.BUNDLE_PRODUCT_ID IN (20,21)THEN 1 ELSE 0 END) smbBundle,
+           sum(CASE WHEN bract.BUNDLE_PRODUCT_ID IN (16,17,18,19,20,21)THEN 1 ELSE 0 END) smTotalBundle,
+           sum(CASE WHEN bract.BUNDLE_PRODUCT_ID IN (11,12,13,14,16,17,18,19,20,21) THEN 1 ELSE 0 END) grandTotalBundle
+                
+            from appsm.bractivity bract
+            inner join appsm.v_teritory_all vter on (bract.route_id = vter.route_id)
+            where to_char(bract.target_date, 'dd-mm-yyyy') = $P{targetDate}
+            group by vter.teritory_id) actualSales on (targetValue.territoryId = actualSales.territory_id)
+            inner join appsm.teritory ter on (actualSales.territory_id = ter.id)
+            inner join appsm.teritory division on (ter.parent_id = division.id)
+            inner join appsm.teritory wing on (division.parent_id = wing.id)
+            group by division.id, division.teritory_name, wing.id, wing.teritory_name, ter.id, ter.teritory_name
+            order by division.id, ter.id]]>
+	</queryString>
+	<field name="serial" class="java.lang.Integer"/>
+	<field name="wingId" class="java.lang.Long"/>
+	<field name="wingName" class="java.lang.String"/>
+	<field name="divisionId" class="java.lang.Long"/>
+	<field name="divisionName" class="java.lang.String"/>
+	<field name="territoryId" class="java.lang.Long"/>
+	<field name="territoryName" class="java.lang.String"/>
+	<field name="teamCount" class="java.lang.Integer"/>
+	<field name="tmsAttendanceCount" class="java.lang.Integer"/>
+	<field name="tmrAttendanceCount" class="java.lang.Integer"/>
+	<field name="baAttendanceCount" class="java.lang.Integer"/>
+	<field name="packSalesTarget" class="java.lang.Integer"/>
+	<field name="rallyVerveSales" class="java.lang.Integer"/>
+	<field name="rallyIceSales" class="java.lang.Integer"/>
+	<field name="rallyBoltSales" class="java.lang.Integer"/>
+	<field name="mariseSale" class="java.lang.Integer"/>
+	<field name="smtbSales" class="java.lang.Integer"/>
+	<field name="smabSales" class="java.lang.Integer"/>
+	<field name="smbbSales" class="java.lang.Integer"/>
+	<field name="vaoSalesTarget" class="java.lang.Integer"/>
+	<field name="rallyVaoSales" class="java.lang.Integer"/>
+	<field name="mariseVaoSales" class="java.lang.Integer"/>
+	<field name="sunmoonVaoSales" class="java.lang.Integer"/>
+	<field name="packetSalesPerson" class="java.lang.Integer"/>
+	<field name="vaoSalesPerson" class="java.lang.Integer"/>
+	<field name="riBundle" class="java.lang.Long"/>
+	<field name="rbBundle" class="java.lang.Long"/>
+	<field name="rallyTargetBundle" class="java.lang.Long"/>
+	<field name="raTotalBundle" class="java.lang.Long"/>
+	<field name="smaBundle" class="java.lang.Long"/>
+	<field name="smtBundle" class="java.lang.Long"/>
+	<field name="smbBundle" class="java.lang.Long"/>
+	<field name="sunmoonTargetBundle" class="java.lang.Long"/>
+	<field name="smTotalBundle" class="java.lang.Long"/>
+	<field name="grandTotalBundleTarget" class="java.lang.Long"/>
+	<field name="grandTotalBundle" class="java.lang.Long"/>
+	<field name="riContribution" class="java.lang.Double"/>
+	<field name="rbContribution" class="java.lang.Double"/>
+	<field name="smaContribution" class="java.lang.Double"/>
+	<field name="smtContribution" class="java.lang.Double"/>
+	<field name="smbContribution" class="java.lang.Double"/>
+	<variable name="teamCount_division_group" class="java.lang.Integer" resetType="Group" resetGroup="Division_Group" calculation="Sum">
+		<variableExpression><![CDATA[$F{teamCount}]]></variableExpression>
+	</variable>
+	<variable name="tms_count_division_group" class="java.lang.Integer" resetType="Group" resetGroup="Division_Group" calculation="Sum">
+		<variableExpression><![CDATA[$F{tmsAttendanceCount}]]></variableExpression>
+	</variable>
+	<variable name="tmr_count_division" class="java.lang.Integer" resetType="Group" resetGroup="Division_Group" calculation="Sum">
+		<variableExpression><![CDATA[$F{tmrAttendanceCount}]]></variableExpression>
+	</variable>
+	<variable name="ba_count_division_group" class="java.lang.Integer" resetType="Group" resetGroup="Division_Group" calculation="Sum">
+		<variableExpression><![CDATA[$F{baAttendanceCount}]]></variableExpression>
+	</variable>
+	<variable name="rally_verve_sale_count_division_group" class="java.lang.Integer" resetType="Group" resetGroup="Division_Group" calculation="Sum">
+		<variableExpression><![CDATA[$F{rallyVerveSales}]]></variableExpression>
+	</variable>
+	<variable name="rally_ice_sale_count_division_group" class="java.lang.Integer" resetType="Group" resetGroup="Division_Group" calculation="Sum">
+		<variableExpression><![CDATA[$F{rallyIceSales}]]></variableExpression>
+	</variable>
+	<variable name="rally_bolt_sale_count_division_group" class="java.lang.Integer" resetType="Group" resetGroup="Division_Group" calculation="Sum">
+		<variableExpression><![CDATA[$F{rallyBoltSales}]]></variableExpression>
+	</variable>
+	<variable name="marise_sale_count_division_group" class="java.lang.Integer" resetType="Group" resetGroup="Division_Group" calculation="Sum">
+		<variableExpression><![CDATA[$F{mariseSale}]]></variableExpression>
+	</variable>
+	<variable name="smtb_sale_count_division_group" class="java.lang.Integer" resetType="Group" resetGroup="Division_Group" calculation="Sum">
+		<variableExpression><![CDATA[$F{smtbSales}]]></variableExpression>
+	</variable>
+	<variable name="smab_sale_count_division_group" class="java.lang.Integer" resetType="Group" resetGroup="Division_Group" calculation="Sum">
+		<variableExpression><![CDATA[$F{smabSales}]]></variableExpression>
+	</variable>
+	<variable name="smbb_sale_count_division_group" class="java.lang.Integer" resetType="Group" resetGroup="Division_Group" calculation="Sum">
+		<variableExpression><![CDATA[$F{smbbSales}]]></variableExpression>
+	</variable>
+	<variable name="vao_sale_sum_rally_division_group" class="java.lang.Integer" resetType="Group" resetGroup="Division_Group" calculation="Sum">
+		<variableExpression><![CDATA[$F{rallyVaoSales}]]></variableExpression>
+	</variable>
+	<variable name="vao_sale_sum_marise_division_group" class="java.lang.Integer" resetType="Group" resetGroup="Division_Group" calculation="Sum">
+		<variableExpression><![CDATA[$F{mariseVaoSales}]]></variableExpression>
+	</variable>
+	<variable name="vao_sale_sum_sunmoon_division_group" class="java.lang.Integer" resetType="Group" resetGroup="Division_Group" calculation="Sum">
+		<variableExpression><![CDATA[$F{sunmoonVaoSales}]]></variableExpression>
+	</variable>
+	<variable name="packet_sales_target_sum_division_group" class="java.lang.Integer" resetType="Group" resetGroup="Division_Group" calculation="Sum">
+		<variableExpression><![CDATA[$F{packSalesTarget}]]></variableExpression>
+	</variable>
+	<variable name="packet_sales_actual_sum_division_group" class="java.lang.Integer" resetType="Group" resetGroup="Division_Group" calculation="Sum">
+		<variableExpression><![CDATA[$F{packetSalesPerson}]]></variableExpression>
+	</variable>
+	<variable name="vao_sales_target_sum_division_group" class="java.lang.Long" resetType="Group" resetGroup="Division_Group" calculation="Sum">
+		<variableExpression><![CDATA[$F{vaoSalesTarget}]]></variableExpression>
+	</variable>
+	<variable name="vao_sales_actual_sum_division_group" class="java.lang.Long" resetType="Group" resetGroup="Division_Group" calculation="Sum">
+		<variableExpression><![CDATA[$F{vaoSalesPerson}]]></variableExpression>
+	</variable>
+	<variable name="vao_sales_and_packet_sale_target_sum_division_group" class="java.lang.Integer" resetType="Group" resetGroup="Division_Group" calculation="Sum">
+		<variableExpression><![CDATA[$F{packSalesTarget} + $F{vaoSalesTarget}]]></variableExpression>
+	</variable>
+	<variable name="vao_sales_and_packet_sale_actual_sum_division_group" class="java.lang.Integer" resetType="Group" resetGroup="Division_Group" calculation="Sum">
+		<variableExpression><![CDATA[$F{packetSalesPerson} + $F{vaoSalesPerson}]]></variableExpression>
+	</variable>
+	<variable name="v_ice_sales" class="java.lang.Long" calculation="Sum">
+		<variableExpression><![CDATA[$F{riBundle}]]></variableExpression>
+	</variable>
+	<variable name="v_bolt_sales" class="java.lang.Long" calculation="Sum">
+		<variableExpression><![CDATA[$F{rbBundle}]]></variableExpression>
+	</variable>
+	<variable name="v_rally_total_target" class="java.lang.Long" calculation="Sum">
+		<variableExpression><![CDATA[$F{rallyTargetBundle}]]></variableExpression>
+	</variable>
+	<variable name="v_rally_total_sales" class="java.lang.Long" calculation="Sum">
+		<variableExpression><![CDATA[$F{raTotalBundle}]]></variableExpression>
+	</variable>
+	<variable name="v_a_sales" class="java.lang.Long" calculation="Sum">
+		<variableExpression><![CDATA[$F{smaBundle}]]></variableExpression>
+	</variable>
+	<variable name="v_t_sales" class="java.lang.Long" calculation="Sum">
+		<variableExpression><![CDATA[$F{smtBundle}]]></variableExpression>
+	</variable>
+	<variable name="v_b_sales" class="java.lang.Long" calculation="Sum">
+		<variableExpression><![CDATA[$F{smbBundle}]]></variableExpression>
+	</variable>
+	<variable name="v_sun_total_target" class="java.lang.Long" calculation="Sum">
+		<variableExpression><![CDATA[$F{sunmoonTargetBundle}]]></variableExpression>
+	</variable>
+	<variable name="v_sun_total_sales" class="java.lang.Long" calculation="Sum">
+		<variableExpression><![CDATA[$F{smTotalBundle}]]></variableExpression>
+	</variable>
+	<variable name="v_grand total_Rally+Sunm_target" class="java.lang.Long" calculation="Sum">
+		<variableExpression><![CDATA[$F{grandTotalBundleTarget}]]></variableExpression>
+	</variable>
+	<variable name="v_grand total_Rally+Sunm_sales" class="java.lang.Long" calculation="Sum">
+		<variableExpression><![CDATA[$F{grandTotalBundle}]]></variableExpression>
+	</variable>
+	<variable name="v_ice_con" class="java.lang.Double"/>
+	<variable name="v_bolt_con" class="java.lang.Double"/>
+	<variable name="v_a_con" class="java.lang.Double"/>
+	<variable name="v_t_con" class="java.lang.Double"/>
+	<variable name="v_b_con" class="java.lang.Double"/>
+	<group name="Division_Group">
+		<groupExpression><![CDATA[$F{divisionId}]]></groupExpression>
+		<groupFooter>
+			<band height="20">
+				<textField>
+					<reportElement mode="Opaque" x="80" y="0" width="150" height="20" backcolor="#99FFCC" uuid="234fb048-e913-433b-9d7f-4a621c2f61be"/>
+					<box>
+						<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[$F{divisionName}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement mode="Opaque" x="230" y="0" width="80" height="20" backcolor="#99FFCC" uuid="828fe938-6005-441d-9962-fbebbacbfe6d"/>
+					<box>
+						<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[$V{teamCount_division_group}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement mode="Opaque" x="390" y="0" width="80" height="20" backcolor="#99FFCC" uuid="08ed712b-e631-4cad-9012-d42a8b43f4f1"/>
+					<box>
+						<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[$V{tms_count_division_group}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement mode="Opaque" x="470" y="0" width="80" height="20" backcolor="#99FFCC" uuid="98a6433f-1f73-4c59-b5c5-2e6ff2a6cfb5"/>
+					<box>
+						<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[$V{tmr_count_division}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement mode="Opaque" x="550" y="0" width="80" height="20" backcolor="#99FFCC" uuid="66982569-65bd-426d-9ad5-1b402e71b39c"/>
+					<box>
+						<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[$V{ba_count_division_group}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement mode="Opaque" x="630" y="0" width="80" height="20" backcolor="#99FFCC" uuid="90748fbc-96fa-4b5c-90cf-cb5ecd9a1e0d"/>
+					<box>
+						<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[$V{rally_verve_sale_count_division_group}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement mode="Opaque" x="710" y="0" width="80" height="20" backcolor="#99FFCC" uuid="e84121e5-31a3-406d-8679-9651004ff801"/>
+					<box>
+						<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[$V{rally_ice_sale_count_division_group}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement mode="Opaque" x="790" y="0" width="80" height="20" backcolor="#99FFCC" uuid="cb1ebd59-377b-4ac0-ae00-c87759e06015"/>
+					<box>
+						<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[$V{rally_bolt_sale_count_division_group}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement mode="Opaque" x="870" y="0" width="80" height="20" backcolor="#99FFCC" uuid="485817a2-0c2f-42f6-b50d-764c2d9f60db"/>
+					<box>
+						<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[$V{marise_sale_count_division_group}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement mode="Opaque" x="950" y="0" width="80" height="20" backcolor="#99FFCC" uuid="29a669a5-05e8-412a-99fb-1913d2ed3e99"/>
+					<box>
+						<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[$V{smtb_sale_count_division_group}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement mode="Opaque" x="1030" y="0" width="80" height="20" backcolor="#99FFCC" uuid="437564a1-f175-4278-80af-ed6cac742be8"/>
+					<box>
+						<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[$V{smab_sale_count_division_group}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement mode="Opaque" x="1110" y="0" width="80" height="20" backcolor="#99FFCC" uuid="616503ae-2415-4aab-b926-febfa529a1d4"/>
+					<box>
+						<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[$V{smbb_sale_count_division_group}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement mode="Opaque" x="1190" y="0" width="80" height="20" backcolor="#99FFCC" uuid="ecfef89b-1082-48d8-8361-9a4cf825c31b"/>
+					<box>
+						<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[$V{vao_sale_sum_rally_division_group}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement mode="Opaque" x="1270" y="0" width="80" height="20" backcolor="#99FFCC" uuid="17a905c2-ce01-4ea6-8ff1-0297707ae30e"/>
+					<box>
+						<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[$V{vao_sale_sum_marise_division_group}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement mode="Opaque" x="1350" y="0" width="80" height="20" backcolor="#99FFCC" uuid="dbccf31b-6ba3-43ac-a28d-44733eae98f8"/>
+					<box>
+						<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[$V{vao_sale_sum_sunmoon_division_group}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement mode="Opaque" x="1430" y="0" width="80" height="20" backcolor="#99FFCC" uuid="8d52a0e5-73e5-45d1-86e4-8c34d8667d07"/>
+					<box>
+						<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[$V{packet_sales_target_sum_division_group}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement mode="Opaque" x="1510" y="0" width="80" height="20" backcolor="#99FFCC" uuid="3f723e45-5e11-486f-9b5c-d209926486d4"/>
+					<box>
+						<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[$V{packet_sales_actual_sum_division_group}]]></textFieldExpression>
+				</textField>
+				<textField pattern="0.00">
+					<reportElement mode="Opaque" x="1590" y="0" width="80" height="20" printWhenGroupChanges="Division_Group" backcolor="#D1DDE3" uuid="2ca51c9f-59b4-49ef-b3a7-b7db7667095e"/>
+					<box>
+						<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[( $V{packet_sales_actual_sum_division_group}) ==0 ? 0.00 :
+(new Double( $V{packet_sales_actual_sum_division_group}  )/new Double($V{packet_sales_target_sum_division_group}))* 100]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement mode="Opaque" x="1670" y="0" width="80" height="20" backcolor="#99FFCC" uuid="2df04179-298d-44bd-a0d7-83c485171f2f"/>
+					<box>
+						<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[$V{vao_sales_target_sum_division_group}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement mode="Opaque" x="1750" y="0" width="80" height="20" backcolor="#99FFCC" uuid="736d9fd7-93a8-46cb-ad06-1b6964999212"/>
+					<box>
+						<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[$V{vao_sales_actual_sum_division_group}]]></textFieldExpression>
+				</textField>
+				<textField pattern="0.00">
+					<reportElement mode="Opaque" x="1830" y="0" width="80" height="20" backcolor="#D1DDE3" uuid="d73435d2-772c-4a8c-b533-34604e8b02ea"/>
+					<box>
+						<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[($V{vao_sales_actual_sum_division_group}) ==0 ? 0.00 :
+(new Double( $V{vao_sales_actual_sum_division_group}  )/new Double($V{vao_sales_target_sum_division_group}))* 100]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement mode="Opaque" x="1910" y="0" width="80" height="20" backcolor="#99FFCC" uuid="384a2f54-23d6-44dc-b59e-ada99ea3b3be"/>
+					<box>
+						<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[$V{vao_sales_and_packet_sale_target_sum_division_group}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement mode="Opaque" x="1990" y="0" width="80" height="20" backcolor="#99FFCC" uuid="f2357379-237b-4c3a-88bf-99f761891bc1"/>
+					<box>
+						<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[$V{vao_sales_and_packet_sale_actual_sum_division_group}]]></textFieldExpression>
+				</textField>
+				<textField pattern="0.00">
+					<reportElement mode="Opaque" x="2070" y="0" width="80" height="20" backcolor="#D1DDE3" uuid="885eacf2-0c4c-4935-91c7-9d1f4a4f1cca"/>
+					<box>
+						<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[($V{vao_sales_and_packet_sale_actual_sum_division_group}) ==0 ? 0.00 :
+(new Double($V{vao_sales_and_packet_sale_actual_sum_division_group}  )/new Double($V{vao_sales_and_packet_sale_target_sum_division_group}))* 100]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement mode="Opaque" x="310" y="0" width="80" height="20" backcolor="#99FFCC" uuid="b6f9893e-5141-45c4-92a1-f11e45fd99a2"/>
+					<box>
+						<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle"/>
+					<text><![CDATA[]]></text>
+				</staticText>
+				<staticText>
+					<reportElement mode="Opaque" x="0" y="0" width="80" height="20" backcolor="#99FFCC" uuid="9644ac0b-8b0f-4dea-bfbb-cc9690f3d67b"/>
+					<box>
+						<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle"/>
+					<text><![CDATA[]]></text>
+				</staticText>
+				<textField>
+					<reportElement mode="Opaque" x="2150" y="0" width="80" height="20" backcolor="#99FFCC" uuid="2414ba38-0338-4ecd-8bab-2a794f326b6b"/>
+					<box>
+						<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[$V{v_ice_sales}]]></textFieldExpression>
+				</textField>
+				<textField pattern="0.00">
+					<reportElement mode="Opaque" x="2230" y="0" width="80" height="20" backcolor="#FFE6CC" uuid="6eaf0917-2cfa-49db-a26f-07649a72adac"/>
+					<box>
+						<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[(new Double($V{v_ice_sales})/new Double($V{v_rally_total_sales}))* 100]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement mode="Opaque" x="2310" y="0" width="80" height="20" backcolor="#99FFCC" uuid="e8d601e3-1f01-49b8-b72f-d673b7827048"/>
+					<box>
+						<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[$V{v_bolt_sales}]]></textFieldExpression>
+				</textField>
+				<textField pattern="0.00">
+					<reportElement mode="Opaque" x="2390" y="0" width="80" height="20" backcolor="#FFE6CC" uuid="b84f9370-48b8-4915-b297-4ef51761b246"/>
+					<box>
+						<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[(new Double($V{v_bolt_sales})/new Double($V{v_rally_total_sales}))* 100]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement mode="Opaque" x="2550" y="0" width="80" height="20" backcolor="#99FFCC" uuid="4761604c-c1c7-4d8b-b570-69d8b977ad83"/>
+					<box>
+						<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[$V{v_rally_total_sales}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement mode="Opaque" x="2470" y="0" width="80" height="20" backcolor="#99FFCC" uuid="7e8c949a-1ec9-4b0b-854f-8532d94d4a8c"/>
+					<box>
+						<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[$V{v_rally_total_target}]]></textFieldExpression>
+				</textField>
+				<textField pattern="0.00">
+					<reportElement mode="Opaque" x="2630" y="0" width="80" height="20" backcolor="#D1DDE3" uuid="879709de-f045-47a2-b9fc-9957b816d5d2"/>
+					<box>
+						<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[($V{v_rally_total_sales}) ==0 ? 0.00 :
+(new Double($V{v_rally_total_sales} )/new Double($V{v_rally_total_target}))* 100]]></textFieldExpression>
+				</textField>
+				<textField pattern="0.00">
+					<reportElement mode="Opaque" x="2790" y="0" width="80" height="20" backcolor="#FFE6CC" uuid="b9f298e9-e73f-471e-88b2-5f0663ff72ae"/>
+					<box>
+						<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[(new Double($V{v_a_sales})/new Double($V{v_sun_total_sales}))* 100]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement mode="Opaque" x="2710" y="0" width="80" height="20" backcolor="#99FFCC" uuid="9e1a6478-5e66-451b-95e2-8c3a96b4dbed"/>
+					<box>
+						<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[$V{v_a_sales}]]></textFieldExpression>
+				</textField>
+				<textField pattern="0.00">
+					<reportElement mode="Opaque" x="2950" y="0" width="80" height="20" backcolor="#FFE6CC" uuid="b4047190-cf60-453d-8b4b-e2db7ab6fb5f"/>
+					<box>
+						<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[(new Double($V{v_t_sales})/new Double($V{v_sun_total_sales}))* 100]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement mode="Opaque" x="2870" y="0" width="80" height="20" backcolor="#99FFCC" uuid="d4e5a69a-1c43-49b9-ba8a-ab78dc30e218"/>
+					<box>
+						<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[$V{v_t_sales}]]></textFieldExpression>
+				</textField>
+				<textField pattern="0.00">
+					<reportElement mode="Opaque" x="3110" y="0" width="80" height="20" backcolor="#FFE6CC" uuid="bccdce86-c54e-4c5e-9aff-51c6f50ec2e0"/>
+					<box>
+						<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[(new Double($V{v_b_sales})/new Double($V{v_sun_total_sales}))* 100]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement mode="Opaque" x="3030" y="0" width="80" height="20" backcolor="#99FFCC" uuid="e042e4b0-26d9-4b75-966f-ec3a18d2cdf5"/>
+					<box>
+						<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[$V{v_b_sales}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement mode="Opaque" x="3190" y="0" width="80" height="20" backcolor="#99FFCC" uuid="f581b6b8-cc67-46da-870c-f553ce49723c"/>
+					<box>
+						<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[$V{v_sun_total_target}]]></textFieldExpression>
+				</textField>
+				<textField pattern="0.00">
+					<reportElement mode="Opaque" x="3350" y="0" width="80" height="20" backcolor="#D1DDE3" uuid="46ccbc5c-a119-4bc0-8e2f-da457f71e39e"/>
+					<box>
+						<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[($V{v_sun_total_sales}) ==0 ? 0.00 :
+(new Double($V{v_sun_total_sales} )/new Double($V{v_sun_total_target}))* 100]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement mode="Opaque" x="3270" y="0" width="80" height="20" backcolor="#99FFCC" uuid="760c2841-ebbf-4f67-b458-607cf30bf24a"/>
+					<box>
+						<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[$V{v_sun_total_sales}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement mode="Opaque" x="3510" y="0" width="80" height="20" backcolor="#99FFCC" uuid="6679f546-1307-4fe8-afcd-47c17c7dac9e"/>
+					<box>
+						<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[$V{v_grand total_Rally+Sunm_sales}]]></textFieldExpression>
+				</textField>
+				<textField pattern="0.00">
+					<reportElement mode="Opaque" x="3590" y="0" width="80" height="20" backcolor="#D1DDE3" uuid="5e726f77-90ee-46a8-a1c0-b57723361c79"/>
+					<box>
+						<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[($V{v_grand total_Rally+Sunm_sales}) ==0 ? 0.00 :
+(new Double($V{v_grand total_Rally+Sunm_sales})/new Double($V{v_grand total_Rally+Sunm_target}))* 100]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement mode="Opaque" x="3430" y="0" width="80" height="20" backcolor="#99FFCC" uuid="112433b3-e337-4934-8ebc-9e6411f668b3"/>
+					<box>
+						<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[$V{v_grand total_Rally+Sunm_target}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="30" splitType="Stretch">
+			<staticText>
+				<reportElement x="590" y="0" width="960" height="30" uuid="8afc6c13-9427-4ce1-8de3-3a94c4bfa648"/>
+				<textElement textAlignment="Center">
+					<font size="22" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Brand Wise Daily Pack Sales Report]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="30" splitType="Stretch">
+			<staticText>
+				<reportElement x="1672" y="0" width="238" height="30" uuid="88cbf189-d328-44cc-a2a6-804d5dd33752"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Date:  ]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="1910" y="0" width="240" height="30" uuid="a35a219b-a42e-4503-91a1-8738b8247133"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$P{targetDate}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="40" splitType="Stretch">
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="0" width="80" height="40" backcolor="#FFE8FB" uuid="e11a110a-3949-4644-a56e-1abd163c2499"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Serial]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="80" y="0" width="150" height="40" backcolor="#FFE8FB" uuid="521fe376-4375-4b65-8291-3f546c400ca4"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Territory Name]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="230" y="0" width="80" height="40" backcolor="#FFE8FB" uuid="e0bf914e-7382-420c-9c8e-9d4c9e5e4dd1"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Working Team]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="310" y="0" width="80" height="40" backcolor="#FFE8FB" uuid="02d6882b-a83c-4232-8c61-b3127e218123"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Working Tmo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="390" y="0" width="240" height="20" backcolor="#FFE8FB" uuid="5442ca47-3ce1-4e32-bbeb-0c5b8c9d9580"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Attendance]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="390" y="20" width="80" height="20" backcolor="#FFE8FB" uuid="043ba561-a980-4541-8552-97331f353854"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[TMS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="470" y="20" width="80" height="20" backcolor="#FFE8FB" uuid="9cfb5cf6-839e-4b01-a52c-b9f9dcbe9c9d"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[TMR]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="550" y="20" width="80" height="20" backcolor="#FFE8FB" uuid="64fc5c1e-156a-447e-ae15-590b1e75a166"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[BA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="630" y="0" width="80" height="40" backcolor="#FFE8FB" uuid="8c690ddd-7eb0-4cc0-ba78-b86efbfdd2d0"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Rally Verve Sales]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="2070" y="20" width="80" height="20" backcolor="#FFE8FB" uuid="64176b81-b7fe-40e7-a811-e7d15dc77b08"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Ach%.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="1990" y="20" width="80" height="20" backcolor="#FFE8FB" uuid="7bf9e7b8-b471-4574-a783-90a54a8bbe3c"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Sales]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="1910" y="20" width="80" height="20" backcolor="#FFE8FB" uuid="b6dedffd-8c0f-4996-96ff-88672752984b"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Target]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="1910" y="0" width="240" height="20" backcolor="#FFE8FB" uuid="a1a2f853-a5a8-4a72-b3ad-f74b45cc567a"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Total (Pack + VAO)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="710" y="0" width="80" height="40" backcolor="#FFE8FB" uuid="4f984554-2601-4ca2-ae13-f50bd0fe058f"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Rally Ice Sales]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="790" y="0" width="80" height="40" backcolor="#FFE8FB" uuid="346ff746-0e82-4387-8ca6-028a5c0d2fe5"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Rally Bolt Sales]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="870" y="0" width="80" height="40" backcolor="#FFE8FB" uuid="c47d9995-eac9-47e4-bf97-ccf60f7c04ba"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Marise Sales]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="950" y="0" width="80" height="40" backcolor="#FFE8FB" uuid="517cb57e-15ed-4d41-9281-2764307aa8d3"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Sunmoon (Turkish) Sales]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="1030" y="0" width="80" height="40" backcolor="#FFE8FB" uuid="d5977a04-1bf8-4205-b50b-80c2e8116061"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Sunmoon (American) Sales]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="1110" y="0" width="80" height="40" backcolor="#FFE8FB" uuid="94e43217-f3ff-46f9-8002-58bd89ff830c"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Sunmoon (Brazilian) Sales]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="1190" y="0" width="80" height="40" backcolor="#FFE8FB" uuid="9321f1ab-eeb3-425e-b3eb-d296a9209edc"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Vao Sales (Rally)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="1270" y="0" width="80" height="40" backcolor="#FFE8FB" uuid="2a492738-e5cf-4968-afd0-2c339ad57c31"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Vao Sales (Marise)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="1350" y="0" width="80" height="40" backcolor="#FFE8FB" uuid="ac716317-83a3-44cb-94d0-586f4a60c4df"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Vao Sales (Sunmoon)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="1830" y="20" width="80" height="20" backcolor="#FFE8FB" uuid="aacffe9c-8a72-45a4-bb5e-f7f29179d2da"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Ach%.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="1670" y="20" width="80" height="20" backcolor="#FFE8FB" uuid="27c01d9a-8796-48d6-b200-927194f889bd"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Target]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="1750" y="20" width="80" height="20" backcolor="#FFE8FB" uuid="6ac20d9d-8d05-41fe-bb80-0b5e497d29c5"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Sales]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="1670" y="0" width="240" height="20" backcolor="#FFE8FB" uuid="479fcdcc-5e5b-4e44-9642-a704e8e7128c"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[VAO Sales]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="1590" y="20" width="80" height="20" backcolor="#FFE8FB" uuid="41f3b34d-d8fc-47df-912f-f27136953f6c"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Ach%.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="1510" y="20" width="80" height="20" backcolor="#FFE8FB" uuid="1539b34c-4782-4756-8256-f36b3fa68485"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Sales]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="1430" y="0" width="240" height="20" backcolor="#FFE8FB" uuid="73dd752e-7fba-468c-99d1-08648cd66551"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Packet Sales]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="1430" y="20" width="80" height="20" backcolor="#FFE8FB" uuid="dfc80662-99d8-4838-8e52-1e438bfdc070"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Target]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="2150" y="20" width="80" height="20" backcolor="#FFE8FB" uuid="73fea156-d7c5-49f7-b8c5-bab4b3b37fe8"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Sales]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="2150" y="0" width="160" height="20" backcolor="#FFE8FB" uuid="110cdd86-a9d8-48aa-8df2-34e1eb5eb022"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Ice]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="2230" y="20" width="80" height="20" backcolor="#FFE8FB" uuid="ccc8b222-60db-4817-8aea-445935cabef4"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Contribution(%)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="2390" y="20" width="80" height="20" backcolor="#FFE8FB" uuid="efa5d2b8-8fc2-4c54-8977-d31460b7c510"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Contribution(%)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="2310" y="20" width="80" height="20" backcolor="#FFE8FB" uuid="70e4dc54-58b4-4c34-9166-514d1eede3cb"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Sales]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="2310" y="0" width="160" height="20" backcolor="#FFE8FB" uuid="550cacfa-a09a-4d43-8f0d-d00d2ac53663"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Bolt]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="2550" y="20" width="80" height="20" backcolor="#FFE8FB" uuid="618895fc-49d3-447c-afbe-7d940ebe9ca5"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Sales]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="2470" y="0" width="240" height="20" backcolor="#FFE8FB" uuid="61bc1609-846e-44d2-9405-0a6fb07ec9b1"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Rally (Total)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="2630" y="20" width="80" height="20" backcolor="#FFE8FB" uuid="c34ab66f-df11-4ea4-a244-f1084008d3ad"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Ach%.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="2470" y="20" width="80" height="20" backcolor="#FFE8FB" uuid="45177b19-e91c-421f-9d1e-7a793ddb21b3"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Target]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="2710" y="20" width="80" height="20" backcolor="#FFE8FB" uuid="4d1e3152-e871-43f5-8329-99a96f20f311"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Sales]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="2710" y="0" width="160" height="20" backcolor="#FFE8FB" uuid="5f9e00dd-f35b-4c6a-92b9-86230bc44924"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[American]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="2790" y="20" width="80" height="20" backcolor="#FFE8FB" uuid="91bc29ed-efe0-4263-a144-e7319efb8f76"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Contribution(%)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="2870" y="0" width="160" height="20" backcolor="#FFE8FB" uuid="0e436103-9ecc-411d-9d5a-a9f115dff76d"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Turkish]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="2870" y="20" width="80" height="20" backcolor="#FFE8FB" uuid="56d3b4fc-795b-4eb6-a4fe-65347471bed1"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Sales]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="2950" y="20" width="80" height="20" backcolor="#FFE8FB" uuid="12fcca30-8055-4d04-83a0-fc9a0232a19c"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Contribution(%)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="3110" y="20" width="80" height="20" backcolor="#FFE8FB" uuid="eb22c111-820c-4f4d-9493-65597ed0b071"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Contribution(%)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="3030" y="0" width="160" height="20" backcolor="#FFE8FB" uuid="9b40be4f-91c0-494f-9d6a-04cccb7cddfa"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Brazilian]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="3030" y="20" width="80" height="20" backcolor="#FFE8FB" uuid="94bcc8c1-d85e-4f24-9ee5-ffb7dba38c5a"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Sales]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="3350" y="20" width="80" height="20" backcolor="#FFE8FB" uuid="2ae92d94-ec24-4b9e-81dc-ab292544bb73"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Ach%.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="3190" y="0" width="240" height="20" backcolor="#FFE8FB" uuid="f1404aeb-5f48-4c4e-a17b-9eaab03dde4b"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Sunmoon (Total)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="3270" y="20" width="80" height="20" backcolor="#FFE8FB" uuid="afa6add6-b4d0-4407-9bc1-939635b45d0d"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Sales]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="3190" y="20" width="80" height="20" backcolor="#FFE8FB" uuid="63e4e90d-1a6a-40bc-b20e-0e0aea022dc8"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Target]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="3590" y="20" width="80" height="20" backcolor="#FFE8FB" uuid="ab4da597-814b-44ab-ad85-25097cec2816"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Ach%.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="3430" y="0" width="240" height="20" backcolor="#FFE8FB" uuid="4609327d-1de1-41c7-b560-ae265c6a2e6e"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Grand total (Rally+Sunm)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="3510" y="20" width="80" height="20" backcolor="#FFE8FB" uuid="3be58e60-51f2-4dce-8358-8162559922c7"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Sales]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="3430" y="20" width="80" height="20" backcolor="#FFE8FB" uuid="9b362297-9b41-4eb7-9168-18a1c437ead8"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Target]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="80" height="20" uuid="04ee37a0-1f0a-4a4b-b495-6063912b0951"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{serial}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="80" y="0" width="150" height="20" uuid="8a47f723-2595-4684-b946-204e2aa4a6f3"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{territoryName}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="230" y="0" width="80" height="20" uuid="f882b9f1-90d4-4b13-b233-4f0c9c8203b0"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{teamCount}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="390" y="0" width="80" height="20" uuid="856bdf17-b74b-4838-95df-9c305c2ea657"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{tmsAttendanceCount}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="550" y="0" width="80" height="20" uuid="2b29b4d7-88ca-46d6-8cef-8a54655fcfb0"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{baAttendanceCount}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="470" y="0" width="80" height="20" uuid="2243f180-9ccd-4534-9342-226e21f98cce"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{tmrAttendanceCount}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="630" y="0" width="80" height="20" uuid="e7d515bc-9395-4369-839f-655cf94aa4a5"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{rallyVerveSales}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1910" y="0" width="80" height="20" uuid="d63ec4d5-9c51-45b8-82ac-8139a352dadf"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{packSalesTarget} + $F{vaoSalesTarget}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1990" y="0" width="80" height="20" uuid="23c56597-33d5-4718-b2a3-3b6c9de4fd87"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{packetSalesPerson} + $F{vaoSalesPerson}]]></textFieldExpression>
+			</textField>
+			<textField pattern="0.00">
+				<reportElement x="2070" y="0" width="80" height="20" uuid="ee8dabfd-1e72-4a4c-9800-50fa9af81059"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[($F{packetSalesPerson} + $F{vaoSalesPerson}) ==0 ? 0.00 :
+(new Double($F{packetSalesPerson} + $F{vaoSalesPerson} )/new Double( $F{packSalesTarget} + $F{vaoSalesTarget}))* 100]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="710" y="0" width="80" height="20" uuid="21624065-11b0-4455-bd56-ad09c8e0a399"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{rallyIceSales}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="790" y="0" width="80" height="20" uuid="cc8320cd-1943-488e-9d51-b689f92a12ec"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{rallyBoltSales}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="870" y="0" width="80" height="20" uuid="f2c60c0a-0a59-42a7-a9c0-82a90c1a88b2"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{mariseSale}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="950" y="0" width="80" height="20" uuid="61a25f9f-6362-4427-a432-46412a64eecc"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{smtbSales}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1030" y="0" width="80" height="20" uuid="065cc323-143c-44a0-a202-e203b33b2645"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{smabSales}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1110" y="0" width="80" height="20" uuid="df700afe-7d61-41bb-b5b4-c5a71cbc9a3d"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{smbbSales}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1190" y="0" width="80" height="20" uuid="719eeb36-0789-4561-a60f-efae12a05177"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{rallyVaoSales}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1270" y="0" width="80" height="20" uuid="ea66795a-2572-497f-bad0-a7b88919600c"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{mariseVaoSales}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1350" y="0" width="80" height="20" uuid="d3bafa95-41d0-46a8-8944-b294ef21811c"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{sunmoonVaoSales}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1750" y="0" width="80" height="20" uuid="5623da58-92ec-45e5-b6c9-0424fe12e17c"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{vaoSalesPerson}]]></textFieldExpression>
+			</textField>
+			<textField pattern="0.00">
+				<reportElement x="1830" y="0" width="80" height="20" uuid="95756bd7-449f-4ec2-abd9-c69d525785c0"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[($F{vaoSalesPerson}) ==0 ? 0.00 :
+(new Double($F{vaoSalesPerson} )/new Double( $F{vaoSalesTarget}))* 100]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1670" y="0" width="80" height="20" uuid="1509ff12-4541-4284-bf50-a5b4a9321920"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{vaoSalesTarget}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1510" y="0" width="80" height="20" uuid="12c925e9-fd5d-464f-9dae-1cfbc0d716b0"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{packetSalesPerson}]]></textFieldExpression>
+			</textField>
+			<textField pattern="0.00">
+				<reportElement x="1590" y="0" width="80" height="20" uuid="69a57bd7-29a2-4685-80c6-c0e70648da7a"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[($F{packetSalesPerson}) ==0 ? 0.00 :
+(new Double($F{packetSalesPerson} )/new Double( $F{packSalesTarget}))* 100]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1430" y="0" width="80" height="20" uuid="071fe2d4-fef8-430a-8aec-671c29dcf2fb"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{packSalesTarget}]]></textFieldExpression>
+			</textField>
+			<textField pattern="0.00">
+				<reportElement x="2230" y="0" width="80" height="20" uuid="92221a49-a89c-45be-91a2-d0f299e4c3d6"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{riContribution}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="2150" y="0" width="80" height="20" uuid="ad7ab471-ea88-4851-9aa0-67eee2404957"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{riBundle}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="2310" y="0" width="80" height="20" uuid="7308b9df-91b4-4369-9159-a3f248b4567f"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{rbBundle}]]></textFieldExpression>
+			</textField>
+			<textField pattern="0.00">
+				<reportElement x="2390" y="0" width="80" height="20" uuid="c5f779f1-5d83-4133-b335-860f426f53c8"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{rbContribution}]]></textFieldExpression>
+			</textField>
+			<textField pattern="0.00">
+				<reportElement x="2630" y="0" width="80" height="20" uuid="3b779b2d-1c78-4741-b9e7-aa2148e3dd5b"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[($F{rallyTargetBundle}) ==0 ? 0.00 :
+(new Double($F{raTotalBundle} )/new Double($F{rallyTargetBundle}))* 100]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="2550" y="0" width="80" height="20" uuid="e88fd5f4-06d8-4594-9ee3-b368a468ae52"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{raTotalBundle}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="2470" y="0" width="80" height="20" uuid="951ecfb0-4b57-4fa7-a272-2fcd89950fca"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{rallyTargetBundle}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="2710" y="0" width="80" height="20" uuid="2d0114bf-a725-4519-9605-9a10ada57bcd"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{smaBundle}]]></textFieldExpression>
+			</textField>
+			<textField pattern="0.00">
+				<reportElement x="2790" y="0" width="80" height="20" uuid="550d306d-e117-4d5c-be92-b6c32bba6a79"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{smaContribution}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="2870" y="0" width="80" height="20" uuid="962b412a-8fd5-40ac-aa27-f7aabe5cc5b8"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{smtBundle}]]></textFieldExpression>
+			</textField>
+			<textField pattern="0.00">
+				<reportElement x="2950" y="0" width="80" height="20" uuid="fd7ba145-a4ae-45c1-8c91-e24992379d58"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{smtContribution}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="3030" y="0" width="80" height="20" uuid="3b787d64-3b2e-408e-99bc-dd77e99738df"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{smbBundle}]]></textFieldExpression>
+			</textField>
+			<textField pattern="0.00">
+				<reportElement x="3110" y="0" width="80" height="20" uuid="6da111a7-3c3e-4384-b59a-0e77300dbe4c"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{smbContribution}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="3270" y="0" width="80" height="20" uuid="9f859854-fa26-4735-a5fc-42f7c78bed87"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{smTotalBundle}]]></textFieldExpression>
+			</textField>
+			<textField pattern="0.00">
+				<reportElement x="3350" y="0" width="80" height="20" uuid="ccec3213-a0b4-49cb-a52c-8e6e51672395"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[($F{sunmoonTargetBundle}) ==0 ? 0.00 :
+(new Double($F{smTotalBundle} )/new Double($F{sunmoonTargetBundle}))* 100]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="3190" y="0" width="80" height="20" uuid="f071ba88-0193-42d4-87e2-a151d34a1fc7"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{sunmoonTargetBundle}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="3430" y="0" width="80" height="20" uuid="3baac916-22ff-4cab-a7ff-97dcdca7d799"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{grandTotalBundleTarget}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="3510" y="0" width="80" height="20" uuid="1d079051-09fb-4299-92c8-bf5afd5969ee"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{grandTotalBundle}]]></textFieldExpression>
+			</textField>
+			<textField pattern="0.00">
+				<reportElement x="3590" y="0" width="80" height="20" uuid="92cc5ba5-8de2-4011-9ceb-76dc146d9369"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[($F{grandTotalBundleTarget}) ==0 ? 0.00 :
+(new Double($F{grandTotalBundle} )/new Double($F{grandTotalBundleTarget}))* 100]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement mode="Transparent" x="310" y="0" width="80" height="20" backcolor="#99FFCC" uuid="aa4a5af8-a26a-4e65-afe2-f116367bd8a4"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[]]></text>
+			</staticText>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>
