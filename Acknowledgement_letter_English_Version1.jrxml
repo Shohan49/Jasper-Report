@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.20.0.final using JasperReports Library version 6.20.0-2bc7ab61c56f459e8176eb05c7705e145cd400ad  -->
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Acknowledgement_letter_English_Version1" pageWidth="612" pageHeight="1500" columnWidth="572" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="56813c04-5bf4-4e93-9eec-e1e48dce15e0">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Acknowledgement_letter_English_Version1" pageWidth="612" pageHeight="1420" columnWidth="572" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="56813c04-5bf4-4e93-9eec-e1e48dce15e0">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<parameter name="Date" class="java.lang.String"/>
 	<parameter name="notiNo" class="java.lang.String"/>
@@ -27,6 +27,7 @@
 	<parameter name="emptyFleet" class="java.lang.String"/>
 	<parameter name="routeNum" class="java.lang.String"/>
 	<parameter name="banglaDate" class="java.lang.String"/>
+	<parameter name="qrcodeScan" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
@@ -104,7 +105,7 @@
 	</title>
 	<pageHeader>
 		<band height="130" splitType="Stretch">
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement x="454" y="15" width="118" height="15" uuid="e781b50b-6efa-45ff-8bea-eb8fceef6e5f">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
@@ -116,7 +117,7 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$P{Date}+" English"]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement x="0" y="15" width="414" height="20" uuid="69616eeb-cd7e-46e8-9989-ba1d964e20f7">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
@@ -188,7 +189,7 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<text><![CDATA[Date :- ]]></text>
 			</staticText>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement x="454" y="30" width="118" height="15" uuid="5e8603af-4652-4e44-887c-f688ab830f2c">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
@@ -326,14 +327,14 @@
 			<textField textAdjust="StretchHeight">
 				<reportElement x="50" y="140" width="522" height="361" uuid="8a616c1a-0699-40a6-9a69-81209e6e255e"/>
 				<textElement markup="html">
-					<font fontName="DejaVu Sans"/>
+					<font fontName="DejaVu Sans" size="10"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{termsAndConditions}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
 	<summary>
-		<band height="522" splitType="Stretch">
+		<band height="600" splitType="Stretch">
 			<staticText>
 				<reportElement x="330" y="110" width="242" height="15" uuid="013b9457-03d8-4f8b-9de0-49358e6265fc">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
@@ -432,7 +433,7 @@
 				</textElement>
 				<text><![CDATA[&]]></text>
 			</staticText>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement x="330" y="45" width="242" height="20" uuid="3af7d0cc-e2fc-4dd2-a15f-a3e4c3e8d315">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
@@ -443,6 +444,19 @@
 				</textElement>
 				<textFieldExpression><![CDATA["Date: "+$P{Date}]]></textFieldExpression>
 			</textField>
+			<componentElement>
+				<reportElement x="480" y="522" width="75" height="64" uuid="a9f57dfd-8927-4945-a8ad-b4f2dc7e6ccc"/>
+				<jr:QRCode xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+					<jr:codeExpression><![CDATA[$P{qrcodeScan}]]></jr:codeExpression>
+				</jr:QRCode>
+			</componentElement>
+			<staticText>
+				<reportElement x="479" y="586" width="80" height="14" uuid="8d3c4b8c-0c62-4d41-94fe-c222ea89a6e2"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<text><![CDATA[Scan to verify]]></text>
+			</staticText>
 		</band>
 	</summary>
 </jasperReport>
