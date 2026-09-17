@@ -3,13 +3,14 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Depot_Wise_Stock" pageWidth="440" pageHeight="612" orientation="Landscape" columnWidth="400" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="582a5e06-e51f-4f5d-9f0f-474138a8b9fa">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<parameter name="aktLogo" class="java.lang.String"/>
+	<parameter name="areaId" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
 	<field name="depotName" class="java.lang.String"/>
-	<field name="inStockBale" class="java.math.BigInteger"/>
+	<field name="inStockBale" class="java.lang.Integer"/>
 	<field name="inStockWeight" class="java.lang.Double"/>
-	<variable name="inStockBale" class="java.math.BigInteger" calculation="Sum">
+	<variable name="inStockBale" class="java.lang.Integer" calculation="Sum">
 		<variableExpression><![CDATA[$F{inStockBale}]]></variableExpression>
 	</variable>
 	<variable name="inStockWeight" class="java.lang.Double" calculation="Sum">
@@ -92,6 +93,16 @@
 					<font fontName="DejaVu Sans" size="7" isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Execution Time : " +new  SimpleDateFormat("dd-MM-yyyy, hh:mm:ss a").format(new java.util.Date())]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="0" width="160" height="20" uuid="06df39af-8c00-4a74-81fe-1269aff334ea">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="7" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Area Name: "+$P{areaId}]]></textFieldExpression>
 			</textField>
 		</band>
 	</pageHeader>
