@@ -269,7 +269,7 @@ Revenue ]]></text>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="SansSerif"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{totalRevenue}+"%"]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{totalRevenue}.setScale(2, java.math.RoundingMode.HALF_UP).toString() + "%"]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
@@ -286,7 +286,7 @@ Revenue ]]></text>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="SansSerif"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{totalRevenue}+"%"]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$V{totalRevenue}.setScale(2, java.math.RoundingMode.HALF_UP).toString() + "%"]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement x="420" y="0" width="120" height="30" uuid="87ffc64a-c8df-49c2-b927-8b9b4d99fb77">
@@ -301,7 +301,7 @@ Revenue ]]></text>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="SansSerif"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{revenueCollected}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$V{revenueCollected}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement x="0" y="0" width="420" height="30" uuid="480bee9b-a4a0-405f-a704-f3b3027df92a"/>
