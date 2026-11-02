@@ -34,7 +34,7 @@
 	<field name="mobileNo" class="java.lang.String"/>
 	<field name="landAcreage" class="java.math.BigDecimal"/>
 	<field name="seedEarlyDate" class="java.lang.String"/>
-	<field name="seedEarlyNob" class="java.lang.String"/>
+	<field name="seedEarlyNob" class="java.math.BigDecimal"/>
 	<field name="seedEarlyLob" class="java.math.BigDecimal"/>
 	<field name="seedEarlyLobFeet" class="java.math.BigDecimal"/>
 	<field name="seedEarlyLobInch" class="java.math.BigDecimal"/>
@@ -49,9 +49,9 @@
 	<field name="seedLateLobFeet" class="java.math.BigDecimal"/>
 	<field name="seedLateLobInch" class="java.math.BigDecimal"/>
 	<field name="plantationDate" class="java.lang.String"/>
-	<field name="plantationEarly" class="java.lang.String"/>
-	<field name="plantationMid" class="java.lang.String"/>
-	<field name="plantationLate" class="java.lang.String"/>
+	<field name="plantationEarly" class="java.math.BigDecimal"/>
+	<field name="plantationMid" class="java.math.BigDecimal"/>
+	<field name="plantationLate" class="java.math.BigDecimal"/>
 	<field name="harvestingDate1" class="java.lang.String"/>
 	<field name="harvestingDate2" class="java.lang.String"/>
 	<field name="harvestingDate3" class="java.lang.String"/>
@@ -83,6 +83,9 @@
 	<field name="pakkaNew161212" class="java.lang.String"/>
 	<field name="pakkaNew161612" class="java.lang.String"/>
 	<field name="pakkaNew161616" class="java.lang.String"/>
+	<field name="seedEarlyDecimal" class="java.math.BigDecimal"/>
+	<field name="seedMidDecimal" class="java.math.BigDecimal"/>
+	<field name="seedLateDecimal" class="java.math.BigDecimal"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -129,17 +132,6 @@ Phone: 88-031-714541-4]]></text>
 					<font size="12" isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{areaId} != null   ? "Area Name : " + $P{areaId}  : "Area Name : "]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="280" y="45" width="320" height="20" uuid="27d4cd8d-dc93-445c-b22c-e80fdcdff57a">
-					<property name="com.jaspersoft.studio.unit.height" value="px"/>
-					<property name="com.jaspersoft.studio.unit.x" value="px"/>
-					<property name="com.jaspersoft.studio.unit.y" value="px"/>
-				</reportElement>
-				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font size="12" isBold="false"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$P{villageId} != null   ? "Village : " + $P{villageId}  : "Village : "]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="0" y="65" width="280" height="20" uuid="c560d3af-4cdc-469e-ac10-840da8284a83">
@@ -191,6 +183,17 @@ Phone: 88-031-714541-4]]></text>
 					<font size="12" isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{categoryId} != null   ? "Category : " + $P{categoryId}  : "Category : "]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="280" y="45" width="320" height="20" uuid="40e4204e-ea38-4b4c-8113-0bc4d0c112c1">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="12" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{villageId} != null   ? "Village Name: " + $P{villageId}  : "Village Name: "]]></textFieldExpression>
 			</textField>
 		</band>
 	</pageHeader>
@@ -1118,7 +1121,7 @@ Phone: 88-031-714541-4]]></text>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{seedEarlyLobInch}]]></textFieldExpression>
 			</textField>
-			<textField isBlankWhenNull="true">
+			<textField pattern="0.00" isBlankWhenNull="true">
 				<reportElement x="1820" y="0" width="100" height="20" uuid="69dee5e3-d804-4938-82f8-5c03ea378d36">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
@@ -1133,6 +1136,7 @@ Phone: 88-031-714541-4]]></text>
 					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{seedEarlyDecimal}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement x="1920" y="0" width="100" height="20" uuid="669add10-9e6c-4b4e-9dd3-fea01872f8cf">
@@ -1202,7 +1206,7 @@ Phone: 88-031-714541-4]]></text>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{seedMidLobInch}]]></textFieldExpression>
 			</textField>
-			<textField isBlankWhenNull="true">
+			<textField pattern="0.00" isBlankWhenNull="true">
 				<reportElement x="2340" y="0" width="100" height="20" uuid="716532be-c006-4289-b98b-e26d31db4100">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
@@ -1217,6 +1221,7 @@ Phone: 88-031-714541-4]]></text>
 					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{seedMidDecimal}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement x="2440" y="0" width="100" height="20" uuid="4629fc3e-d3a2-4a56-9d1a-739cc28c64ab">
@@ -1286,7 +1291,7 @@ Phone: 88-031-714541-4]]></text>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{seedLateLobInch}]]></textFieldExpression>
 			</textField>
-			<textField isBlankWhenNull="true">
+			<textField pattern="0.00" isBlankWhenNull="true">
 				<reportElement x="2860" y="0" width="100" height="20" uuid="700ae725-a250-4cb1-9c13-3e31888babc9">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
@@ -1301,8 +1306,9 @@ Phone: 88-031-714541-4]]></text>
 					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{seedLateDecimal}]]></textFieldExpression>
 			</textField>
-			<textField isBlankWhenNull="true">
+			<textField pattern="0.00" isBlankWhenNull="true">
 				<reportElement x="2960" y="0" width="120" height="20" uuid="8f4bc402-8468-4857-a5f2-d4005c7891f3">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
@@ -1317,6 +1323,10 @@ Phone: 88-031-714541-4]]></text>
 					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[java.math.BigDecimal.ZERO
+    .add($F{seedEarlyDecimal} == null ? java.math.BigDecimal.ZERO : $F{seedEarlyDecimal})
+    .add($F{seedMidDecimal} == null ? java.math.BigDecimal.ZERO : $F{seedMidDecimal})
+    .add($F{seedLateDecimal} == null ? java.math.BigDecimal.ZERO : $F{seedLateDecimal})]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
