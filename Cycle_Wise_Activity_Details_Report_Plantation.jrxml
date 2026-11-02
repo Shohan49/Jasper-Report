@@ -25,7 +25,7 @@
 	<field name="mobileNo" class="java.lang.String"/>
 	<field name="landAcreage" class="java.math.BigDecimal"/>
 	<field name="seedEarlyDate" class="java.lang.String"/>
-	<field name="seedEarlyNob" class="java.lang.String"/>
+	<field name="seedEarlyNob" class="java.math.BigDecimal"/>
 	<field name="seedEarlyLob" class="java.math.BigDecimal"/>
 	<field name="seedEarlyLobFeet" class="java.math.BigDecimal"/>
 	<field name="seedEarlyLobInch" class="java.math.BigDecimal"/>
@@ -40,9 +40,9 @@
 	<field name="seedLateLobFeet" class="java.math.BigDecimal"/>
 	<field name="seedLateLobInch" class="java.math.BigDecimal"/>
 	<field name="plantationDate" class="java.lang.String"/>
-	<field name="plantationEarly" class="java.lang.String"/>
-	<field name="plantationMid" class="java.lang.String"/>
-	<field name="plantationLate" class="java.lang.String"/>
+	<field name="plantationEarly" class="java.math.BigDecimal"/>
+	<field name="plantationMid" class="java.math.BigDecimal"/>
+	<field name="plantationLate" class="java.math.BigDecimal"/>
 	<field name="harvestingDate1" class="java.lang.String"/>
 	<field name="harvestingDate2" class="java.lang.String"/>
 	<field name="harvestingDate3" class="java.lang.String"/>
@@ -74,6 +74,9 @@
 	<field name="pakkaNew161212" class="java.lang.String"/>
 	<field name="pakkaNew161612" class="java.lang.String"/>
 	<field name="pakkaNew161616" class="java.lang.String"/>
+	<field name="seedEarlyDecimal" class="java.math.BigDecimal"/>
+	<field name="seedMidDecimal" class="java.math.BigDecimal"/>
+	<field name="seedLateDecimal" class="java.math.BigDecimal"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -120,17 +123,6 @@ Phone: 88-031-714541-4]]></text>
 					<font size="12" isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{areaId} != null   ? "Area Name : " + $P{areaId}  : "Area Name : "]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="280" y="45" width="320" height="20" uuid="27d4cd8d-dc93-445c-b22c-e80fdcdff57a">
-					<property name="com.jaspersoft.studio.unit.height" value="px"/>
-					<property name="com.jaspersoft.studio.unit.x" value="px"/>
-					<property name="com.jaspersoft.studio.unit.y" value="px"/>
-				</reportElement>
-				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font size="12" isBold="false"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$P{villageId} != null   ? "Village : " + $P{villageId}  : "Village : "]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="0" y="65" width="280" height="20" uuid="c560d3af-4cdc-469e-ac10-840da8284a83">
@@ -182,6 +174,17 @@ Phone: 88-031-714541-4]]></text>
 					<font size="12" isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{categoryId} != null   ? "Category : " + $P{categoryId}  : "Category : "]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="280" y="45" width="320" height="20" uuid="e1d8e245-9d8c-48bf-be82-37f9393d8071">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="12" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{villageId} != null   ? "Village Name: " + $P{villageId}  : "Village Name: "]]></textFieldExpression>
 			</textField>
 		</band>
 	</pageHeader>
@@ -835,6 +838,10 @@ Phone: 88-031-714541-4]]></text>
 					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[java.math.BigDecimal.ZERO
+    .add($F{plantationEarly} == null ? java.math.BigDecimal.ZERO : $F{plantationEarly})
+    .add($F{plantationMid} == null ? java.math.BigDecimal.ZERO : $F{plantationMid})
+    .add($F{plantationLate} == null ? java.math.BigDecimal.ZERO : $F{plantationLate})]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
