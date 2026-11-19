@@ -2,6 +2,8 @@
 <!-- Created with Jaspersoft Studio version 6.20.0.final using JasperReports Library version 6.20.0-2bc7ab61c56f459e8176eb05c7705e145cd400ad  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Company_And_Farmer_V" pageWidth="700" pageHeight="842" orientation="Landscape" columnWidth="660" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="c76074b9-1c47-425a-a0ae-aaea5282a78a">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+	<parameter name="seasonId" class="java.lang.String"/>
+	<parameter name="areaName" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
@@ -29,17 +31,17 @@
 		<band splitType="Stretch"/>
 	</background>
 	<detail>
-		<band height="592">
-			<image hAlign="Center">
-				<reportElement x="539" y="7" width="121" height="100" uuid="68ab2bef-3b05-4bbc-85ff-c254eed06f5d">
-					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+		<band height="802">
+			<image hAlign="Right">
+				<reportElement x="529" y="40" width="130" height="110" uuid="68ab2bef-3b05-4bbc-85ff-c254eed06f5d">
 					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
 				<imageExpression><![CDATA[net.sf.jasperreports.engine.util.JRImageLoader.getInstance(new SimpleJasperReportsContext()).loadAwtImageFromBytes(Base64.getDecoder().decode($F{farmerImage}))]]></imageExpression>
 			</image>
 			<textField>
-				<reportElement x="250" y="46" width="220" height="25" uuid="44e8ef76-8501-40ce-bf5d-5d7c352cc2e5">
+				<reportElement x="240" y="81" width="220" height="25" uuid="44e8ef76-8501-40ce-bf5d-5d7c352cc2e5">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
 				<box>
@@ -54,7 +56,7 @@
 				<textFieldExpression><![CDATA[" রেজি নংঃ "+$F{regNo}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="250" y="71" width="220" height="25" uuid="136aeb67-3cf5-41f7-a03d-11256d702c5f">
+				<reportElement x="240" y="106" width="220" height="25" uuid="136aeb67-3cf5-41f7-a03d-11256d702c5f">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<box>
@@ -69,10 +71,8 @@
 				<textFieldExpression><![CDATA[" জমির একরঃ "+$F{landAcre}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="22" y="155" width="315" height="20" uuid="2014c8de-86c7-4248-bb55-cb4861106614">
+				<reportElement x="-3" y="172" width="330" height="20" uuid="2014c8de-86c7-4248-bb55-cb4861106614">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
-					<property name="com.jaspersoft.studio.unit.width" value="px"/>
-					<property name="com.jaspersoft.studio.unit.firstLineIndent" value="px"/>
 				</reportElement>
 				<box>
 					<pen lineWidth="1.0" lineStyle="Dotted"/>
@@ -82,16 +82,14 @@
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font fontName="SolaimanLipi" size="12.9" isBold="false"/>
-					<paragraph firstLineIndent="10"/>
+					<font fontName="SolaimanLipi" size="14" isBold="false"/>
+					<paragraph firstLineIndent="0"/>
 				</textElement>
 				<textFieldExpression><![CDATA[" গ্রামঃ "+$F{villageName}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="22" y="195" width="315" height="20" uuid="cd01136c-fbed-4739-b62b-f4d1b5a3932c">
+				<reportElement x="-3" y="212" width="330" height="20" uuid="cd01136c-fbed-4739-b62b-f4d1b5a3932c">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
-					<property name="com.jaspersoft.studio.unit.width" value="px"/>
-					<property name="com.jaspersoft.studio.unit.firstLineIndent" value="px"/>
 				</reportElement>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -100,14 +98,13 @@
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font fontName="SolaimanLipi" size="12.9" isBold="false"/>
-					<paragraph firstLineIndent="10"/>
+					<font fontName="SolaimanLipi" size="14" isBold="false"/>
+					<paragraph firstLineIndent="0"/>
 				</textElement>
 				<textFieldExpression><![CDATA[" ইউনিয়নঃ "+$F{unionName}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="337" y="236" width="323" height="20" uuid="9742b18d-8746-4c01-ac6d-60d28d293099">
-					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				<reportElement x="330" y="253" width="330" height="20" uuid="9742b18d-8746-4c01-ac6d-60d28d293099">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
 				<box>
@@ -117,14 +114,13 @@
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font fontName="SolaimanLipi" size="12.9" isBold="false"/>
+					<font fontName="SolaimanLipi" size="14" isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[" একাউন্ট নম্বরঃ "+$F{bankAccountNo}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="337" y="195" width="323" height="20" uuid="440b544e-4acb-4cb8-a7f6-d1c9c8b03632">
+				<reportElement x="330" y="212" width="330" height="20" uuid="440b544e-4acb-4cb8-a7f6-d1c9c8b03632">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
-					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -133,15 +129,15 @@
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font fontName="SolaimanLipi" size="12.9" isBold="false"/>
+					<font fontName="SolaimanLipi" size="14" isBold="false"/>
 					<paragraph firstLineIndent="0"/>
 				</textElement>
 				<textFieldExpression><![CDATA[" ব্যাংকের নামঃ "+$F{bankName}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="22" y="215" width="315" height="20" uuid="e55c9ff1-6097-4609-8f13-5d4a3a0419de">
-					<property name="com.jaspersoft.studio.unit.firstLineIndent" value="px"/>
+				<reportElement x="-3" y="232" width="330" height="20" uuid="e55c9ff1-6097-4609-8f13-5d4a3a0419de">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -150,15 +146,15 @@
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font fontName="SolaimanLipi" size="12.9" isBold="false"/>
-					<paragraph firstLineIndent="10"/>
+					<font fontName="SolaimanLipi" size="14" isBold="false"/>
+					<paragraph firstLineIndent="0"/>
 				</textElement>
 				<textFieldExpression><![CDATA[" থানাঃ "+$F{thanaName}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="22" y="175" width="315" height="20" uuid="68420be2-7d09-4c20-921a-92e7fe1a0172">
-					<property name="com.jaspersoft.studio.unit.firstLineIndent" value="px"/>
+				<reportElement x="-3" y="192" width="330" height="20" uuid="68420be2-7d09-4c20-921a-92e7fe1a0172">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -167,16 +163,13 @@
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font fontName="SolaimanLipi" size="12.9" isBold="false"/>
-					<paragraph firstLineIndent="10"/>
+					<font fontName="SolaimanLipi" size="14" isBold="false"/>
+					<paragraph firstLineIndent="0"/>
 				</textElement>
 				<textFieldExpression><![CDATA[" পোষ্ট অফিসঃ "+$F{postOfficeName}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="22" y="135" width="315" height="20" uuid="97978c48-7d17-45af-be7e-408207137605">
-					<property name="com.jaspersoft.studio.unit.firstLineIndent" value="px"/>
-					<property name="com.jaspersoft.studio.unit.width" value="px"/>
-				</reportElement>
+				<reportElement x="-3" y="152" width="330" height="20" uuid="97978c48-7d17-45af-be7e-408207137605"/>
 				<box>
 					<pen lineStyle="Dotted"/>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -185,13 +178,15 @@
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font fontName="SolaimanLipi" size="12.9" isBold="false"/>
-					<paragraph firstLineIndent="10"/>
+					<font fontName="SolaimanLipi" size="14" isBold="false"/>
+					<paragraph firstLineIndent="0"/>
 				</textElement>
 				<textFieldExpression><![CDATA[" পিতার নামঃ "+$F{fatherName}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="337" y="215" width="323" height="20" uuid="3290199f-f5fb-4c5c-9e19-dbab623180ba"/>
+				<reportElement x="330" y="232" width="330" height="20" uuid="3290199f-f5fb-4c5c-9e19-dbab623180ba">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -199,13 +194,13 @@
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font fontName="SolaimanLipi" size="12.9" isBold="false"/>
+					<font fontName="SolaimanLipi" size="14" isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[" ব্যাংকের শাখাঃ "+$F{bankBranchName}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="22" y="115" width="315" height="20" uuid="b86a1ca3-5c8f-4d7c-88d3-72f8df3b413b">
-					<property name="com.jaspersoft.studio.unit.firstLineIndent" value="px"/>
+				<reportElement x="-3" y="132" width="330" height="20" uuid="b86a1ca3-5c8f-4d7c-88d3-72f8df3b413b">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<box>
 					<pen lineWidth="1.0" lineStyle="Dotted"/>
@@ -215,14 +210,13 @@
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font fontName="SolaimanLipi" size="12.9" isBold="false"/>
-					<paragraph firstLineIndent="10"/>
+					<font fontName="SolaimanLipi" size="14" isBold="false"/>
+					<paragraph firstLineIndent="0"/>
 				</textElement>
 				<textFieldExpression><![CDATA[" চাষীর নামঃ "+$F{name}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="337" y="175" width="323" height="20" uuid="a09d53fe-2736-42d7-a80d-42c0e465d917">
-					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				<reportElement x="330" y="192" width="330" height="20" uuid="a09d53fe-2736-42d7-a80d-42c0e465d917">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
 				<box>
@@ -232,15 +226,15 @@
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font fontName="SolaimanLipi" size="12.9" isBold="false"/>
+					<font fontName="SolaimanLipi" size="14" isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[" মোবাইল নংঃ "+$F{mobileNo}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="22" y="235" width="315" height="20" uuid="5fc1cd75-07e3-49f5-af4c-d678c33efe7c">
+				<reportElement x="-3" y="252" width="330" height="20" uuid="5fc1cd75-07e3-49f5-af4c-d678c33efe7c">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
-					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="com.jaspersoft.studio.unit.firstLineIndent" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -249,14 +243,13 @@
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font fontName="SolaimanLipi" size="12.9" isBold="false"/>
-					<paragraph firstLineIndent="10"/>
+					<font fontName="SolaimanLipi" size="14" isBold="false"/>
+					<paragraph firstLineIndent="0"/>
 				</textElement>
 				<textFieldExpression><![CDATA[" জেলাঃ "+$F{districtName}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="337" y="155" width="323" height="20" uuid="de13b649-1d6f-4f22-935b-a0051a5c37bc">
-					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				<reportElement x="330" y="172" width="330" height="20" uuid="de13b649-1d6f-4f22-935b-a0051a5c37bc">
 					<property name="com.jaspersoft.studio.unit.firstLineIndent" value="px"/>
 				</reportElement>
 				<box>
@@ -266,19 +259,18 @@
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font fontName="SolaimanLipi" size="12.9" isBold="false"/>
+					<font fontName="SolaimanLipi" size="14" isBold="false"/>
 					<paragraph firstLineIndent="0"/>
 				</textElement>
 				<textFieldExpression><![CDATA[" এনআইডি/জন্ম সনদ নম্বরঃ "+$F{nidNo}]]></textFieldExpression>
 			</textField>
 			<break>
-				<reportElement x="0" y="591" width="555" height="1" uuid="c39daed3-1a38-4659-bd0a-cff9974d7cb3">
+				<reportElement x="0" y="801" width="555" height="1" uuid="c39daed3-1a38-4659-bd0a-cff9974d7cb3">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 			</break>
 			<textField>
-				<reportElement x="337" y="115" width="323" height="20" uuid="9706a520-841d-4f47-bbea-c092540274cd">
-					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				<reportElement x="330" y="132" width="330" height="20" uuid="9706a520-841d-4f47-bbea-c092540274cd">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
 				<box>
@@ -288,14 +280,14 @@
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font fontName="SolaimanLipi" size="12.9" isBold="false"/>
+					<font fontName="SolaimanLipi" size="14" isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[" সাব এরিয়াঃ "+$F{subArea}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="337" y="135" width="323" height="20" uuid="c58b0494-f6b1-4669-ba4b-a616445e5474">
-					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				<reportElement x="330" y="152" width="330" height="20" uuid="c58b0494-f6b1-4669-ba4b-a616445e5474">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -304,14 +296,142 @@
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font fontName="SolaimanLipi" size="12.9" isBold="false"/>
+					<font fontName="SolaimanLipi" size="14" isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[" জোনঃ "+$F{zone}]]></textFieldExpression>
 			</textField>
-		</band>
-		<band height="777">
+			<staticText>
+				<reportElement x="0" y="0" width="660" height="30" uuid="3672b499-2f28-4339-a35a-4654684c0e4c">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font fontName="SolaimanLipi" size="22" isBold="true"/>
+				</textElement>
+				<text><![CDATA[আবুল খায়ের লীফ টোব্যাকো কোম্পানী লিমিটেড]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="56" width="660" height="25" uuid="2ade7a24-311f-43ba-93db-23cb9bc85cb3">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font fontName="SolaimanLipi" size="13" isBold="true"/>
+				</textElement>
+				<text><![CDATA[রেজিষ্ট্রিভুক্তির জন্য কোম্পানী ও তামাক চাষীর সহিত চুক্তিপত্র]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="281" width="660" height="60" uuid="9f1366d4-b897-44c3-b152-ac35a7371c8e">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font fontName="SolaimanLipi" size="14" isBold="false"/>
+				</textElement>
+				<text><![CDATA[জনাব,
+নিম্নলিখিত শর্তাবলী সাপেক্ষে আপনাকে আবুল খায়ের লীফ টোব্যাকো কোম্পানী লিমিটেড এর (তাপ/বায়ু শোধিত) ভার্জিনিয়া তামাক চাষী হিসাবে রেজিষ্ট্রিভুক্ত করা হয়েছেঃ]]></text>
+			</staticText>
 			<textField>
-				<reportElement x="15" y="697" width="264" height="30" isPrintInFirstWholeBand="true" uuid="2befdbcf-60ed-4955-a8d3-efd4a9cb9841">
+				<reportElement x="0" y="341" width="660" height="50" uuid="f7ef6e6a-8759-4f3f-b3f5-143dfbc6ecbe">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Justified" verticalAlignment="Top">
+					<font fontName="SolaimanLipi" size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA["১) আপনি  "+$P{seasonId}+" সালে "+$F{landAcre}+ " একর জমিতে কোম্পানী কর্তৃক অনুমোদিত জাতের তাপ/বায়ু শোষিত ভার্জিনিয়া তামাক চাষ করবেন। ইহার ফলে আপনার  ___ কিলোগ্রাম (আনুমানিক) তামাক উৎপন্ন হবে। তাই কোম্পানী আপনার শুধুমাত্র ____  কিলোগ্রাম ক্রয় করবে।"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="391" width="660" height="40" uuid="7c07d9a3-c97c-4740-a605-2f7e0ca54f7d">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Justified" verticalAlignment="Top">
+					<font fontName="SolaimanLipi" size="14" isBold="false"/>
+				</textElement>
+				<text><![CDATA[২) আপনার আবাদের পরিমাণ অনুমোদিত একরের কম হওয়া চলিবে না। ইহার অতিরিক্ত আবাদ করলে তাহা বাজারজাত করণে কোম্পানীর কোনো দায়িত্ব থাকবে না।]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="431" width="660" height="40" uuid="79defb35-885c-47bb-abd0-b9ab81eaefac">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Justified" verticalAlignment="Top">
+					<font fontName="SolaimanLipi" size="14" isBold="false"/>
+				</textElement>
+				<text><![CDATA[৩) এই ___ কিলোগ্রাম তামাক উৎপন্ন করার জন্য কোম্পানী আপনাকে উন্নত মানের বীজ সরবরাহ করবে, যার পরিমাণ কোম্পানী প্রতিনিধি কর্তৃক নির্ধারিত হবে। উহা ছাড়াও কোম্পানী আপনাকে প্রয়োজনীয় কারিগরি পরামর্শ দিয়ে সময়মত সাহায্য করবে।]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="471" width="660" height="40" uuid="3e0b40d6-b930-40ad-b108-0f15bc7691c0">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Justified" verticalAlignment="Top">
+					<font fontName="SolaimanLipi" size="14" isBold="false"/>
+				</textElement>
+				<text><![CDATA[৪) আপনার নিজস্ব জমিতে তৈরিকৃত ব্যবহার যোগ্য ভালো ___ টি ___ সাইজের বার্ন হাউজ/বার্লি তামাক উৎপাদনের জন্য কিউরিং শেড তৈরি করতে হবে। বার্ন হাউজ/কিউরিং শেড তৈরী ও পরিচালনার সমস্ত খরচ ও দায়িত্ব আপনার। 
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="511" width="660" height="40" uuid="35fa9a35-49ed-441b-89d8-817e7550e015">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Justified" verticalAlignment="Top">
+					<font fontName="SolaimanLipi" size="14" isBold="false"/>
+				</textElement>
+				<text><![CDATA[৫) আপনি এর মধ্যে বিক্রয়ের জন্য নিজ খরচে আপনার ___/___ সালের উৎপাদিত থেকে ___ কিলোগ্রাম তামাক কোম্পানী নির্ধারিত ক্রয় কেন্দ্রে নিয়ে আসবেন।]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="551" width="660" height="60" uuid="3041e60f-d2b8-4c54-b4b6-004da84f4dfd">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Justified" verticalAlignment="Top">
+					<font fontName="SolaimanLipi" size="14" isBold="false"/>
+				</textElement>
+				<text><![CDATA[৬) বিক্রয়ের জন্য আপনার উৎপাদিত তামাক বাংলাদেশ সরকার কর্তৃক নির্ধারিত শ্রেণী বিন্যাস মোতাবেক অর্থাৎ বাংলা ১ হতে ৬/ বার্লি তামাকে ১ থেকে ৩ পর্যন্ত অবশ্যই শ্রেণী বিন্যাস (গ্রেডিং) করে আনতে হবে। বিক্রয়ের জন্য প্রতিটি বেলের ওজন তাপ শোধিত ৭০ (সত্তর) কেজির বেশি হবে না।]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="611" width="660" height="60" uuid="ac39b314-1b4a-4b07-a7ec-7ccc38355f96">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Justified" verticalAlignment="Top">
+					<font fontName="SolaimanLipi" size="14" isBold="false"/>
+				</textElement>
+				<text><![CDATA[৭) আট ইঞ্চির কম দৈর্ঘ্য বিশিষ্ট তামাক পাতা, কলির পাতা, পোড়া পাতা, মরা পাতা, জ্বলা পাতা, পঁচা পাতা, স্থায়ী সবুজ পাতা, রোগাক্রান্ত পাতা, ছেঁড়া পাতা, পোকায় আক্রান্ত (সিগারেট বিটল মথ) পাতা, রোদে শুকানো পাতা, ১৫% এর বেশী আর্দ্রতা সম্পন্ন পাতা ইত্যাদি কোম্পানী কোন অবস্থাতেই ক্রয় করবে না।]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="671" width="660" height="40" uuid="ac27f2d9-b0f3-411b-95d9-1e166eba5e60">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Justified" verticalAlignment="Top">
+					<font fontName="SolaimanLipi" size="14" isBold="false"/>
+				</textElement>
+				<text><![CDATA[৮) কোম্পানীর প্রতিনিধির পরামর্শ মোতাবেক আপনি আপনার ক্ষেতের তামাকের মাথা একবার ভাঙতে (Topping) এবং ৪ বার কলি ভাঙতে (Suckering) বাধ্য থাকবেন।]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="716" width="660" height="40" uuid="9b5fbafa-b3d7-40ba-bddd-6065757acc05">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Justified" verticalAlignment="Top">
+					<font fontName="SolaimanLipi" size="14" isBold="false"/>
+				</textElement>
+				<text><![CDATA[৯) কোম্পানীর সরবরাহকৃত বীজ দ্বারা আপনি তামাক উৎপাদন করবেন। অন্য কোনো জাতের তামাক (যার বীজ কোম্পানী সরবরাহ করে নাই) বীজ দ্বারা উৎপাদিত তামাক কোম্পানী ক্রয় করবে না।]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="757" width="660" height="40" uuid="5c37d868-c3fb-4290-9c26-ebf8a81f35f3">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Justified" verticalAlignment="Top">
+					<font fontName="SolaimanLipi" size="14" isBold="false"/>
+				</textElement>
+				<text><![CDATA[১০) তামাক লাগানোর সময় লাইন হতে লাইনের দূরত্ব ৪২'' (সাড়ে তিন ফুট) এবং গাছ হতে গাছের দূরত্ব ১৮'' (দেড় ফুট) রেখে চারা রোপন করতে হবে। চারাগুলো অবশ্যই সুপরিণত, পেন্সিলসম মোটা ও কমপক্ষে ৬' (ছয় ইঞ্চি) দৈর্ঘ্য বিশিষ্ট হতে হবে।]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="0" y="31" width="660" height="25" uuid="6e6cccf1-7b55-44c0-a0a7-7a64edacbd21">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SolaimanLipi" size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{areaName}]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="791">
+			<textField>
+				<reportElement x="0" y="697" width="279" height="30" isPrintInFirstWholeBand="true" uuid="2befdbcf-60ed-4955-a8d3-efd4a9cb9841">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<box>
@@ -321,12 +441,12 @@
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font fontName="SolaimanLipi" size="12.9" isBold="false"/>
+					<font fontName="SolaimanLipi" size="13" isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[" জামীনদারের নামঃ "+$F{granterName}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="0" y="747" width="660" height="30" isPrintInFirstWholeBand="true" uuid="3f3c86d9-5f73-4a48-a9da-b6647e1dae81">
+				<reportElement x="0" y="761" width="660" height="30" isPrintInFirstWholeBand="true" uuid="3f3c86d9-5f73-4a48-a9da-b6647e1dae81">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<box>
@@ -336,7 +456,7 @@
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="SolaimanLipi" size="12.9" isBold="false"/>
+					<font fontName="SolaimanLipi" size="14" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA["**ধন্যবাদ**"]]></textFieldExpression>
 			</textField>
@@ -350,11 +470,152 @@
 					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
-				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font fontName="SolaimanLipi" size="12.9" isBold="false"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="SolaimanLipi" size="13" isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[" রেজিঃ নাম্বার (AKT): "+$F{granterRegNo}]]></textFieldExpression>
 			</textField>
+			<staticText>
+				<reportElement x="0" y="5" width="660" height="80" uuid="7cd52862-711e-40c0-8b97-1be0ab73090f">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Justified" verticalAlignment="Top">
+					<font fontName="SolaimanLipi" size="14" isBold="false"/>
+				</textElement>
+				<text><![CDATA[১১) কোম্পানীর তত্ত্বাবধানে ও ঋণ সহযোগিতায় আপনার উৎপাদিত তামাক আপনি অন্য কোনো ব্যক্তি, ফার্ম বা অন্য কোনো কোম্পানীর নিকট বিক্রয় করতে পারবেন না, যতক্ষন পর্যন্ত উহা কোম্পানীর প্রতিনিধি কর্তৃক প্রত্যাখ্যাত না হয়ে থাকে। আপনি এ শর্ত ভঙ্গ করে যদি অন্য কোনো ব্যক্তি বা কোম্পানীর নিকট তামাক বিক্রয় করেন তাহলে পরিণতি স্বরূপ আপনার রেজিস্ট্রেশন বাতিল হয়ে যাবে এবং কোম্পানী আইনগত পদক্ষেপ গ্রহণ করতে পারবে।]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="85" width="660" height="35" uuid="119d5bdb-2191-4269-9e83-d835523b83ea">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="SolaimanLipi" size="14" isBold="false"/>
+				</textElement>
+				<text><![CDATA[১২) শুধুমাত্র ক্রেতা-বিক্রেতা এবং সরকারী প্রতিনিধির (যদি থাকেন) উপস্থিতিতে তামাক ক্রয় করা হবে।]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="120" width="660" height="60" uuid="00a820b6-9dc6-4f37-9778-0bf1f0ff438a">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="SolaimanLipi" size="14" isBold="false"/>
+				</textElement>
+				<text><![CDATA[১৩) কোম্পানীর মনোনীত ক্রয় কেন্দ্রে থাকাকালীন কোম্পানীর কর্তৃক গৃহীত হওয়ার আগে যদি আপনার তামাকের কোনো ক্ষয়-ক্ষতি হয় তবে উহার জন্য কোম্পানী দায়ী হবে না এবং কোনো কারণে প্রত্যাখ্যাত তামাক আপনি ঐ দিনই নিজ খরচে কোম্পানী মনোনীত ক্রয় কেন্দ্র হতে অবশ্যই সরিয়ে নিবেন।
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="180" width="660" height="60" uuid="c4e895b2-547d-4699-8270-2f1ff8acda7c">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font fontName="SolaimanLipi" size="14" isBold="false"/>
+				</textElement>
+				<text><![CDATA[১৪) যুদ্ধ, গণবিক্ষোভ, হরতাল, লকডাউন, ভূমিকম্প, বজ্রপাত, ঝড়, বন্যা, ঘূর্নিঝড় অথবা কোনো কারণে যা কোম্পানীর আয়ত্বের বাহিরে এবং যার দ্বারা কোম্পানী প্রত্যক্ষভাবে প্রভাবিত হতে পারে এইরকম অবস্থায় সম্পূর্ণ বা আংশিক তামাক ক্রয় করতে না পারলে বা ক্রয় স্থগিত থাকলে বা বিলম্বিত হলে তার জন্য কোম্পানী দায়ী থাকবে না।
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="240" width="660" height="100" uuid="48d80c12-15fb-43f1-88cb-4dc613912ae8">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font fontName="SolaimanLipi" size="14" isBold="false"/>
+				</textElement>
+				<text><![CDATA[১৫) তামাক বিক্রয় কেন্দ্রে যদি কোনো রেজিস্ট্রিভুক্ত চাষী বা তার কোনো সহযোগী প্রত্যক্ষ বা পরোক্ষভাবে যে কোনো রকম গণ-বিক্ষোভ, অশালীন আচরণ বা অন্যান্য বে-আইনী কাজের মাধ্যমে অত্র প্রতিষ্ঠানের কাজের ব্যাঘাত ঘটায় অথবা কোনো কর্মকর্তা/ কর্মচারীকে ক্রয় কেন্দ্রে বা এলাকাতে অপমান বা অপদস্থ করে, তবে তাৎক্ষণিক ভাবে তার রেজিস্ট্রেশন কোনো নোটিশ ছাড়াই কোম্পানী বাতিল করে দিতে পারবে এবং উক্ত চাষীর তামাক চুক্তি মোতাবেক কোম্পানী ক্রয় করতে বাধ্য থাকবে না। উপরোক্ত বে-আইনী কর্মকাণ্ডের জন্য কোম্পানী আপনার বিরুদ্ধে আইনের আশ্রয় নিতে পারবে।]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="340" width="660" height="40" uuid="116c3a27-f79a-4cd9-bbc8-4c70f0b7b4a9">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font fontName="SolaimanLipi" size="14" isBold="false"/>
+				</textElement>
+				<text><![CDATA[১৬) উপরোল্লিখিত ১ নং হতে ১৫ নং শর্তাবলী পূরণে আপনি ব্যর্থ হলে কোম্পানী আপনার রেজিস্ট্রেশন যে কোনো সময় বাতিল করে দিতে পারবে।
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="380" width="660" height="40" uuid="d25166b7-cdef-460a-b8c8-a33e8ddfe0bd">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font fontName="SolaimanLipi" size="14" isBold="false"/>
+				</textElement>
+				<text><![CDATA[যদি উপরের বর্ণিত শর্তাবলী আপনার নিকট গ্রহণযোগ্য হয় তাহলে আপনি নিম্নে স্বাক্ষর বা টিপসই প্রদান করবেন এবং কোম্পানীর অফিসার রেজিস্ট্রেশন অনুমোদন করার পর মূল কপি গ্রহণ করবেন এবং ডুপ্লিকেট কপি কোম্পানীর অফিসে জমা দিবেন।]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="320" y="420" width="320" height="160" uuid="432acf2a-b59d-4aec-8104-3ed49f6dda74">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SolaimanLipi" size="14"/>
+				</textElement>
+				<text><![CDATA[উপরোক্ত সকল শর্ত বাস্তবায়ন করেছেন বিধায়
+এই চাষীর সহিত চুক্তি সম্পাদন করা হল।
+আপনার একান্ত বিশ্বস্ত
+আবুল খায়ের লীফ টোব্যাকো কোম্পানি লিমিটেড এর পক্ষে]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="613" width="220" height="30" uuid="cf2965ae-6569-4c40-b8df-c381400c135d"/>
+				<box>
+					<pen lineWidth="1.0" lineStyle="Dashed"/>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font fontName="SolaimanLipi" size="13" isBold="true"/>
+				</textElement>
+				<text><![CDATA[চাষীর স্বাক্ষর]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="643" width="220" height="37" uuid="57fb991e-963d-4e47-930c-d32cdeba1113"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SolaimanLipi"/>
+				</textElement>
+				<text><![CDATA[আমি উপরের শর্তাবলী সুস্থ মস্তিস্কে পড়ে/শুনে এবং সম্পূর্ণরূপে মেনে নিয়ে স্বাক্ষর/টিপসই করে মূল কপি গ্রহণ করলাম।]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="279" y="643" width="200" height="37" uuid="bba897b4-753d-4f68-8d95-0bb48b2d18a5"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SolaimanLipi"/>
+				</textElement>
+				<text><![CDATA[(স্বাক্ষর ও সীল)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="279" y="613" width="200" height="30" uuid="8a3516b8-4529-4b51-946b-4fa6019e3a36"/>
+				<box>
+					<pen lineWidth="1.0" lineStyle="Dashed"/>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font fontName="SolaimanLipi" size="13" isBold="true"/>
+				</textElement>
+				<text><![CDATA[জোন ইনচার্জ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="510" y="613" width="148" height="30" uuid="84e953d5-77a3-41f7-a6f2-128896d49982"/>
+				<box>
+					<pen lineWidth="1.0" lineStyle="Dashed"/>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font fontName="SolaimanLipi" size="13" isBold="true"/>
+				</textElement>
+				<text><![CDATA[এরিয়া ইনচার্জ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="510" y="643" width="148" height="37" uuid="3f90966d-53e7-4031-8b8c-e284ced7e24c"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SolaimanLipi"/>
+				</textElement>
+				<text><![CDATA[(স্বাক্ষর ও সীল)]]></text>
+			</staticText>
 		</band>
 	</detail>
 </jasperReport>
